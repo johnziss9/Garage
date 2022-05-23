@@ -8,7 +8,7 @@ export default class CarsDAO {
             return;
         }
         try {
-            cars = await conn.db(process.env.GARAGE_NS).collection("Cars");
+            cars = await conn.db(process.env.GARAGE_NS).collection("cars");
         } catch (e) {
             console.error(`Unable to establish a collection in carsDAO: ${e}`);
         }
