@@ -1,3 +1,7 @@
+import mongodb from 'mongodb';
+		 
+const ObjectId = mongodb.ObjectId;
+
 let cars;
 
 export default class CarsDAO {
@@ -116,5 +120,20 @@ export default class CarsDAO {
             console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
             return { carList: [], totalNumberOfCars: 0 }
         } 
+    }
+
+    static async updateMOT(carId, motStartDate, motEndDate) {
+        try {
+            const updateResponse = await cars.updateOne(
+                { _id: ObjectId(carId) },
+                { $set: { mot: { start_date: motStartDate, end_date: motEndDate } } }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update MOT: ${e}`);
+        
+        return { error: e };
+        }
     }
 }

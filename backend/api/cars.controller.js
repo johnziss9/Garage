@@ -61,4 +61,31 @@ export default class CarsController {
         };
         res.json(response);
     }
+
+    static async apiUpdateMOT(req, res, next) {
+        try {
+            const carId = req.body.car_id;
+            const motStartDate = new Date(req.body.mot.start_date);
+            const motEndDate = new Date(req.body.mot.end_date);
+ 
+            const carMOTResponse = await CarsDAO.updateMOT(
+                carId,
+                motStartDate,
+                motEndDate,
+            );
+ 
+            var { error } = carMOTResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (carMOTResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the MOT for this car.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 }

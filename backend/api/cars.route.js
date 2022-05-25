@@ -6,5 +6,6 @@ const router = express.Router();
 router.route("/getAll").get(CarsController.apiGetCars);
 router.route("/getExpiringMOTs").get(CarsController.apiGetExpiringMOTs);
 router.route("/getExpiringRTs").get(CarsController.apiGetExpiringRTs);
+router.route("/").put(CarsController.apiUpdateMOT)
 
 export default router;
