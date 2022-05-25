@@ -25,4 +25,40 @@ export default class CarsController {
         };
         res.json(response);
     }
+
+    static async apiGetExpiringMOTs(req, res, next) {
+        const carsPerPage = req.query.carsPerPage ? parseInt(req.query.carsPerPage, 10) : 15;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 0;
+ 
+        const { carList, totalNumberOfCars } = await CarsDAO.getExpiringMOTs({
+            page,
+            carsPerPage
+        });
+ 
+        let response = {
+            cars: carList,
+            page: page,
+            entries_per_page: carsPerPage,
+            total_results: totalNumberOfCars
+        };
+        res.json(response);
+    }
+
+    static async apiGetExpiringRTs(req, res, next) {
+        const carsPerPage = req.query.carsPerPage ? parseInt(req.query.carsPerPage, 10) : 15;
+        const page = req.query.page ? parseInt(req.query.page, 10) : 0;
+ 
+        const { carList, totalNumberOfCars } = await CarsDAO.getExpiringRTs({
+            page,
+            carsPerPage
+        });
+ 
+        let response = {
+            cars: carList,
+            page: page,
+            entries_per_page: carsPerPage,
+            total_results: totalNumberOfCars
+        };
+        res.json(response);
+    }
 }
