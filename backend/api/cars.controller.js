@@ -88,4 +88,48 @@ export default class CarsController {
             res.status(500).json({ error: e.message });
         }
     }
+
+    static async apiUpdateRT(req, res, next) {
+        try {
+            const carId = req.body.car_id;
+            const rtStartDate = new Date(req.body.road_tax.start_date);
+            const rtEndDate = new Date(req.body.road_tax.end_date);
+ 
+            const carRTResponse = await CarsDAO.updateRT(
+                carId,
+                rtStartDate,
+                rtEndDate,
+            );
+ 
+            var { error } = carRTResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (carRTResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the RT for this car.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiGetCarById(req, res, next) {
+        try {
+            let id = req.params.id || {};
+            let car = await CarsDAO.getCarById(id);
+ 
+            if (!car) {
+                res.status(404).json({ error: "Not Found" });
+                return;
+            }
+ 
+            res.json(car)
+        } catch (e) {
+            console.log(`api, ${e}`);
+            res.status(500).json({ error: e });
+        }
+    }
 }

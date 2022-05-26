@@ -136,4 +136,64 @@ export default class CarsDAO {
         return { error: e };
         }
     }
+
+    static async updateRT(carId, rtStartDate, rtEndDate) {
+        try {
+            const updateResponse = await cars.updateOne(
+                { _id: ObjectId(carId) },
+                { $set: { road_tax: { start_date: rtStartDate, end_date: rtEndDate } } }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update RT: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async getCarById(id) {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        _id: new ObjectId(id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "cars",
+                        let: {
+                            id: "$_id"
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ["$car_id", "$$id"]
+                                    }
+                                }
+                            },
+                            {
+                                $sort: {
+                                    date: -1
+                                }
+                            }
+                        ],
+                        as: "cars"
+                    }
+                },
+                {
+                    $addFields: {
+                        cars: "$cars"
+                    }
+                }
+            ]
+            return await cars.aggregate(pipeline).next();
+        } catch (e) {
+            console.error(`Something went wrong in getCarById: ${e}`);
+            throw e;
+        }
+    }
+
 }
