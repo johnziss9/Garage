@@ -119,9 +119,6 @@ dist
 # TernJS port file
 .tern-port
 
-# Stores launch.json file
-.vscode
-
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
@@ -131,6 +128,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# DS_Store files
-**/.DS_Store
