@@ -196,4 +196,26 @@ export default class CarsDAO {
         }
     }
 
+    static async addCar(make, model, numberPlate, mot, road_tax) {
+        try {
+            const car = { 
+                make: make,
+                model: model,
+                number_plate: numberPlate,
+                mot: {
+                    start_date: mot.start_date,
+                    end_date: mot.end_date
+                },
+                road_tax: {
+                    start_date: road_tax.start_date,
+                    end_date: road_tax.end_date
+                }
+            };
+ 
+            return await cars.insertOne(car);
+        } catch (e) {
+            console.error(`Unable to post review: ${e}`);
+     return { error: e };
+        }
+    }
 }

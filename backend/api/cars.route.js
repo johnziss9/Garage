@@ -9,5 +9,6 @@ router.route("/getExpiringRTs").get(CarsController.apiGetExpiringRTs);
 router.route("/updateMOT").put(CarsController.apiUpdateMOT);
 router.route("/updateRT").put(CarsController.apiUpdateRT);
 router.route("/id/:id").get(CarsController.apiGetCarById);
+router.route("/add").post(CarsController.apiAddCar)
 
 export default router;

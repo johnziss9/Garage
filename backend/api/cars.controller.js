@@ -132,4 +132,32 @@ export default class CarsController {
             res.status(500).json({ error: e });
         }
     }
+
+    static async apiAddCar(req, res, next) {
+        try {
+            const make = req.body.make;
+            const model = req.body.model;
+            const numberPlate = req.body.number_plate;
+            const mot = { 
+                start_date: new Date(req.body.mot.start_date),
+                end_date: new Date(req.body.mot.end_date)
+            };
+            const road_tax = {
+                start_date: new Date(req.body.road_tax.start_date),
+                end_date: new Date(req.body.road_tax.end_date)
+            };
+ 
+            const addCarResponse = await CarsDAO.addCar(
+                make,
+                model,
+                numberPlate,
+                mot,
+                road_tax
+            );
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
 }
