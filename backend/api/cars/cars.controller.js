@@ -1,6 +1,7 @@
-import CarsDAO from "../dao/carsDAO.js";
+import CarsDAO from "../../dao/carsDAO.js";
 
 export default class CarsController {
+
     static async apiGetCars(req, res, next) {
         const carsPerPage = req.query.carsPerPage ? parseInt(req.query.carsPerPage, 10) : 15;
         const page = req.query.page ? parseInt(req.query.page, 10) : 0;
@@ -159,5 +160,4 @@ export default class CarsController {
             res.status(500).json({ error: e.message });
         }
     }
-
 }
