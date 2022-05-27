@@ -214,8 +214,36 @@ export default class CarsDAO {
  
             return await cars.insertOne(car);
         } catch (e) {
-            console.error(`Unable to post review: ${e}`);
+            console.error(`Unable to add review: ${e}`);
      return { error: e };
+        }
+    }
+
+    static async addRental(carId, firstName, lastName, phoneNumber, address, dates) {
+        try {
+            const updateResponse = await cars.updateOne(
+                { _id: ObjectId(carId) },
+                { $set: 
+                    {
+                        rentals: [{
+                            first_name: firstName,
+                            last_name: lastName,
+                            phone_number: phoneNumber,
+                            address: address,
+                            dates: {
+                                start_date: dates.startDate,
+                                end_date: dates.endDate
+                            }
+                        }]     
+                    } 
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update car: ${e}`);
+        
+        return { error: e };
         }
     }
 }

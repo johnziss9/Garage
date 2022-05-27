@@ -2,7 +2,6 @@ import app from './server.js';
 import mongodb from "mongodb";
 import dotenv from "dotenv";
 import CarsDAO from './dao/carsDAO.js';
-import RentalsDAO from './dao/rentalsDAO.js';
  
 dotenv.config();
  
@@ -24,7 +23,6 @@ MongoClient.connect(
 // if there's no errors run the following code 
 .then(async client => {
     await CarsDAO.injectDB(client);
-    await RentalsDAO.injectDB(client);
     app.listen(port, () => {
         console.log(`listening to port ${port}`);
     });
