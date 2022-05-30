@@ -28,4 +28,16 @@ export default class RentalsController {
             res.status(500).json({ error: e.message });
         }
     }
+
+    static async apiGetRentals(req, res, next) {
+
+        const { rentalList, totalNumberOfRentals } = await RentalsDAO.getRentals();
+
+        let response = {
+            rentals: rentalList,
+            total_results: totalNumberOfRentals
+
+        };
+        res.json(response);
+    }
 }

@@ -19,10 +19,7 @@ export default class CarsDAO {
     }
     
     // This method will be called if we want to get all the cars from the database
-    static async getCars({
-        page = 0,
-        carsPerPage = 15
-    } = {}) {
+    static async getCars({} = {}) {
         let cursor;
     
         try {
@@ -43,11 +40,9 @@ export default class CarsDAO {
             console.error(`Unable to issue find command, ${e}`);
             return { carList: [], totalNumberOfCars: 0 }
         }
-    
-        const displayCursor = cursor.limit(carsPerPage).skip(carsPerPage * page);
-    
+        
         try {
-            const carList = await displayCursor.toArray();
+            const carList = await cursor.toArray();
             const totalNumberOfCars = await cars.countDocuments();
     
             return { carList, totalNumberOfCars }
