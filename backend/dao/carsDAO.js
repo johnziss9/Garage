@@ -20,24 +20,25 @@ export default class CarsDAO {
     
     // This method will be called if we want to get all the cars from the database
     static async getCars({
-        filters = null,
         page = 0,
         carsPerPage = 15
     } = {}) {
-        let query;
-    
-        // When this method is called and we pass in any of the filters below, it will query the data.
-        if (filters) {
-            if ("number_plate" in filters) {
-                query = { $text: { $search: filters["number_plate"]}}
-            }
-        }
-    
         let cursor;
     
         try {
-            // If the query is not empty, it will run the find function to match the cars.
-            cursor = await cars.find(query);
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: "rentals",
+                        localField: "_id",
+                        foreignField: "car_id",
+                        as: "rentals"
+                    }
+                }
+            ]
+            
+            cursor = await cars.aggregate(pipeline);
+
         } catch(e) {
             console.error(`Unable to issue find command, ${e}`);
             return { carList: [], totalNumberOfCars: 0 }
@@ -47,7 +48,7 @@ export default class CarsDAO {
     
         try {
             const carList = await displayCursor.toArray();
-            const totalNumberOfCars = await cars.countDocuments(query);
+            const totalNumberOfCars = await cars.countDocuments();
     
             return { carList, totalNumberOfCars }
         } catch(e) {

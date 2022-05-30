@@ -6,13 +6,7 @@ export default class CarsController {
         const carsPerPage = req.query.carsPerPage ? parseInt(req.query.carsPerPage, 10) : 15;
         const page = req.query.page ? parseInt(req.query.page, 10) : 0;
  
-        let filters = {};
-        if (req.query.number_plate) {
-            filters.number_plate = req.query.number_plate;
-        }
- 
         const { carList, totalNumberOfCars } = await CarsDAO.getCars({
-            filters,
             page,
             carsPerPage
         });
@@ -20,7 +14,6 @@ export default class CarsController {
         let response = {
             cars: carList,
             page: page,
-            filters: filters,
             entries_per_page: carsPerPage,
             total_results: totalNumberOfCars
         };
