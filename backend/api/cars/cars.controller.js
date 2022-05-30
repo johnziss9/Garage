@@ -160,40 +160,4 @@ export default class CarsController {
             res.status(500).json({ error: e.message });
         }
     }
-
-    static async apiAddRental(req, res, next) {
-        try {
-            const carId = req.body.car_id;
-            const firstName = req.body.first_name;
-            const lastName = req.body.last_name;
-            const phoneNumber = req.body.phone_number;
-            const address = req.body.address;
-            const dates = {
-                startDate: new Date(req.body.dates.start_date),
-                endDate: new Date(req.body.dates.end_date)
-            };
- 
-            const addRenalResponse = await CarsDAO.addRental(
-                carId,
-                firstName,
-                lastName,
-                phoneNumber,
-                address,
-                dates
-            );
- 
-            var { error } = addRenalResponse;
-            if (error) {
-                res.status(400).json({ error });
-            }
- 
-            if (addRenalResponse.modifiedCount === 0) {
-                throw new Error("Unable to add rental for this car.")
-            }
- 
-            res.json({ status: "success" });
-        } catch (e) {
-            res.status(500).json({ error: e.message });
-        }
-    }
 }

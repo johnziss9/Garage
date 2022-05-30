@@ -162,7 +162,7 @@ export default class CarsDAO {
                 },
                 {
                     $lookup: {
-                        from: "cars",
+                        from: "rentals",
                         let: {
                             id: "$_id"
                         },
@@ -180,12 +180,12 @@ export default class CarsDAO {
                                 }
                             }
                         ],
-                        as: "cars"
+                        as: "rentals"
                     }
                 },
                 {
                     $addFields: {
-                        cars: "$cars"
+                        rentals: "$rentals"
                     }
                 }
             ]
@@ -216,34 +216,6 @@ export default class CarsDAO {
         } catch (e) {
             console.error(`Unable to add review: ${e}`);
      return { error: e };
-        }
-    }
-
-    static async addRental(carId, firstName, lastName, phoneNumber, address, dates) {
-        try {
-            const updateResponse = await cars.updateOne(
-                { _id: ObjectId(carId) },
-                { $set: 
-                    {
-                        rentals: [{
-                            first_name: firstName,
-                            last_name: lastName,
-                            phone_number: phoneNumber,
-                            address: address,
-                            dates: {
-                                start_date: dates.startDate,
-                                end_date: dates.endDate
-                            }
-                        }]     
-                    } 
-                }
-            );
- 
-            return updateResponse;
-        } catch (e) {
-            console.error(`Unable to update car: ${e}`);
-        
-        return { error: e };
         }
     }
 }
