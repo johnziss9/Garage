@@ -31,12 +31,45 @@ export default class RentalsController {
 
     static async apiGetRentals(req, res, next) {
 
-        const { rentalList, totalNumberOfRentals } = await RentalsDAO.getRentals();
+        const { rentalsList, totalNumberOfRentals } = await RentalsDAO.getRentals();
 
         let response = {
-            rentals: rentalList,
+            rentals: rentalsList,
             total_results: totalNumberOfRentals
 
+        };
+        res.json(response);
+    }
+
+    static async apiGetPastRentals(req, res, next) {
+ 
+        const { pastRentalsList, totalNumberOfPastRentals } = await RentalsDAO.getPastRentals();
+ 
+        let response = {
+            pastRentals: pastRentalsList,
+            total_results: totalNumberOfPastRentals
+        };
+        res.json(response);
+    }
+
+    static async apiGetFutureRentals(req, res, next) {
+ 
+        const { futureRentalsList, totalNumberOfFutureRentals } = await RentalsDAO.getFutureRentals();
+ 
+        let response = {
+            futureRentals: futureRentalsList,
+            total_results: totalNumberOfFutureRentals
+        };
+        res.json(response);
+    }
+
+    static async apiGetCurrentRentals(req, res, next) {
+ 
+        const { currentRentalsList, totalNumberOfCurrentRentals } = await RentalsDAO.getCurrentRentals();
+ 
+        let response = {
+            currentRentals: currentRentalsList,
+            total_results: totalNumberOfCurrentRentals
         };
         res.json(response);
     }

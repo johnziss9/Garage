@@ -46,17 +46,95 @@ export default class RentalsDAO {
             cursor = await rentals.find();
         } catch(e) {
             console.error(`Unable to issue find command, ${e}`);
-            return { rentalList: [], totalNumberOfRentals: 0 }
+            return { rentalsList: [], totalNumberOfRentals: 0 }
         }
 
         try {
-            const rentalList = await cursor.toArray();
+            const rentalsList = await cursor.toArray();
             const totalNumberOfRentals = await rentals.countDocuments();
 
-            return { rentalList, totalNumberOfRentals }
+            return { rentalsList, totalNumberOfRentals }
         } catch(e) {
             console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
-            return { rentalList: [], totalNumberOfRentals: 0 }
+            return { rentalsList: [], totalNumberOfRentals: 0 }
+        } 
+    }
+
+    static async getPastRentals({} = {}) {
+        let query;
+        let currentDate = new Date();
+
+        query = {"dates.end_date" : { $lt: currentDate }}
+
+        let cursor;
+    
+        try {
+            cursor = await rentals.find(query);
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { pastRentalsList: [], totalNumberOfPastRentals: 0 }
+        }
+        
+        try {
+            const pastRentalsList = await cursor.toArray();
+            const totalNumberOfPastRentals = await rentals.countDocuments(query);
+    
+            return { pastRentalsList, totalNumberOfPastRentals }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { pastRentalsList: [], totalNumberOfPastRentals: 0 }
+        } 
+    }
+
+    static async getFutureRentals({} = {}) {
+        let query;
+        let currentDate = new Date();
+
+        query = {"dates.start_date" : { $gt: currentDate }}
+
+        let cursor;
+    
+        try {
+            cursor = await rentals.find(query);
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { futureRentalsList: [], totalNumberOfFutureRentals: 0 }
+        }
+        
+        try {
+            const futureRentalsList = await cursor.toArray();
+            const totalNumberOfFutureRentals = await rentals.countDocuments(query);
+    
+            return { futureRentalsList, totalNumberOfFutureRentals }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { futureRentalsList: [], totalNumberOfFutureRentals: 0 }
+        } 
+    }
+
+    static async getCurrentRentals({} = {}) {
+        let query;
+        let currentDate = new Date();
+
+        query = {"dates.start_date" : { $lte: currentDate }, "dates.end_date" : { $gte: currentDate }}
+
+        let cursor;
+    
+        try {
+            cursor = await rentals.find(query);
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { currentRentalsList: [], totalNumberOfCurrentRentals: 0 }
+        }
+        
+        try {
+            const currentRentalsList = await cursor.toArray();
+            const totalNumberOfCurrentRentals = await rentals.countDocuments(query);
+    
+            return { currentRentalsList, totalNumberOfCurrentRentals }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { currentRentalsList: [], totalNumberOfCurrentRentals: 0 }
         } 
     }
 }
