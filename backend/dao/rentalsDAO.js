@@ -40,10 +40,14 @@ export default class RentalsDAO {
     }
 
     static async getRentals({} = {}) {
+        let query;
+
+        query = {"deleted": { $eq: false }}
+
         let cursor;
 
         try {
-            cursor = await rentals.find();
+            cursor = await rentals.find(query);
         } catch(e) {
             console.error(`Unable to issue find command, ${e}`);
             return { rentalsList: [], totalNumberOfRentals: 0 }
@@ -51,7 +55,7 @@ export default class RentalsDAO {
 
         try {
             const rentalsList = await cursor.toArray();
-            const totalNumberOfRentals = await rentals.countDocuments();
+            const totalNumberOfRentals = await rentals.countDocuments(query);
 
             return { rentalsList, totalNumberOfRentals }
         } catch(e) {
@@ -64,7 +68,7 @@ export default class RentalsDAO {
         let query;
         let currentDate = new Date();
 
-        query = {"dates.end_date" : { $lt: currentDate }}
+        query = {"dates.end_date": { $lt: currentDate }, "deleted": { $eq: false }}
 
         let cursor;
     
@@ -90,7 +94,7 @@ export default class RentalsDAO {
         let query;
         let currentDate = new Date();
 
-        query = {"dates.start_date" : { $gt: currentDate }}
+        query = {"dates.start_date": { $gt: currentDate }, "deleted": { $eq: false }}
 
         let cursor;
     
@@ -116,7 +120,7 @@ export default class RentalsDAO {
         let query;
         let currentDate = new Date();
 
-        query = {"dates.start_date" : { $lte: currentDate }, "dates.end_date" : { $gte: currentDate }}
+        query = {"dates.start_date": { $lte: currentDate }, "dates.end_date": { $gte: currentDate }, "deleted": { $eq: false }}
 
         let cursor;
     
@@ -151,6 +155,24 @@ export default class RentalsDAO {
                             start_date: rentalStartDate,
                             end_date: rentalEndDate
                         }
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update rental in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async deleteRental(rentalId, deleted) {
+        try {
+            const updateResponse = await rentals.updateOne(
+                { _id: ObjectId(rentalId) },
+                { $set: { 
+                        deleted: deleted
                     }
                 }
             );

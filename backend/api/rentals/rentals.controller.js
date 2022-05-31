@@ -108,4 +108,29 @@ export default class RentalsController {
             res.status(500).json({ error: e.message });
         }
     }
+
+    static async apiDeleteRental(req, res, next) {
+        try {
+            const rentalId = req.body.rental_Id;
+            const deleted = req.body.deleted;
+ 
+            const rentalResponse = await RentalsDAO.deleteRental(
+                rentalId,
+                deleted
+            );
+ 
+            var { error } = rentalResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (rentalResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the rental in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 }
