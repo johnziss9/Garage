@@ -137,4 +137,29 @@ export default class RentalsDAO {
             return { currentRentalsList: [], totalNumberOfCurrentRentals: 0 }
         } 
     }
+
+    static async updateRental(rentalId, firstName, lastName, phoneNumber, address, rentalStartDate, rentalEndDate) {
+        try {
+            const updateResponse = await rentals.updateOne(
+                { _id: ObjectId(rentalId) },
+                { $set: { 
+                        first_name: firstName,
+                        last_name: lastName,
+                        phone_number: phoneNumber,
+                        address: address,
+                        dates: {
+                            start_date: rentalStartDate,
+                            end_date: rentalEndDate
+                        }
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update rental in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
 }

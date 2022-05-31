@@ -73,4 +73,39 @@ export default class RentalsController {
         };
         res.json(response);
     }
+
+    static async apiUpdateRental(req, res, next) {
+        try {
+            const rentalId = req.body.rental_Id;
+            const firstName = req.body.first_name;
+            const lastName = req.body.last_name;
+            const phoneNumber = req.body.phone_number;
+            const address = req.body.address;
+            const rentalStartDate = new Date(req.body.dates.start_date);
+            const rentalEndDate = new Date(req.body.dates.end_date);
+ 
+            const rentalResponse = await RentalsDAO.updateRental(
+                rentalId,
+                firstName,
+                lastName,
+                phoneNumber,
+                address,
+                rentalStartDate,
+                rentalEndDate
+            );
+ 
+            var { error } = rentalResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (rentalResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the rental in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 }
