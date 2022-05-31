@@ -20,6 +20,10 @@ export default class CarsDAO {
     
     // This method will be called if we want to get all the cars from the database
     static async getCars({} = {}) {
+        let query;
+
+        query = {"deleted": { $eq: false }}
+
         let cursor;
     
         try {
@@ -30,6 +34,11 @@ export default class CarsDAO {
                         localField: "_id",
                         foreignField: "car_id",
                         as: "rentals"
+                    }
+                },
+                {
+                    $match: {
+                        deleted: false
                     }
                 }
             ]
@@ -43,7 +52,7 @@ export default class CarsDAO {
         
         try {
             const carList = await cursor.toArray();
-            const totalNumberOfCars = await cars.countDocuments();
+            const totalNumberOfCars = await cars.countDocuments(query);
     
             return { carList, totalNumberOfCars }
         } catch(e) {
@@ -61,7 +70,7 @@ export default class CarsDAO {
         let currentDateToChange = new Date(); // Using this as a provisional variable as the line below changes its value.
         let currentDateTwoWeeks = new Date(currentDateToChange.setDate(currentDateToChange.getDate() + 14));
 
-        query = {"mot.end_date" : { $gte : currentDate, $lte: currentDateTwoWeeks }}
+        query = {"mot.end_date" : { $gte : currentDate, $lte: currentDateTwoWeeks }, "deleted": { $eq: false }}
 
         let cursor;
     
@@ -94,7 +103,7 @@ export default class CarsDAO {
         let currentDateToChange = new Date(); // Using this as a provisional variable as the line below changes its value.
         let currentDateTwoWeeks = new Date(currentDateToChange.setDate(currentDateToChange.getDate() + 14));
 
-        query = {"road_tax.end_date" : { $gte : currentDate, $lte: currentDateTwoWeeks }}
+        query = {"road_tax.end_date" : { $gte : currentDate, $lte: currentDateTwoWeeks }, "deleted": { $eq: false }}
 
         let cursor;
     
