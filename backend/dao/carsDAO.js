@@ -19,10 +19,10 @@ export default class CarsDAO {
     }
     
     // This method will be called if we want to get all the cars from the database
-    static async getCars({} = {}) {
+    static async getRentalCars({} = {}) {
         let query;
 
-        query = {"deleted": { $eq: false }}
+        query = {"deleted": { $eq: false }, "type": { $eq: "rental" } }
 
         let cursor;
     
@@ -38,7 +38,8 @@ export default class CarsDAO {
                 },
                 {
                     $match: {
-                        deleted: false
+                        deleted: false,
+                        type: "rental"
                     }
                 }
             ]
@@ -222,5 +223,61 @@ export default class CarsDAO {
             console.error(`Unable to add review: ${e}`);
      return { error: e };
         }
+    }
+
+    static async getActiveRentalCars({} = {}) {
+        let query;
+
+        query = {"deleted": { $eq: false }, "type": { $eq: "rental" } }
+
+        let cursor;
+    
+        try {
+            const currentDate = new Date();
+            const pipeline = [
+                {
+                    "$lookup": {
+                        "from": "rentals",
+                        "let": {
+                            "rId": "$_id"
+                        },
+                        "pipeline": [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [ "$car_id", "$$rId" ]
+                                    },
+                                    "dates.start_date": { $lte: currentDate },
+                                    "dates.end_date": { $gte: currentDate }
+                                }
+                            }
+                        ],
+                        "as": "rentals"
+                    }
+                },
+                {
+                    $match: {
+                        deleted: false,
+                        type: "rental"
+                    }
+                }
+            ]
+            
+            cursor = await cars.aggregate(pipeline);
+
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        }
+        
+        try {
+            const carList = await cursor.toArray();
+            const totalNumberOfCars = await cars.countDocuments(query);
+    
+            return { carList, totalNumberOfCars }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        } 
     }
 }

@@ -2,8 +2,8 @@ import CarsDAO from "../../dao/carsDAO.js";
 
 export default class CarsController {
 
-    static async apiGetCars(req, res, next) {
-        const { carList, totalNumberOfCars } = await CarsDAO.getCars();
+    static async apiGetRentalCars(req, res, next) {
+        const { carList, totalNumberOfCars } = await CarsDAO.getRentalCars();
  
         let response = {
             cars: carList,
@@ -144,5 +144,15 @@ export default class CarsController {
         } catch (e) {
             res.status(500).json({ error: e.message });
         }
+    }
+
+    static async apiGetActiveRentalCars(req, res, next) {
+        const { carList, totalNumberOfCars } = await CarsDAO.getActiveRentalCars();
+ 
+        let response = {
+            cars: carList,
+            total_results: totalNumberOfCars
+        };
+        res.json(response);
     }
 }
