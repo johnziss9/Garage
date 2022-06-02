@@ -155,4 +155,24 @@ export default class CarsController {
         };
         res.json(response);
     }
+
+    static async apiGetInactiveRentalCars(req, res, next) {
+        const { carList, totalNumberOfCars } = await CarsDAO.getInactiveRentalCars();
+ 
+        let response = {
+            cars: carList,
+            total_results: totalNumberOfCars
+        };
+        res.json(response);
+    }
+
+    static async apiGetExpiringRentals(req, res, next) {
+        const { carList, totalNumberOfCars } = await CarsDAO.getExpiringRentals();
+ 
+        let response = {
+            cars: carList,
+            total_results: totalNumberOfCars
+        };
+        res.json(response);
+    }
 }

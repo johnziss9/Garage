@@ -11,5 +11,7 @@ router.route("/updateRT").put(CarsController.apiUpdateRT);
 router.route("/id/:id").get(CarsController.apiGetCarById);
 router.route("/add").post(CarsController.apiAddCar);
 router.route("/getActiveRentals").get(CarsController.apiGetActiveRentalCars);
+router.route("/getInactiveRentals").get(CarsController.apiGetInactiveRentalCars);
+router.route("/getExpiringRentals").get(CarsController.apiGetExpiringRentals);
 
 export default router;

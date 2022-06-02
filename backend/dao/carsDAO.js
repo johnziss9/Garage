@@ -280,4 +280,116 @@ export default class CarsDAO {
             return { carList: [], totalNumberOfCars: 0 }
         } 
     }
+
+    static async getInactiveRentalCars({} = {}) {
+        let query;
+
+        query = {"deleted": { $eq: false }, "type": { $eq: "rental" } }
+
+        let cursor;
+    
+        try {
+            const currentDate = new Date();
+            const pipeline = [
+                {
+                    "$lookup": {
+                        "from": "rentals",
+                        "let": {
+                            "rId": "$_id"
+                        },
+                        "pipeline": [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [ "$car_id", "$$rId" ]
+                                    },
+                                    $or: [{ "dates.end_date": { $lt: currentDate } }, { "dates.start_date": { $gt: currentDate } }]
+                                }
+                            }
+                        ],
+                        "as": "rentals"
+                    }
+                },
+                {
+                    $match: {
+                        deleted: false,
+                        type: "rental"
+                    }
+                }
+            ]
+            
+            cursor = await cars.aggregate(pipeline);
+
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        }
+        
+        try {
+            const carList = await cursor.toArray();
+            const totalNumberOfCars = await cars.countDocuments(query);
+    
+            return { carList, totalNumberOfCars }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        } 
+    }
+
+    static async getExpiringRentals({} = {}) {
+        let query;
+
+        query = {"deleted": { $eq: false }, "type": { $eq: "rental" } }
+
+        let cursor;
+    
+        try {
+            const currentDate = new Date();
+            const currentDateToChange = new Date(); // Using this as a provisional variable as the line below changes its value.
+            const currentDateTwoWeeks = new Date(currentDateToChange.setDate(currentDateToChange.getDate() + 14));
+            const pipeline = [
+                {
+                    "$lookup": {
+                        "from": "rentals",
+                        "let": {
+                            "rId": "$_id"
+                        },
+                        "pipeline": [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [ "$car_id", "$$rId" ]
+                                    },
+                                    "dates.end_date": { $gte: currentDate, $lte: currentDateTwoWeeks }
+                                }
+                            }
+                        ],
+                        "as": "rentals"
+                    }
+                },
+                {
+                    $match: {
+                        deleted: false,
+                        type: "rental"
+                    }
+                }
+            ]
+            
+            cursor = await cars.aggregate(pipeline);
+
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        }
+        
+        try {
+            const carList = await cursor.toArray();
+            const totalNumberOfCars = await cars.countDocuments(query);
+    
+            return { carList, totalNumberOfCars }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        } 
+    }
 }
