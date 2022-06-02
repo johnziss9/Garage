@@ -14,7 +14,7 @@ export default class RentalsDAO {
         try {
             rentals = await conn.db(process.env.GARAGE_NS).collection("rentals");
         } catch (e) {
-            console.error(`Unable to establish a collection in carsDAO: ${e}`);
+            console.error(`Unable to establish a collection in rentalsDAO: ${e}`);
         }
     }
 
