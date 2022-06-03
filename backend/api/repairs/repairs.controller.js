@@ -98,40 +98,68 @@ export default class RepairsController {
         res.json(response);
     }
 
-    // static async apiUpdateRental(req, res, next) {
-    //     try {
-    //         const rentalId = req.body.rental_Id;
-    //         const firstName = req.body.first_name;
-    //         const lastName = req.body.last_name;
-    //         const phoneNumber = req.body.phone_number;
-    //         const address = req.body.address;
-    //         const rentalStartDate = new Date(req.body.dates.start_date);
-    //         const rentalEndDate = new Date(req.body.dates.end_date);
+    static async apiUpdateRepair(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const firstName = req.body.customer_details.first_name;
+            const lastName = req.body.customer_details.last_name;
+            const phoneNumber = req.body.customer_details.phone_number;
+            const address = req.body.customer_details.address;
+            const email = req.body.customer_details.email;
+            const insuranceName = req.body.insurance_details.name;
+            const insurerName = req.body.insurance_details.insurer_name;
+            const insurerPhoneNumber = req.body.insurance_details.insurer_phone_number;
+            const operatorName = req.body.insurance_details.operator_name;
+            const operatorPhoneNumber = req.body.insurance_details.operator_phone_number;
+            const amount = req.body.insurance_details.amount;
+            const repairDate = req.body.repair_details.repair_date;
+            const receievedDate = req.body.repair_details.received_date;
+            const dueDate = req.body.repair_details.due_date;
+            const isiomata = req.body.isiomata;
+            const paintings = req.body.paintings;
+            const mechanical = req.body.mechanical;
+            const electric = req.body.electric;
+            const aircon = req.body.aircon;
+            const additionalNotes = req.body.additional_notes;
  
-    //         const rentalResponse = await RentalsDAO.updateRental(
-    //             rentalId,
-    //             firstName,
-    //             lastName,
-    //             phoneNumber,
-    //             address,
-    //             rentalStartDate,
-    //             rentalEndDate
-    //         );
+            const repairResponse = await RepairsDAO.updateRepair(
+                repairId,
+                firstName,
+                lastName,
+                phoneNumber,
+                address,
+                email,
+                insuranceName,
+                insurerName,
+                insurerPhoneNumber,
+                operatorName,
+                operatorPhoneNumber,
+                amount,
+                repairDate,
+                receievedDate,
+                dueDate,
+                isiomata,
+                paintings,
+                mechanical,
+                electric,
+                aircon,
+                additionalNotes
+            );
  
-    //         var { error } = rentalResponse;
-    //         if (error) {
-    //             res.status(400).json({ error });
-    //         }
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
  
-    //         if (rentalResponse.modifiedCount === 0) {
-    //             throw new Error("Unable to update the rental in controller.")
-    //         }
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
  
-    //         res.json({ status: "success" });
-    //     } catch (e) {
-    //         res.status(500).json({ error: e.message });
-    //     }
-    // }
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 
     static async apiDeleteRepair(req, res, next) {
         try {

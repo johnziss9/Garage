@@ -161,30 +161,69 @@ export default class RepairsDAO {
         } 
     }
 
-    // static async updateRental(rentalId, firstName, lastName, phoneNumber, address, rentalStartDate, rentalEndDate) {
-    //     try {
-    //         const updateResponse = await rentals.updateOne(
-    //             { _id: ObjectId(rentalId) },
-    //             { $set: { 
-    //                     first_name: firstName,
-    //                     last_name: lastName,
-    //                     phone_number: phoneNumber,
-    //                     address: address,
-    //                     dates: {
-    //                         start_date: rentalStartDate,
-    //                         end_date: rentalEndDate
-    //                     }
-    //                 }
-    //             }
-    //         );
+    static async updateRepair(
+        repairId,
+        firstName,
+        lastName,
+        phoneNumber,
+        address,
+        email,
+        insuranceName,
+        insurerName,
+        insurerPhoneNumber,
+        operatorName,
+        operatorPhoneNumber,
+        amount,
+        repairDate,
+        receievedDate,
+        dueDate,
+        isiomata,
+        paintings,
+        mechanical,
+        electric,
+        aircon,
+        additionalNotes) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        customer_details: {
+                            first_name: firstName,
+                            last_name: lastName,
+                            phone_number: phoneNumber,
+                            address: address,
+                            email: email
+                        },
+                        insurance_details: {
+                            name: insuranceName,
+                            insurer_name: insurerName,
+                            insurer_phone_number: insurerPhoneNumber,
+                            operator_name: operatorName,
+                            operator_phone_number: operatorPhoneNumber,
+                            amount: amount
+                        },
+                        repair_details: {
+                            repair_date: repairDate,
+                            received_date: receievedDate,
+                            due_date: dueDate
+                        },
+                        isiomata: isiomata,
+                        paintings: paintings,
+                        mechanical: mechanical,
+                        electric: electric,
+                        aircon: aircon,
+                        additional_notes: additionalNotes
+                    }
+                }
+            );
  
-    //         return updateResponse;
-    //     } catch (e) {
-    //         console.error(`Unable to update rental in DAO: ${e}`);
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
         
-    //     return { error: e };
-    //     }
-    // }
+        return { error: e };
+        }
+    }
 
     static async deleteRepair(repairId, deleted) {
         try {
