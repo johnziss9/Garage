@@ -18,7 +18,7 @@ export default class RepairsDAO {
         }
     }
 
-    static async addRepair(carId, customerDetails, insuranceDetails, repairDetails, isiomata, paintings, mechanical, electric, aircon, additionalNotes) {
+    static async addRepair(carId, customerDetails, insuranceDetails, repairDetails, isiomata, paintings, mechanical, electric, aircon, additionalNotes, deleted) {
         try {
             const repair = { 
                 car_id: ObjectId(carId),
@@ -47,7 +47,8 @@ export default class RepairsDAO {
                 mechanical: mechanical,
                 electric: electric,
                 aircon: aircon,
-                additional_notes: additionalNotes
+                additional_notes: additionalNotes,
+                deleted: deleted
             };
  
             return await repairs.insertOne(repair);
@@ -57,108 +58,108 @@ export default class RepairsDAO {
         }
     }
 
-    // static async getRentals({} = {}) {
-    //     let query;
+    static async getRepairs({} = {}) {
+        let query;
 
-    //     query = {"deleted": { $eq: false }}
+        query = {"deleted": { $eq: false }}
 
-    //     let cursor;
+        let cursor;
 
-    //     try {
-    //         cursor = await rentals.find(query);
-    //     } catch(e) {
-    //         console.error(`Unable to issue find command, ${e}`);
-    //         return { rentalsList: [], totalNumberOfRentals: 0 }
-    //     }
+        try {
+            cursor = await repairs.find(query);
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { repairsList: [], totalNumberOfRepairs: 0 }
+        }
 
-    //     try {
-    //         const rentalsList = await cursor.toArray();
-    //         const totalNumberOfRentals = await rentals.countDocuments(query);
+        try {
+            const repairsList = await cursor.toArray();
+            const totalNumberOfRepairs = await repairs.countDocuments(query);
 
-    //         return { rentalsList, totalNumberOfRentals }
-    //     } catch(e) {
-    //         console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
-    //         return { rentalsList: [], totalNumberOfRentals: 0 }
-    //     } 
-    // }
+            return { repairsList, totalNumberOfRepairs }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { repairsList: [], totalNumberOfRepairs: 0 }
+        } 
+    }
 
-    // static async getPastRentals({} = {}) {
-    //     let query;
-    //     let currentDate = new Date();
+    static async getPastRepairs({} = {}) {
+        let query;
+        let currentDate = new Date();
 
-    //     query = {"dates.end_date": { $lt: currentDate }, "deleted": { $eq: false }}
+        query = {"repair_details.due_date": { $lt: currentDate }, "deleted": { $eq: false }}
 
-    //     let cursor;
+        let cursor;
     
-    //     try {
-    //         cursor = await rentals.find(query);
-    //     } catch(e) {
-    //         console.error(`Unable to issue find command, ${e}`);
-    //         return { pastRentalsList: [], totalNumberOfPastRentals: 0 }
-    //     }
+        try {
+            cursor = await repairs.find(query);
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { pastRepairsList: [], totalNumberOfPastRepairs: 0 }
+        }
         
-    //     try {
-    //         const pastRentalsList = await cursor.toArray();
-    //         const totalNumberOfPastRentals = await rentals.countDocuments(query);
+        try {
+            const pastRepairsList = await cursor.toArray();
+            const totalNumberOfPastRepairs = await repairs.countDocuments(query);
     
-    //         return { pastRentalsList, totalNumberOfPastRentals }
-    //     } catch(e) {
-    //         console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
-    //         return { pastRentalsList: [], totalNumberOfPastRentals: 0 }
-    //     } 
-    // }
+            return { pastRepairsList, totalNumberOfPastRepairs }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { pastRepairsList: [], totalNumberOfPastRepairs: 0 }
+        } 
+    }
 
-    // static async getFutureRentals({} = {}) {
-    //     let query;
-    //     let currentDate = new Date();
+    static async getFutureRepairs({} = {}) {
+        let query;
+        let currentDate = new Date();
 
-    //     query = {"dates.start_date": { $gt: currentDate }, "deleted": { $eq: false }}
+        query = {"repair_details.received_date": { $gt: currentDate }, "deleted": { $eq: false }}
 
-    //     let cursor;
+        let cursor;
     
-    //     try {
-    //         cursor = await rentals.find(query);
-    //     } catch(e) {
-    //         console.error(`Unable to issue find command, ${e}`);
-    //         return { futureRentalsList: [], totalNumberOfFutureRentals: 0 }
-    //     }
+        try {
+            cursor = await repairs.find(query);
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { futureRepairsList: [], totalNumberOfFutureRepairs: 0 }
+        }
         
-    //     try {
-    //         const futureRentalsList = await cursor.toArray();
-    //         const totalNumberOfFutureRentals = await rentals.countDocuments(query);
+        try {
+            const futureRepairsList = await cursor.toArray();
+            const totalNumberOfFutureRepairs = await repairs.countDocuments(query);
     
-    //         return { futureRentalsList, totalNumberOfFutureRentals }
-    //     } catch(e) {
-    //         console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
-    //         return { futureRentalsList: [], totalNumberOfFutureRentals: 0 }
-    //     } 
-    // }
+            return { futureRepairsList, totalNumberOfFutureRepairs }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { futureRepairsList: [], totalNumberOfFutureRepairs: 0 }
+        } 
+    }
 
-    // static async getCurrentRentals({} = {}) {
-    //     let query;
-    //     let currentDate = new Date();
+    static async getCurrentRepairs({} = {}) {
+        let query;
+        let currentDate = new Date();
 
-    //     query = {"dates.start_date": { $lte: currentDate }, "dates.end_date": { $gte: currentDate }, "deleted": { $eq: false }}
+        query = {"repair_details.received_date": { $lte: currentDate }, "repair_details.due_date": { $gte: currentDate }, "deleted": { $eq: false }}
 
-    //     let cursor;
+        let cursor;
     
-    //     try {
-    //         cursor = await rentals.find(query);
-    //     } catch(e) {
-    //         console.error(`Unable to issue find command, ${e}`);
-    //         return { currentRentalsList: [], totalNumberOfCurrentRentals: 0 }
-    //     }
+        try {
+            cursor = await repairs.find(query);
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { currentRepairsList: [], totalNumberOfCurrentRepairs: 0 }
+        }
         
-    //     try {
-    //         const currentRentalsList = await cursor.toArray();
-    //         const totalNumberOfCurrentRentals = await rentals.countDocuments(query);
+        try {
+            const currentRepairsList = await cursor.toArray();
+            const totalNumberOfCurrentRepairs = await repairs.countDocuments(query);
     
-    //         return { currentRentalsList, totalNumberOfCurrentRentals }
-    //     } catch(e) {
-    //         console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
-    //         return { currentRentalsList: [], totalNumberOfCurrentRentals: 0 }
-    //     } 
-    // }
+            return { currentRepairsList, totalNumberOfCurrentRepairs }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { currentRepairsList: [], totalNumberOfCurrentRepairs: 0 }
+        } 
+    }
 
     // static async updateRental(rentalId, firstName, lastName, phoneNumber, address, rentalStartDate, rentalEndDate) {
     //     try {
@@ -185,21 +186,21 @@ export default class RepairsDAO {
     //     }
     // }
 
-    // static async deleteRental(rentalId, deleted) {
-    //     try {
-    //         const updateResponse = await rentals.updateOne(
-    //             { _id: ObjectId(rentalId) },
-    //             { $set: { 
-    //                     deleted: deleted
-    //                 }
-    //             }
-    //         );
+    static async deleteRepair(repairId, deleted) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        deleted: deleted
+                    }
+                }
+            );
  
-    //         return updateResponse;
-    //     } catch (e) {
-    //         console.error(`Unable to update rental in DAO: ${e}`);
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
         
-    //     return { error: e };
-    //     }
-    // }
+        return { error: e };
+        }
+    }
 }

@@ -18,7 +18,7 @@ export default class RentalsDAO {
         }
     }
 
-    static async addRental(carId, firstName, lastName, phoneNumber, address, dates) {
+    static async addRental(carId, firstName, lastName, phoneNumber, address, dates, deleted) {
         try {
             const rental = { 
                 car_id: ObjectId(carId),
@@ -29,7 +29,8 @@ export default class RentalsDAO {
                 dates: {
                     start_date: dates.startDate,
                     end_date: dates.endDate
-                }
+                },
+                deleted: deleted
             };
  
             return await rentals.insertOne(rental);

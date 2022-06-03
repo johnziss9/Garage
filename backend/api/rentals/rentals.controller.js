@@ -13,6 +13,7 @@ export default class RentalsController {
                 startDate: new Date(req.body.dates.start_date),
                 endDate: new Date(req.body.dates.end_date)
             };
+            const deleted = req.body.deleted;
  
             const addRentalResponse = await RentalsDAO.addRental(
                 carId,
@@ -20,7 +21,8 @@ export default class RentalsController {
                 lastName,
                 phoneNumber,
                 address,
-                dates
+                dates,
+                deleted
             );
 
             res.json({ status: "success" });
@@ -76,7 +78,7 @@ export default class RentalsController {
 
     static async apiUpdateRental(req, res, next) {
         try {
-            const rentalId = req.body.rental_Id;
+            const rentalId = req.body.rental_id;
             const firstName = req.body.first_name;
             const lastName = req.body.last_name;
             const phoneNumber = req.body.phone_number;
@@ -111,7 +113,7 @@ export default class RentalsController {
 
     static async apiDeleteRental(req, res, next) {
         try {
-            const rentalId = req.body.rental_Id;
+            const rentalId = req.body.rental_id;
             const deleted = req.body.deleted;
  
             const rentalResponse = await RentalsDAO.deleteRental(

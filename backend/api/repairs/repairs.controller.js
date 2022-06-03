@@ -31,6 +31,7 @@ export default class RepairsController {
             const electric = req.body.electric;
             const aircon = req.body.aircon;
             const additional_notes = req.body.additional_notes;
+            const deleted = req.body.deleted;
  
             const addRepairResponse = await RepairsDAO.addRepair(
                 carId,
@@ -42,7 +43,8 @@ export default class RepairsController {
                 mechanical,
                 electric,
                 aircon,
-                additional_notes
+                additional_notes,
+                deleted
             );
 
             res.json({ status: "success" });
@@ -51,50 +53,50 @@ export default class RepairsController {
         }
     }
 
-    // static async apiGetRentals(req, res, next) {
+    static async apiGetRepairs(req, res, next) {
 
-    //     const { rentalsList, totalNumberOfRentals } = await RentalsDAO.getRentals();
+        const { repairsList, totalNumberOfRepairs } = await RepairsDAO.getRepairs();
 
-    //     let response = {
-    //         rentals: rentalsList,
-    //         total_results: totalNumberOfRentals
+        let response = {
+            repairs: repairsList,
+            total_results: totalNumberOfRepairs
 
-    //     };
-    //     res.json(response);
-    // }
+        };
+        res.json(response);
+    }
 
-    // static async apiGetPastRentals(req, res, next) {
+    static async apiGetPastRepairs(req, res, next) {
  
-    //     const { pastRentalsList, totalNumberOfPastRentals } = await RentalsDAO.getPastRentals();
+        const { pastRepairsList, totalNumberOfPastRepairs } = await RepairsDAO.getPastRepairs();
  
-    //     let response = {
-    //         pastRentals: pastRentalsList,
-    //         total_results: totalNumberOfPastRentals
-    //     };
-    //     res.json(response);
-    // }
+        let response = {
+            pastRepairs: pastRepairsList,
+            total_results: totalNumberOfPastRepairs
+        };
+        res.json(response);
+    }
 
-    // static async apiGetFutureRentals(req, res, next) {
+    static async apiGetFutureRepairs(req, res, next) {
  
-    //     const { futureRentalsList, totalNumberOfFutureRentals } = await RentalsDAO.getFutureRentals();
+        const { futureRepairsList, totalNumberOfFutureRepairs } = await RepairsDAO.getFutureRepairs();
  
-    //     let response = {
-    //         futureRentals: futureRentalsList,
-    //         total_results: totalNumberOfFutureRentals
-    //     };
-    //     res.json(response);
-    // }
+        let response = {
+            futureRepairs: futureRepairsList,
+            total_results: totalNumberOfFutureRepairs
+        };
+        res.json(response);
+    }
 
-    // static async apiGetCurrentRentals(req, res, next) {
+    static async apiGetCurrentRepairs(req, res, next) {
  
-    //     const { currentRentalsList, totalNumberOfCurrentRentals } = await RentalsDAO.getCurrentRentals();
+        const { currentRepairsList, totalNumberOfCurrentRepairs } = await RepairsDAO.getCurrentRepairs();
  
-    //     let response = {
-    //         currentRentals: currentRentalsList,
-    //         total_results: totalNumberOfCurrentRentals
-    //     };
-    //     res.json(response);
-    // }
+        let response = {
+            currentRepairs: currentRepairsList,
+            total_results: totalNumberOfCurrentRepairs
+        };
+        res.json(response);
+    }
 
     // static async apiUpdateRental(req, res, next) {
     //     try {
@@ -131,28 +133,28 @@ export default class RepairsController {
     //     }
     // }
 
-    // static async apiDeleteRental(req, res, next) {
-    //     try {
-    //         const rentalId = req.body.rental_Id;
-    //         const deleted = req.body.deleted;
+    static async apiDeleteRepair(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const deleted = req.body.deleted;
  
-    //         const rentalResponse = await RentalsDAO.deleteRental(
-    //             rentalId,
-    //             deleted
-    //         );
+            const repairResponse = await RepairsDAO.deleteRepair(
+                repairId,
+                deleted
+            );
  
-    //         var { error } = rentalResponse;
-    //         if (error) {
-    //             res.status(400).json({ error });
-    //         }
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
  
-    //         if (rentalResponse.modifiedCount === 0) {
-    //             throw new Error("Unable to update the rental in controller.")
-    //         }
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
  
-    //         res.json({ status: "success" });
-    //     } catch (e) {
-    //         res.status(500).json({ error: e.message });
-    //     }
-    // }
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
 }

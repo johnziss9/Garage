@@ -132,13 +132,17 @@ export default class CarsController {
                 start_date: new Date(req.body.road_tax.start_date),
                 end_date: new Date(req.body.road_tax.end_date)
             };
+            const deleted = req.body.deleted;
+            const type = req.body.type;
  
             const addCarResponse = await CarsDAO.addCar(
                 make,
                 model,
                 numberPlate,
                 mot,
-                road_tax
+                road_tax,
+                deleted,
+                type
             );
             res.json({ status: "success" });
         } catch (e) {
@@ -174,5 +178,30 @@ export default class CarsController {
             total_results: totalNumberOfCars
         };
         res.json(response);
+    }
+
+    static async apiDeleteCar(req, res, next) {
+        try {
+            const carId = req.body.car_id;
+            const deleted = req.body.deleted;
+ 
+            const deleteCarResponse = await CarsDAO.deleteCar(
+                carId,
+                deleted
+            );
+ 
+            var { error } = deleteCarResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (deleteCarResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the car in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
     }
 }

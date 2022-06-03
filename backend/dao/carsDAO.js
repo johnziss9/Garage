@@ -71,7 +71,7 @@ export default class CarsDAO {
         let currentDateToChange = new Date(); // Using this as a provisional variable as the line below changes its value.
         let currentDateTwoWeeks = new Date(currentDateToChange.setDate(currentDateToChange.getDate() + 14));
 
-        query = {"mot.end_date" : { $gte : currentDate, $lte: currentDateTwoWeeks }, "deleted": { $eq: false }}
+        query = {"mot.end_date" : { $gte : currentDate, $lte: currentDateTwoWeeks }, "deleted": { $eq: false }, "type": { $eq: "rental" } }
 
         let cursor;
     
@@ -104,7 +104,7 @@ export default class CarsDAO {
         let currentDateToChange = new Date(); // Using this as a provisional variable as the line below changes its value.
         let currentDateTwoWeeks = new Date(currentDateToChange.setDate(currentDateToChange.getDate() + 14));
 
-        query = {"road_tax.end_date" : { $gte : currentDate, $lte: currentDateTwoWeeks }, "deleted": { $eq: false }}
+        query = {"road_tax.end_date" : { $gte : currentDate, $lte: currentDateTwoWeeks }, "deleted": { $eq: false }, "type": { $eq: "rental" } }
 
         let cursor;
     
@@ -202,7 +202,7 @@ export default class CarsDAO {
         }
     }
 
-    static async addCar(make, model, numberPlate, mot, road_tax) {
+    static async addCar(make, model, numberPlate, mot, road_tax, deleted, type) {
         try {
             const car = { 
                 make: make,
@@ -215,7 +215,9 @@ export default class CarsDAO {
                 road_tax: {
                     start_date: road_tax.start_date,
                     end_date: road_tax.end_date
-                }
+                },
+                deleted: deleted,
+                type: type
             };
  
             return await cars.insertOne(car);
@@ -391,5 +393,23 @@ export default class CarsDAO {
             console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
             return { carList: [], totalNumberOfCars: 0 }
         } 
+    }
+
+    static async deleteCar(carId, deleted) {
+        try {
+            const updateResponse = await cars.updateOne(
+                { _id: ObjectId(carId) },
+                { $set: { 
+                        deleted: deleted
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update car in DAO: ${e}`);
+        
+        return { error: e };
+        }
     }
 }
