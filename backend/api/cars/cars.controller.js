@@ -102,10 +102,10 @@ export default class CarsController {
         }
     }
 
-    static async apiGetCarById(req, res, next) {
+    static async apiGetRentalCarById(req, res, next) {
         try {
             let id = req.params.id || {};
-            let car = await CarsDAO.getCarById(id);
+            let car = await CarsDAO.getRentalCarById(id);
  
             if (!car) {
                 res.status(404).json({ error: "Not Found" });
@@ -202,6 +202,53 @@ export default class CarsController {
             res.json({ status: "success" });
         } catch (e) {
             res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiGetRepairCars(req, res, next) {
+        const { carList, totalNumberOfCars } = await CarsDAO.getRepairCars();
+ 
+        let response = {
+            cars: carList,
+            total_results: totalNumberOfCars
+        };
+        res.json(response);
+    }
+
+    static async apiGetActiveRepairCars(req, res, next) {
+        const { carList, totalNumberOfCars } = await CarsDAO.getActiveRepairCars();
+ 
+        let response = {
+            cars: carList,
+            total_results: totalNumberOfCars
+        };
+        res.json(response);
+    }
+
+    static async apiGetInactiveRepairCars(req, res, next) {
+        const { carList, totalNumberOfCars } = await CarsDAO.getInactiveRepairCars();
+ 
+        let response = {
+            cars: carList,
+            total_results: totalNumberOfCars
+        };
+        res.json(response);
+    }
+    
+    static async apiGetRepairCarById(req, res, next) {
+        try {
+            let id = req.params.id || {};
+            let car = await CarsDAO.getRepairCarById(id);
+ 
+            if (!car) {
+                res.status(404).json({ error: "Not Found" });
+                return;
+            }
+ 
+            res.json(car)
+        } catch (e) {
+            console.log(`api, ${e}`);
+            res.status(500).json({ error: e });
         }
     }
 }

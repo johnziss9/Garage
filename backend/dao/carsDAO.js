@@ -18,7 +18,6 @@ export default class CarsDAO {
         }
     }
     
-    // This method will be called if we want to get all the cars from the database
     static async getRentalCars({} = {}) {
         let query;
 
@@ -158,7 +157,7 @@ export default class CarsDAO {
         }
     }
 
-    static async getCarById(id) {
+    static async getRentalCarById(id) {
         try {
             const pipeline = [
                 {
@@ -410,6 +409,204 @@ export default class CarsDAO {
             console.error(`Unable to update car in DAO: ${e}`);
         
         return { error: e };
+        }
+    }
+
+    static async getRepairCars({} = {}) {
+        let query;
+
+        query = {"deleted": { $eq: false }, "type": { $eq: "repair" } }
+
+        let cursor;
+    
+        try {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: "repairs",
+                        localField: "_id",
+                        foreignField: "car_id",
+                        as: "repairs"
+                    }
+                },
+                {
+                    $match: {
+                        deleted: false,
+                        type: "repair"
+                    }
+                }
+            ]
+            
+            cursor = await cars.aggregate(pipeline);
+
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        }
+        
+        try {
+            const carList = await cursor.toArray();
+            const totalNumberOfCars = await cars.countDocuments(query);
+    
+            return { carList, totalNumberOfCars }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        } 
+    }
+
+    static async getActiveRepairCars({} = {}) {
+        let query;
+
+        query = {"deleted": { $eq: false }, "type": { $eq: "repair" } }
+
+        let cursor;
+    
+        try {
+            const currentDate = new Date();
+            const pipeline = [
+                {
+                    "$lookup": {
+                        "from": "repairs",
+                        "let": {
+                            "rId": "$_id"
+                        },
+                        "pipeline": [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [ "$car_id", "$$rId" ]
+                                    },
+                                    "repair_details.received_date": { $lte: currentDate },
+                                    "repair_details.due_date": { $gte: currentDate }
+                                }
+                            }
+                        ],
+                        "as": "repairs"
+                    }
+                },
+                {
+                    $match: {
+                        deleted: false,
+                        type: "repair"
+                    }
+                }
+            ]
+            
+            cursor = await cars.aggregate(pipeline);
+
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        }
+        
+        try {
+            const carList = await cursor.toArray();
+            const totalNumberOfCars = await cars.countDocuments(query);
+    
+            return { carList, totalNumberOfCars }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        } 
+    }
+
+    static async getInactiveRepairCars({} = {}) {
+        let query;
+
+        query = {"deleted": { $eq: false }, "type": { $eq: "repair" } }
+
+        let cursor;
+    
+        try {
+            const currentDate = new Date();
+            const pipeline = [
+                {
+                    "$lookup": {
+                        "from": "repairs",
+                        "let": {
+                            "rId": "$_id"
+                        },
+                        "pipeline": [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [ "$car_id", "$$rId" ]
+                                    },
+                                    $or: [{ "repair_details.due_date": { $lt: currentDate } }, { "repair_details.received_date": { $gt: currentDate } }]
+                                }
+                            }
+                        ],
+                        "as": "repairs"
+                    }
+                },
+                {
+                    $match: {
+                        deleted: false,
+                        type: "repair"
+                    }
+                }
+            ]
+            
+            cursor = await cars.aggregate(pipeline);
+
+        } catch(e) {
+            console.error(`Unable to issue find command, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        }
+        
+        try {
+            const carList = await cursor.toArray();
+            const totalNumberOfCars = await cars.countDocuments(query);
+    
+            return { carList, totalNumberOfCars }
+        } catch(e) {
+            console.error(`Unable to convert cursor to array or problem counting documents, ${e}`);
+            return { carList: [], totalNumberOfCars: 0 }
+        } 
+    }
+
+    static async getRepairCarById(id) {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        _id: new ObjectId(id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "repairs",
+                        let: {
+                            id: "$_id"
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ["$car_id", "$$id"]
+                                    }
+                                }
+                            },
+                            {
+                                $sort: {
+                                    date: -1
+                                }
+                            }
+                        ],
+                        as: "repairs"
+                    }
+                },
+                {
+                    $addFields: {
+                        repairs: "$repairs"
+                    }
+                }
+            ]
+            return await cars.aggregate(pipeline).next();
+        } catch (e) {
+            console.error(`Something went wrong in getCarById: ${e}`);
+            throw e;
         }
     }
 }
