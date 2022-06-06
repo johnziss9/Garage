@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+}
+
+text {
+    color: #fff;
+}
+
+.top {
+    background-color: #000;
+    height: 40vh;
+}
+
+.bottom {
+    height: 60vh;
+    border-top: 5px solid #00cc99;
+}
