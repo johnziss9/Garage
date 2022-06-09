@@ -418,15 +418,41 @@ export default class CarsDAO {
         query = {"deleted": { $eq: false }, "type": { $eq: "repair" } }
 
         let cursor;
-    
+        
         try {
             const pipeline = [
                 {
                     $lookup: {
-                        from: "repairs",
+                        from: 'repairs',
                         localField: "_id",
                         foreignField: "car_id",
                         as: "repairs"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$repairs'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'spare_parts',
+                        localField: 'repairs._id',
+                        foreignField: 'repair_id',
+                        as: 'repairs.spare_parts'
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        make: { $first: '$make' },
+                        model: { $first: '$model' },
+                        number_plate: { $first: '$number_plate' },
+                        repairs: { $push: '$repairs' },
+                        mot: { $first: '$mot' },
+                        road_tax: { $first: '$road_tax' },
+                        type: { $first: '$type' },
+                        deleted: { $first: '$deleted' }
                     }
                 },
                 {
@@ -464,31 +490,70 @@ export default class CarsDAO {
     
         try {
             const currentDate = new Date();
+
             const pipeline = [
                 {
-                    "$lookup": {
-                        "from": "repairs",
-                        "let": {
-                            "rId": "$_id"
-                        },
-                        "pipeline": [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $eq: [ "$car_id", "$$rId" ]
-                                    },
-                                    "repair_details.received_date": { $lte: currentDate },
-                                    "repair_details.due_date": { $gte: currentDate }
-                                }
-                            }
-                        ],
-                        "as": "repairs"
+                    $lookup: {
+                        from: 'repairs',
+                        localField: "_id",
+                        foreignField: "car_id",
+                        as: "repairs"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$repairs'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'spare_parts',
+                        localField: 'repairs._id',
+                        foreignField: 'repair_id',
+                        as: 'repairs.spare_parts'
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        make: { $first: '$make' },
+                        model: { $first: '$model' },
+                        number_plate: { $first: '$number_plate' },
+                        repairs: { $push: '$repairs' },
+                        mot: { $first: '$mot' },
+                        road_tax: { $first: '$road_tax' },
+                        type: { $first: '$type' },
+                        deleted: { $first: '$deleted' }
                     }
                 },
                 {
                     $match: {
                         deleted: false,
-                        type: "repair"
+                        type: "repair"                      
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        make: 1,
+                        model: 1,
+                        number_plate: 1,
+                        mot: 1,
+                        road_tax: 1,
+                        type: 1,
+                        deleted: 1,
+                        "repairs" : {
+                            $filter : {
+                                "input" : "$repairs",
+                                "as" : "repair",
+                                "cond" : {
+                                    $and: [
+                                        {"$lte" : ["$$repair.repair_details.received_date", currentDate]},
+                                        {"$gte" : ["$$repair.repair_details.due_date", currentDate]}
+                                    ]
+                                }
+                            }
+                        }
                     }
                 }
             ]
@@ -522,28 +587,67 @@ export default class CarsDAO {
             const currentDate = new Date();
             const pipeline = [
                 {
-                    "$lookup": {
-                        "from": "repairs",
-                        "let": {
-                            "rId": "$_id"
-                        },
-                        "pipeline": [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $eq: [ "$car_id", "$$rId" ]
-                                    },
-                                    $or: [{ "repair_details.due_date": { $lt: currentDate } }, { "repair_details.received_date": { $gt: currentDate } }]
-                                }
-                            }
-                        ],
-                        "as": "repairs"
+                    $lookup: {
+                        from: 'repairs',
+                        localField: "_id",
+                        foreignField: "car_id",
+                        as: "repairs"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$repairs'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'spare_parts',
+                        localField: 'repairs._id',
+                        foreignField: 'repair_id',
+                        as: 'repairs.spare_parts'
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        make: { $first: '$make' },
+                        model: { $first: '$model' },
+                        number_plate: { $first: '$number_plate' },
+                        repairs: { $push: '$repairs' },
+                        mot: { $first: '$mot' },
+                        road_tax: { $first: '$road_tax' },
+                        type: { $first: '$type' },
+                        deleted: { $first: '$deleted' }
                     }
                 },
                 {
                     $match: {
                         deleted: false,
-                        type: "repair"
+                        type: "repair"                      
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        make: 1,
+                        model: 1,
+                        number_plate: 1,
+                        mot: 1,
+                        road_tax: 1,
+                        type: 1,
+                        deleted: 1,
+                        "repairs" : {
+                            $filter : {
+                                "input" : "$repairs",
+                                "as" : "repair",
+                                "cond" : {
+                                    $or: [
+                                        {"$gt" : ["$$repair.repair_details.received_date", currentDate]},
+                                        {"$lt" : ["$$repair.repair_details.due_date", currentDate]}
+                                    ]
+                                }
+                            }
+                        }
                     }
                 }
             ]
@@ -589,6 +693,23 @@ export default class CarsDAO {
                                 }
                             },
                             {
+                                $lookup: {
+                                    from: "spare_parts",
+                                    let: { 
+                                        "repairId": "$_id" 
+                                    },
+                                    pipeline: [
+                                        { 
+                                            $match: {
+                                                $expr: {
+                                                    $eq: ["$repair_id", "$$repairId"] 
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "as": "spare_parts"
+                                }
+                            },{
                                 $sort: {
                                     date: -1
                                 }

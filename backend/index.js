@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import CarsDAO from './dao/carsDAO.js';
 import RentalsDAO from './dao/rentalsDAO.js';
 import RepairsDAO from './dao/repairsDAO.js'
+import SparePartsDAO from './dao/spare_partsDAO.js';
 
 dotenv.config();
  
@@ -27,6 +28,7 @@ MongoClient.connect(
     await CarsDAO.injectDB(client);
     await RentalsDAO.injectDB(client);
     await RepairsDAO.injectDB(client);
+    await SparePartsDAO.injectDB(client);
     app.listen(port, () => {
         console.log(`listening to port ${port}`);
     });

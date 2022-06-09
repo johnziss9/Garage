@@ -21,10 +21,10 @@ router.route("/updateMOT").put(CarsController.apiUpdateMOT); // Updated the MOT 
 router.route("/updateRT").put(CarsController.apiUpdateRT); // Updated the RT dates of the rental cars
 
 // Repair Cars
-router.route("/getRepairs").get(CarsController.apiGetRepairCars); // Gets al the repair cars
-router.route("/getActiveRepairs").get(CarsController.apiGetActiveRepairCars); // Gets cars with active repairs
-router.route("/getInactiveRepairs").get(CarsController.apiGetInactiveRepairCars); // Gets cars with inactive repairs
+router.route("/getRepairs").get(CarsController.apiGetRepairCars); // Gets all the repair cars with their spare parts
+router.route("/getActiveRepairs").get(CarsController.apiGetActiveRepairCars); // Gets cars with active repairs with their spare parts
+router.route("/getInactiveRepairs").get(CarsController.apiGetInactiveRepairCars); // Gets cars with inactive repairs with their spare parts
 
-router.route("/repairCarId/:id").get(CarsController.apiGetRepairCarById); // Gets a single repair car with all of it's repairs
+router.route("/repairCarId/:id").get(CarsController.apiGetRepairCarById); // Gets a single repair car with all of it's repairs and spare parts
 
 export default router;
