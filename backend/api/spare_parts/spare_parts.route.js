@@ -1,11 +1,12 @@
 import express from "express";
 import SparePartsController from "./spare_parts.controller.js";
+import verifyToken from "../authentication/authentication.js";
 
 const router = express.Router();
 
-router.route("/add").post(SparePartsController.apiAddSparePart); 
-router.route("/getAll").get(SparePartsController.apiGetSpareParts);
-router.route("/delete").put(SparePartsController.apiDeleteSparePart);
-router.route("/update").put(SparePartsController.apiUpdateSparePart);
+router.route("/add").post(verifyToken, SparePartsController.apiAddSparePart); 
+router.route("/getAll").get(verifyToken, SparePartsController.apiGetSpareParts);
+router.route("/delete").put(verifyToken, SparePartsController.apiDeleteSparePart);
+router.route("/update").put(verifyToken, SparePartsController.apiUpdateSparePart);
 
 export default router;

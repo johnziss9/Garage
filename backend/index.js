@@ -5,6 +5,7 @@ import CarsDAO from './dao/carsDAO.js';
 import RentalsDAO from './dao/rentalsDAO.js';
 import RepairsDAO from './dao/repairsDAO.js'
 import SparePartsDAO from './dao/spare_partsDAO.js';
+import AuthenticationDAO from './dao/authenticationDAO.js';
 
 dotenv.config();
  
@@ -29,6 +30,8 @@ MongoClient.connect(
     await RentalsDAO.injectDB(client);
     await RepairsDAO.injectDB(client);
     await SparePartsDAO.injectDB(client);
+    await AuthenticationDAO.injectDB(client);
+    
     app.listen(port, () => {
         console.log(`listening to port ${port}`);
     });

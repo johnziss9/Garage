@@ -4,6 +4,7 @@ import cars from "./api/cars/cars.route.js"; // This is the routes file we will 
 import rentals from "./api/rentals/rentals.route.js";
 import repairs from "./api/repairs/repairs.route.js";
 import spare_parts from "./api/spare_parts/spare_parts.route.js";
+import authentication from "./api/authentication/authentication.route.js"
  
 const app = express();
  
@@ -15,6 +16,7 @@ app.use("/api/cars", cars); // Specifying the url for the route and cars will be
 app.use("/api/rentals", rentals);
 app.use("/api/repairs", repairs);
 app.use("/api/spare_parts", spare_parts);
+app.use("/api/authentication", authentication);
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
  
 export default app;
