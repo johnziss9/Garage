@@ -32,21 +32,21 @@ export default class AuthenticationController {
             const username = req.body.username;
             const password = req.body.password;
 
-            const loginResponse = await AuthenticationDAO.loginUser(
+            const user = await AuthenticationDAO.loginUser(
                 username,
                 password
             );
 
-            var { error } = loginResponse;
+            var { status, error } = user;
             if (error) {
-                res.status(400).json({ error });
+                return res.status(400).json({ status, error });
             }
  
-            if (loginResponse.modifiedCount === 0) {
+            if (user.modifiedCount === 0) {
                 throw new Error("Unable to login user in controller.")
             }
  
-            res.json(loginResponse);
+            res.json({ status: "success", user: user});
         } catch (e) {
             res.status(500).json({ error: e.message });
         }

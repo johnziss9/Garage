@@ -80,8 +80,7 @@ export default class AuthenticationDAO {
             
                 return await user;
             } else {
-                console.error(`Invalid credentials`);
-                return { error: 'Invalid credentials' };
+                return { status: 'Failed', error: 'Invalid credentials' };
             }
         } catch (e) {
             console.error(`Unable to add user: ${e}`);
