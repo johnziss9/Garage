@@ -1,3 +1,13 @@
+.top-login {
+    background-color: #000;
+    height: 40vh;
+}
+
+.bottom-login {
+    height: 60vh;
+    border-top: 5px solid #00cc99;
+}
+
 .login-content {
     padding-top: 60px;
     padding-left: 150px;

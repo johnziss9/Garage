@@ -51,7 +51,7 @@ function Login() {
 
   return (
     <>
-      <div className='top'>
+      <div className='top-login'>
         {loginFailed ? 
           <Snackbar
             autoHideDuration={4000}
@@ -78,7 +78,7 @@ function Login() {
         </div>
         
       </div>
-      <div className='bottom'></div>
+      <div className='bottom-login'></div>
     </>
   );
 }

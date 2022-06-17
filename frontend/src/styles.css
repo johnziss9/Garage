@@ -8,10 +8,25 @@ text {
 
 .top {
     background-color: #000;
-    height: 40vh;
+    height: 25vh;
 }
 
 .bottom {
-    height: 60vh;
+    height: auto;
+    min-height: 75vh;
     border-top: 5px solid #00cc99;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.title {
+    font-size: 70px;
+}
+
+.top-content {
+    padding-top: 70px;
+    padding-left: 150px;
+    display: flex;
+    flex-direction: column;
 }
