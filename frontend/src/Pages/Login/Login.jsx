@@ -37,7 +37,7 @@ function Login() {
     .then((Response) => Response.json())
     .then((result) => {
         if (result.status === 'success')  {
-          sessionStorage.setItem('token', result.data);
+          sessionStorage.setItem('token', result.user.token);
           sessionStorage.setItem('username', username);
           navigate('/Reminders');
         }

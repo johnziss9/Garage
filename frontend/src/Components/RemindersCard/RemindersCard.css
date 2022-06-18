@@ -5,13 +5,22 @@
     align-items: center;
     flex-direction: column;
     margin: 20px 20px;
-    border-top: 8px solid #00cc99;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.reminders-card-type {
+    width: 100%;
+    height: 40px;
+    background-color: #00cc99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 .reminders-number-plate {
     margin: 10px 0;
-    width: 250px;
+    width: 230px;
     height: 45px;
     border: 1px solid #000;
     border-radius: 5px;
@@ -20,6 +29,7 @@
     justify-content: center;
     font-size: 30px;
     font-weight: bold;
+    background-color: rgba(255, 255, 0, 0.977);
 }
 
 .reminders-make {
