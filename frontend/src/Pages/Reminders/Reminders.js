@@ -66,7 +66,7 @@ function Reminders() {
               model={car.model}
               expiry_date_type="Expiring on"
               expiry_date={moment(car.mot.end_date).format('DD/MM/YYYY')}
-              button_value={"RENEWED"}
+              button_value={"RENEW"}
             />
           ))}
           {expiringRTs.map((car) => (
@@ -77,7 +77,7 @@ function Reminders() {
               model={car.model}
               expiry_date_type="Expiring on"
               expiry_date={moment(car.road_tax.end_date).format('DD/MM/YYYY')}
-              button_value={"RENEWED"}
+              button_value={"RENEW"}
             />
           ))}
           {expiringRentals.map((car) => (
@@ -88,7 +88,8 @@ function Reminders() {
               model={car.model}
               expiry_date_type="Due date is on"
               expiry_date={moment(car.rentals[0].dates.end_date).format('DD/MM/YYYY')}
-              button_value={"RETURNED"}
+              customer={`${car.rentals[0].first_name} ${car.rentals[0].last_name}`}
+              button_value={"RETURN"}
             />
           ))}
         </div>

@@ -65,6 +65,21 @@
     font-weight: bold;
 }
 
+.reminders-days-left {
+    width: 250px;
+    text-align: center;
+    font-size: 20px;
+    margin: 15px 0;
+    color: red;
+}
+
+.reminders-customer {
+    width: 250px;
+    text-align: center;
+    font-size: 22px;
+    margin: 15px 0;
+}
+
 .reminders-button {
     margin-top: auto;
     margin-bottom: 20px;
