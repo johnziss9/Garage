@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 function CustomButton(props) {
   return (
     <Button 
-        style={{ backgroundColor: props.backgroundColor, width: props.width, height: props.height, margin: props.margin }}
+        style={{ backgroundColor: props.backgroundColor, width: props.width, height: props.height, color: props.color }}
         variant="contained"
         onClick={props.onClick}
     >

@@ -20,7 +20,7 @@ function RemindersCard(props) {
       <div className='reminders-expiring-text'>{props.expiry_date_type}</div>
       <div className='reminders-expiring-date'>{props.expiry_date}</div>
       <div className='reminders-button'>
-        <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={props.button_value} onClick={handleOpen} />
+        <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={props.button_value} color={'#fff'} onClick={handleOpen} />
       </div>
       <Dialog open={open} onClose={handleClose} PaperProps={{ sx: { textAlign:'center' } }}>
         {(() => {
@@ -29,10 +29,10 @@ function RemindersCard(props) {
               return <div>
                 <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff' }} >{props.type} renewal for {props.make} {props.model} - {props.number_plate}</DialogTitle>
                 <Divider variant="middle" style={{width:'90%'}} />
-                <DialogContent>
+                <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <CustomDatePicker label="M.O.T. Start Date" />
                   <CustomDatePicker label="M.O.T. End Date" />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} margin={'0 100px'}></CustomButton>
+                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'}></CustomButton>
                 </DialogContent>
               </div>
             case 'RENTAL':
