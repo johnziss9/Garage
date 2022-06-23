@@ -168,6 +168,27 @@ export default class RentalsDAO {
         }
     }
 
+    static async updateRentalDates(rentalId, rentalStartDate, rentalEndDate) {
+        try {
+            const updateResponse = await rentals.updateOne(
+                { _id: ObjectId(rentalId) },
+                { $set: {
+                        dates: {
+                            start_date: rentalStartDate,
+                            end_date: rentalEndDate
+                        }
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update rental in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
     static async deleteRental(rentalId, deleted) {
         try {
             const updateResponse = await rentals.updateOne(

@@ -8,6 +8,13 @@ import CustomDatePicker from '../CustomDatePicker/CustomDatePicker';
 function RemindersCard(props) {
 
   const [open, setOpen] = React.useState(false);
+  const [newMOTStartDate, setNewMOTStartDate] = React.useState(new Date());
+  const [newMOTEndDate, setNewMOTEndDate] = React.useState(new Date());
+
+  const [newRTStartDate, setNewRTStartDate] = React.useState(new Date());
+  const [newRTEndDate, setNewRTEndDate] = React.useState(new Date());
+
+  const [carReturnDate, setCarReturnDate] = React.useState(new Date());
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -15,32 +22,65 @@ function RemindersCard(props) {
   const currentDate = moment(new Date(), "DD.MM.YYYY");
   const expiryDate = moment(props.expiry_date, "DD.MM.YYYY");
 
-  // const handleLogin = () => {
-  //   fetch('http://localhost:5000/api/authentication/login', {
-  //       method: 'post',
-  //       headers: {
-  //           'Accept': 'application/json',
-  //           'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({
-  //           username: username,
-  //           password: password
-  //       })
-  //   })
-  //   .then((Response) => Response.json())
-  //   .then((result) => {
-  //       if (result.status === 'success')  {
-  //         sessionStorage.setItem('token', result.user.token);
-  //         sessionStorage.setItem('username', username);
-  //         navigate('/Reminders');
-  //       }
-  //       else {
-  //         handleShowLoginFailedSB();
-  //         handleClearUsername();
-  //         handleClearPassword();
-  //       }
-  //   })
-  // }
+  const handleRenewMOT = () => {
+    fetch('http://localhost:5000/api/cars/updateMOT', {
+        method: 'put',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': sessionStorage.getItem('token')
+        },
+        body: JSON.stringify({
+            car_id: props.car_id,
+            mot: {
+              start_date: newMOTStartDate,
+              end_date: newMOTEndDate
+            }
+        })
+    })
+    .then((Response) => Response.json())
+    .then(handleClose(), window.location.reload())
+  }
+
+  const handleRenewRT = () => {
+    fetch('http://localhost:5000/api/cars/updateRT', {
+        method: 'put',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': sessionStorage.getItem('token')
+        },
+        body: JSON.stringify({
+            car_id: props.car_id,
+            road_tax: {
+              start_date: newRTStartDate,
+              end_date: newRTEndDate
+            }
+        })
+    })
+    .then((Response) => Response.json())
+    .then(handleClose(), window.location.reload())
+  }
+
+  const handleCarReturn = () => {
+    fetch('http://localhost:5000/api/rentals/updateDates', {
+        method: 'put',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': sessionStorage.getItem('token')
+        },
+        body: JSON.stringify({
+            rental_id: props.rental_Id,
+            dates: {
+              start_date: props.start_date,
+              end_date: carReturnDate
+            }
+        })
+    })
+    .then((Response) => Response.json())
+    .then(handleClose(), window.location.reload())
+  }
 
   return (
     <div className='reminders-card-wrapper'>
@@ -68,9 +108,9 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="M.O.T. Start Date" />
-                  <CustomDatePicker label="M.O.T. End Date" />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'}></CustomButton>
+                  <CustomDatePicker label="M.O.T. Start Date" value={newMOTStartDate} onChange={setNewMOTStartDate} />
+                  <CustomDatePicker label="M.O.T. End Date" value={newMOTEndDate} onChange={setNewMOTEndDate} />
+                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewMOT}></CustomButton>
                 </DialogContent>
               </div>
             case 'ROAD TAX':
@@ -81,9 +121,9 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="Road Tax Start Date" />
-                  <CustomDatePicker label="Road Tax End Date" />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'}></CustomButton>
+                  <CustomDatePicker label="Road Tax Start Date" value={newRTStartDate} onChange={setNewRTStartDate} />
+                  <CustomDatePicker label="Road Tax End Date" value={newRTEndDate} onChange={setNewRTEndDate} />
+                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewRT}></CustomButton>
                 </DialogContent>
               </div>
             case 'RENTAL':
@@ -94,8 +134,8 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="Car returned on" />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Return'} color={'#fff'}></CustomButton>
+                  <CustomDatePicker label="Car returned on" value={carReturnDate} onChange={setCarReturnDate} />
+                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Return'} color={'#fff'} onClick={handleCarReturn}></CustomButton>
                 </DialogContent>
               </div>
             default:

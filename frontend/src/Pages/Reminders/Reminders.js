@@ -43,9 +43,6 @@ function Reminders() {
       setExpiringMOTs(expiringMOTsData.cars);
       setExpiringRTs(expiringRTsData.cars);
       setExpiringRentals(expiringRentalsData.cars);
-      console.log(expiringMOTs);
-      console.log(expiringRTs);
-      console.log(expiringRentals);
     })
   }, []);
 
@@ -67,6 +64,7 @@ function Reminders() {
               expiry_date_type="Expiring on"
               expiry_date={moment(car.mot.end_date).format('DD/MM/YYYY')}
               button_value={"RENEW"}
+              car_id={car._id}
             />
           ))}
           {expiringRTs.map((car) => (
@@ -78,6 +76,7 @@ function Reminders() {
               expiry_date_type="Expiring on"
               expiry_date={moment(car.road_tax.end_date).format('DD/MM/YYYY')}
               button_value={"RENEW"}
+              car_id={car._id}
             />
           ))}
           {expiringRentals.map((car) => (
@@ -90,6 +89,8 @@ function Reminders() {
               expiry_date={moment(car.rentals[0].dates.end_date).format('DD/MM/YYYY')}
               customer={`${car.rentals[0].first_name} ${car.rentals[0].last_name}`}
               button_value={"RETURN"}
+              rental_Id={car.rentals[0]._id}
+              start_date={car.rentals[0].dates.start_date}
             />
           ))}
         </div>

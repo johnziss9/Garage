@@ -8,8 +8,6 @@ import {makeStyles} from "@material-ui/core/styles";
 
 function CustomDatePicker(props) {
 
-    const [date, setDate] = React.useState(new Date());
-
     const materialTheme = createMuiTheme({
         overrides: {
             MuiPickersToolbar: {
@@ -123,8 +121,8 @@ function CustomDatePicker(props) {
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <ThemeProvider theme={materialTheme}>
                 <KeyboardDatePicker
-                    value={date}
-                    onChange={setDate}
+                    value={props.value}
+                    onChange={props.onChange}
                     label={props.label}
                     format="dd/MM/yyyy"
                     variant='dialog'
