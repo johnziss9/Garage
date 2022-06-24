@@ -9,6 +9,7 @@ function Reminders() {
   const [expiringMOTs, setExpiringMOTs] = useState([]);
   const [expiringRTs, setExpiringRTs] = useState([]);
   const [expiringRentals, setExpiringRentals] = useState([]);
+  const [rentalsList, setRentalsList] = useState([]);
 
   useEffect(() => {
     Promise.all([
@@ -43,6 +44,21 @@ function Reminders() {
       setExpiringMOTs(expiringMOTsData.cars);
       setExpiringRTs(expiringRTsData.cars);
       setExpiringRentals(expiringRentalsData.cars);
+      
+      // This function gets a list of all rental even in the same car
+      const getRentals = () => {
+        const rentals = [];
+
+        expiringRentals.forEach(car => {
+          for (let r = 0; r < car.rentals.length; r++) {
+            rentals.push(car);
+          }
+        });
+
+        setRentalsList(rentals);
+      }
+
+      getRentals();
     })
   }, []);
 
@@ -79,7 +95,7 @@ function Reminders() {
               car_id={car._id}
             />
           ))}
-          {expiringRentals.map((car) => (
+          {rentalsList.map((car) => (
             <RemindersCard
               type="RENTAL"
               number_plate={car.number_plate}
