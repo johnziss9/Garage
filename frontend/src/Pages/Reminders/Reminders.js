@@ -49,9 +49,26 @@ function Reminders() {
       const getRentals = () => {
         const rentals = [];
 
-        expiringRentals.forEach(car => {
+        expiringRentalsData.cars.forEach(car => {
           for (let r = 0; r < car.rentals.length; r++) {
-            rentals.push(car);
+            rentals.push(
+              {
+                "_id": car._id,
+                "make": car.make,
+                "model": car.model,
+                "number_plate": car.number_plate,
+                "rentals": {
+                  "car_id": car.rentals[r].car_id,
+                  "_id": car.rentals[r]._id,
+                  "first_name": car.rentals[r].first_name,
+                  "last_name": car.rentals[r].last_name,
+                  "dates": {
+                    "start_date": car.rentals[r].dates.start_date,
+                    "end_date": car.rentals[r].dates.end_date,
+                  }
+                }
+              }
+            );
           }
         });
 
@@ -77,7 +94,7 @@ function Reminders() {
               number_plate={car.number_plate}
               make={car.make}
               model={car.model}
-              expiry_date_type="Expiring on"
+              expiry_text_or_name={"Expiring on"}
               expiry_date={moment(car.mot.end_date).format('DD/MM/YYYY')}
               button_value={"RENEW"}
               car_id={car._id}
@@ -89,7 +106,7 @@ function Reminders() {
               number_plate={car.number_plate}
               make={car.make}
               model={car.model}
-              expiry_date_type="Expiring on"
+              expiry_text_or_name={"Expiring on"}
               expiry_date={moment(car.road_tax.end_date).format('DD/MM/YYYY')}
               button_value={"RENEW"}
               car_id={car._id}
@@ -101,12 +118,12 @@ function Reminders() {
               number_plate={car.number_plate}
               make={car.make}
               model={car.model}
-              expiry_date_type="Due date is on"
-              expiry_date={moment(car.rentals[0].dates.end_date).format('DD/MM/YYYY')}
-              customer={`${car.rentals[0].first_name} ${car.rentals[0].last_name}`}
+              expiry_text_or_name={`${car.rentals.first_name} ${car.rentals.last_name}`}
+              rental_start_date={moment(car.rentals.dates.start_date).format('DD/MM/YYYY')}
+              until_text={"until"}
+              rental_end_date={moment(car.rentals.dates.end_date).format('DD/MM/YYYY')}
               button_value={"RETURN"}
-              rental_Id={car.rentals[0]._id}
-              start_date={car.rentals[0].dates.start_date}
+              rental_Id={car.rentals._id}
             />
           ))}
         </div>

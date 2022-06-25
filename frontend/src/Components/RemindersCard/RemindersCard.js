@@ -89,11 +89,12 @@ function RemindersCard(props) {
       <div className='reminders-make'>{props.make}</div>
       <div className='reminders-model'>{props.model}</div>
       <Divider style={{width:'90%'}} />
-      <div className='reminders-expiring-text'>{props.expiry_date_type}</div>
-      <div className='reminders-expiring-date'>{props.expiry_date}</div>
-      {props.type === 'RENTAL' ?
-      <div className='reminders-customer'>{props.customer}</div> :
-      <div className='reminders-days-left'>{expiryDate.diff(currentDate, 'days')} days left</div> }
+      <div className='reminders-expiring-text-or-name' style={props.type === 'RENTAL' ? {marginBottom: 10} : {marginBottom: 15}}>{props.expiry_text_or_name}</div>
+      <div className='reminders-date'>{props.expiry_date}</div> {/* MOT and RT */}
+      <div className='reminders-date'>{props.rental_start_date}</div> {/* Rental */}
+      <div className='reminders-until-text'>{props.until_text}</div> {/* Rental */}
+      <div className='reminders-date'>{props.rental_end_date}</div> {/* Rental */}
+      {props.type !== 'RENTAL' ? <div className='reminders-days-left'>{expiryDate.diff(currentDate, 'days')} days left</div> : null } {/* MOT and RT */}
       <div className='reminders-button'>
         <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={props.button_value} color={'#fff'} onClick={handleOpen} />
       </div>
