@@ -2,10 +2,6 @@ body {
     margin: 0;
 }
 
-text {
-    color: #fff;
-}
-
 .top {
     background-color: #000;
     height: 25vh;
@@ -22,6 +18,7 @@ text {
 
 .title {
     font-size: 70px;
+    color: #fff;
 }
 
 .top-content {

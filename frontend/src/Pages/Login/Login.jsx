@@ -63,7 +63,7 @@ function Login() {
           </Snackbar>
         : null}
         <div className='login-content'>
-          <text className='login-title'>Garage Volt</text>
+          <div className='login-title'>Garage Volt</div>
           {!showForm ?
             <CustomButton backgroundColor={'#00cc99'} width={'200px'} height={'45px'} value={'Login'} onClick={handleShowForm}></CustomButton> :
             <form className='login-form'>

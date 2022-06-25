@@ -83,7 +83,7 @@ function Reminders() {
     <>
       <div className='top'>
         <div className='top-content'>
-          <text className='title'>Reminders</text>
+          <div className='title'>Reminders</div>
         </div>
       </div>
       <div className='bottom'>
