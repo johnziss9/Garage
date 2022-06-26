@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import './CustomNavbar.css';
 
@@ -11,13 +12,13 @@ function CustomNavbar() {
             </span>
             <ul>
                 <li>
-                    <a href="#">Reminders</a>
+                    <Link to="/Reminders">Reminders</Link>
                 </li>
                 <li>
-                    <a href="#">Rentals</a>
+                    <Link to="/Rentals">Rentals</Link>
                 </li>
                 <li>
-                    <a href="#">Repairs</a>
+                    <Link to="/Repairs">Repairs</Link>
                 </li>
             </ul>
         </label>

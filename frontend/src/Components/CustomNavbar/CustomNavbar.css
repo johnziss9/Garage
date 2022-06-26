@@ -88,6 +88,7 @@ label ul {
   transition: .25s 0s ease-in-out;
   list-style: none;
   padding: 0;
+  text-align: center;
 }
 
 label a {
