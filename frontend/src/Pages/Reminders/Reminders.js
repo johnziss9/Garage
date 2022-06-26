@@ -3,12 +3,12 @@ import './Reminders.css';
 import '../../styles.css';
 import moment from 'moment';
 import RemindersCard from '../../Components/RemindersCard/RemindersCard';
+import CustomNavbar from '../../Components/CustomNavbar/CustomNavbar';
 
 function Reminders() {
 
   const [expiringMOTs, setExpiringMOTs] = useState([]);
   const [expiringRTs, setExpiringRTs] = useState([]);
-  const [expiringRentals, setExpiringRentals] = useState([]);
   const [rentalsList, setRentalsList] = useState([]);
 
   useEffect(() => {
@@ -43,12 +43,12 @@ function Reminders() {
     ]).then(([expiringMOTsData, expiringRTsData, expiringRentalsData]) => {
       setExpiringMOTs(expiringMOTsData.cars);
       setExpiringRTs(expiringRTsData.cars);
-      setExpiringRentals(expiringRentalsData.cars);
       
       // This function gets a list of all rental even in the same car
       const getRentals = () => {
         const rentals = [];
 
+        // Creating a car object and adding it to the list so we have only one rental instead of an array. Only passing the information needed.
         expiringRentalsData.cars.forEach(car => {
           for (let r = 0; r < car.rentals.length; r++) {
             rentals.push(
@@ -84,6 +84,7 @@ function Reminders() {
       <div className='top'>
         <div className='top-content'>
           <div className='title'>Reminders</div>
+          <CustomNavbar />
         </div>
       </div>
       <div className='bottom'>

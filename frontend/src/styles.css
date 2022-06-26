@@ -22,8 +22,5 @@ body {
 }
 
 .top-content {
-    padding-top: 70px;
-    padding-left: 150px;
-    display: flex;
-    flex-direction: column;
+    padding: 70px 0 0 150px;
 }
