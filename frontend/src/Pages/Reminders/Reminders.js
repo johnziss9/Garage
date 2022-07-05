@@ -9,7 +9,8 @@ function Reminders() {
 
   const [expiringMOTs, setExpiringMOTs] = useState([]);
   const [expiringRTs, setExpiringRTs] = useState([]);
-  const [rentalsList, setRentalsList] = useState([]);
+  const [expiringRentalsList, setExpiringRentalsList] = useState([]);
+  const [allRentalsList, setAllRentalsList] = useState([]);
 
   useEffect(() => {
     Promise.all([
@@ -39,16 +40,25 @@ function Reminders() {
               'x-access-token': sessionStorage.getItem('token')
           }
       })
+      .then(res => res.json()),
+      fetch('http://localhost:5000/api/cars/getRentals',  {
+          method: 'get',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'x-access-token': sessionStorage.getItem('token')
+          }
+      })
       .then(res => res.json())
-    ]).then(([expiringMOTsData, expiringRTsData, expiringRentalsData]) => {
+    ]).then(([expiringMOTsData, expiringRTsData, expiringRentalsData, allRentalData]) => {
       setExpiringMOTs(expiringMOTsData.cars);
       setExpiringRTs(expiringRTsData.cars);
       
-      // This function gets a list of all rental even in the same car
-      const getRentals = () => {
+      // This function gets a list of all expiring rentals as there might be more than one rental expiring.
+      const getExpiringRentals = () => {
         const rentals = [];
 
-        // Creating a car object and adding it to the list so we have only one rental instead of an array. Only passing the information needed.
+        // Creating a car object and adding it to the list so we have only one rental instead of an array. (Only passing the information needed.)
         expiringRentalsData.cars.forEach(car => {
           for (let r = 0; r < car.rentals.length; r++) {
             rentals.push(
@@ -72,10 +82,14 @@ function Reminders() {
           }
         });
 
-        setRentalsList(rentals);
+        setExpiringRentalsList(rentals);
       }
 
-      getRentals();
+      getExpiringRentals();
+
+      // Get all rentals to pass over to the CustomDatePicker
+      const getAllRentals = () => setAllRentalsList(allRentalData);
+      getAllRentals();
     })
   }, []);
 
@@ -113,7 +127,7 @@ function Reminders() {
               car_id={car._id}
             />
           ))}
-          {rentalsList.map((car) => (
+          {expiringRentalsList.map((car) => (
             <RemindersCard
               type="RENTAL"
               number_plate={car.number_plate}
@@ -125,6 +139,8 @@ function Reminders() {
               rental_end_date={moment(car.rentals.dates.end_date).format('DD/MM/YYYY')}
               button_value={"RETURN"}
               rental_Id={car.rentals._id}
+              expiringRentals={expiringRentalsList}
+              allRentals={allRentalsList}
             />
           ))}
         </div>

@@ -135,7 +135,7 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="Car returned on" value={carReturnDate} onChange={setCarReturnDate} />
+                  <CustomDatePicker label="Car returned on" value={carReturnDate} onChange={setCarReturnDate} expiringRentals={props.expiringRentals} allRentals={props.allRentals} number_plate={props.number_plate} />
                   <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Return'} color={'#fff'} onClick={handleCarReturn}></CustomButton>
                 </DialogContent>
               </div>
