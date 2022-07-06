@@ -2,7 +2,7 @@ import React from 'react';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import {createMuiTheme, Paper, Grid } from "@material-ui/core";
+import {createMuiTheme} from "@material-ui/core";
 import {ThemeProvider} from "@material-ui/styles";
 import {makeStyles} from "@material-ui/core/styles";
 import moment from 'moment';
@@ -10,26 +10,30 @@ import moment from 'moment';
 function CustomDatePicker(props) {
 
     const rentalDates = (date) => {
-        let ranges = [];
+        if (props.allRentals !== null) {
+            let ranges = [];
 
-        props.allRentals.cars.forEach(car => {
-            if (car.number_plate === props.number_plate) {
-                const rentals = car.rentals;
+            props.allRentals.cars.forEach(car => {
+                if (car.number_plate === props.number_plate) {
+                    const rentals = car.rentals;
 
-                rentals.forEach(rental => {
-                    var startDate = moment(rental.dates.start_date).subtract(1, 'days');
-                    var endDate = moment(rental.dates.end_date).subtract(1, 'days');
+                    rentals.forEach(rental => {
+                        var startDate = moment(rental.dates.start_date).subtract(1, 'days');
+                        var endDate = moment(rental.dates.end_date).subtract(1, 'days');
 
-                    while (startDate <= endDate) {
-                        ranges.push(moment(startDate).format("YYYY-MM-DD"));
-                        startDate = moment(startDate).add(1, 'days');
-                    }                  
-                })
+                        while (startDate <= endDate) {
+                            ranges.push(moment(startDate).format("YYYY-MM-DD"));
+                            startDate = moment(startDate).add(1, 'days');
+                        }                  
+                    })
 
-            }
-        });
+                }
+            });
 
-        return ranges.includes(date.toISOString().split('T')[0]);
+            return ranges.includes(date.toISOString().split('T')[0]);
+        } else {
+            return null;
+        }
     }
 
     const materialTheme = createMuiTheme({

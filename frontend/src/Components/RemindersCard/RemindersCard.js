@@ -74,7 +74,7 @@ function RemindersCard(props) {
             rental_id: props.rental_Id,
             dates: {
               start_date: props.rental_start_date,
-              end_date: carReturnDate
+              end_date: moment(carReturnDate).add(1, 'hour')
             }
         })
     })
@@ -109,8 +109,8 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="M.O.T. Start Date" value={newMOTStartDate} onChange={setNewMOTStartDate} />
-                  <CustomDatePicker label="M.O.T. End Date" value={newMOTEndDate} onChange={setNewMOTEndDate} />
+                  <CustomDatePicker label="M.O.T. Start Date" value={newMOTStartDate} onChange={setNewMOTStartDate} allRentals={null} />
+                  <CustomDatePicker label="M.O.T. End Date" value={newMOTEndDate} onChange={setNewMOTEndDate} allRentals={null} />
                   <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewMOT}></CustomButton>
                 </DialogContent>
               </div>
@@ -122,8 +122,8 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="Road Tax Start Date" value={newRTStartDate} onChange={setNewRTStartDate} />
-                  <CustomDatePicker label="Road Tax End Date" value={newRTEndDate} onChange={setNewRTEndDate} />
+                  <CustomDatePicker label="Road Tax Start Date" value={newRTStartDate} onChange={setNewRTStartDate} allRentals={null} />
+                  <CustomDatePicker label="Road Tax End Date" value={newRTEndDate} onChange={setNewRTEndDate} allRentals={null} />
                   <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewRT}></CustomButton>
                 </DialogContent>
               </div>
