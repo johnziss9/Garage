@@ -85,9 +85,9 @@ function RemindersCard(props) {
   return (
     <div className='reminders-card-wrapper'>
       <div className='reminders-card-type'>{props.type}</div>
-      <div className='reminders-number-plate'>{props.number_plate}</div>
-      <div className='reminders-make'>{props.make}</div>
-      <div className='reminders-model'>{props.model}</div>
+      <div className='card-number-plate'>{props.number_plate}</div>
+      <div className='card-make'>{props.make}</div>
+      <div className='card-model'>{props.model}</div>
       <Divider style={{width:'90%'}} />
       <div className='reminders-expiring-text-or-name' style={props.type === 'RENTAL' ? {marginBottom: 10} : {marginBottom: 15}}>{props.expiry_text_or_name}</div>
       <div className='reminders-date'>{props.expiry_date}</div> {/* MOT and RT */}

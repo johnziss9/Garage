@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import Login from './Pages/Login/Login';
-import Reminders from './Pages/Reminders/Reminders.js';
+import Reminders from './Pages/Reminders/Reminders';
 import Rentals from './Pages/Rentals/Rentals';
 import Repairs from './Pages/Repairs/Repairs';
 

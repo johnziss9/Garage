@@ -1,0 +1,7 @@
+.rentals-content {
+    width: 1020px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border: 1px solid red;
+}
