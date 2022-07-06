@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
@@ -23,9 +23,7 @@ function CustomDatePicker(props) {
                     while (startDate <= endDate) {
                         ranges.push(moment(startDate).format("YYYY-MM-DD"));
                         startDate = moment(startDate).add(1, 'days');
-                    }
-
-                    
+                    }                  
                 })
 
             }
@@ -36,15 +34,18 @@ function CustomDatePicker(props) {
 
     const materialTheme = createMuiTheme({
         overrides: {
+            // Top bar
             MuiPickersToolbar: {
                 toolbar: {backgroundColor: "#00cc99"}
             },
+            // Month and Year bar
             MuiPickersCalendarHeader: {
                 switchHeader: {
                     backgroundColor: "#fff",
                     color: "#000"
                 }
             },
+            // Dialog buttons
             MuiButton: {
                 textPrimary: {
                     color: '#00cc99',
@@ -55,9 +56,47 @@ function CustomDatePicker(props) {
                         color: '#fff',
                     }
                 }
+            },
+            MuiPickersDay: {
+                daySelected: {
+                    backgroundColor: "#00cc99",
+                    '&:hover': {
+                        backgroundColor: '#00cc99'
+                    }
+                }
             }
         }
     });
+
+    const useStyles = makeStyles(() => ({
+        rented: {
+            backgroundColor: '#ef9a9a'
+        },
+        notInMonth: {
+            backgroundColor: '#fff'
+        }
+    }))
+
+    const classes = useStyles();
+
+    const renderDayInPicker = (date, selectedDate, dayInCurrentMonth, dayComponent) => {
+
+        if (!dayInCurrentMonth) {
+            return (<div className={classes.notInMonth}>
+                {dayComponent}
+            </div>);
+        } else {
+            if (dayComponent.props.disabled) {
+                return (<div className={classes.rented}>
+                    {dayComponent}
+                </div>);
+            } else {
+                return (<div>
+                    {dayComponent}
+                </div>);
+            }
+        }
+    }
 
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -68,11 +107,10 @@ function CustomDatePicker(props) {
                     label={props.label}
                     format="dd/MM/yyyy"
                     variant='dialog'
-                    // renderDay={(day, selectedDate, isInCurrentMonth, dayComponent) => getDayElement(day, selectedDate, isInCurrentMonth, dayComponent)}
+                    renderDay={renderDayInPicker}
                     style={{ width: "55%", marginBottom: "30px" }}
                     shouldDisableDate={rentalDates}
                     showTodayButton={true}
-                    // initialFocusedDate={range.includes(props.value) ? range[range.length - 1] : props.value}
                 />
             </ThemeProvider>
         </MuiPickersUtilsProvider>

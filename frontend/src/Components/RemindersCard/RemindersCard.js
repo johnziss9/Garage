@@ -73,7 +73,7 @@ function RemindersCard(props) {
         body: JSON.stringify({
             rental_id: props.rental_Id,
             dates: {
-              start_date: props.start_date,
+              start_date: props.rental_start_date,
               end_date: carReturnDate
             }
         })
