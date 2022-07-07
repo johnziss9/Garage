@@ -134,6 +134,7 @@ export default class CarsController {
             };
             const deleted = req.body.deleted;
             const type = req.body.type;
+            const rented = req.body.rented;
  
             const addCarResponse = await CarsDAO.addCar(
                 make,
@@ -142,7 +143,8 @@ export default class CarsController {
                 mot,
                 road_tax,
                 deleted,
-                type
+                type,
+                rented
             );
             res.json({ status: "success" });
         } catch (e) {
@@ -249,6 +251,31 @@ export default class CarsController {
         } catch (e) {
             console.log(`api, ${e}`);
             res.status(500).json({ error: e });
+        }
+    }
+
+    static async apiUpdateCar(req, res, next) {
+        try {
+            const carId = req.body.car_id;
+            const rented = req.body.rented;
+ 
+            const updateCarResponse = await CarsDAO.updateCar(
+                carId,
+                rented
+            );
+ 
+            var { error } = updateCarResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (updateCarResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the car in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
         }
     }
 }

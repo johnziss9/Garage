@@ -201,7 +201,7 @@ export default class CarsDAO {
         }
     }
 
-    static async addCar(make, model, numberPlate, mot, road_tax, deleted, type) {
+    static async addCar(make, model, numberPlate, mot, road_tax, deleted, type, rented) {
         try {
             const car = { 
                 make: make,
@@ -216,7 +216,8 @@ export default class CarsDAO {
                     end_date: road_tax.end_date
                 },
                 deleted: deleted,
-                type: type
+                type: type,
+                rented: rented
             };
  
             return await cars.insertOne(car);
@@ -728,6 +729,24 @@ export default class CarsDAO {
         } catch (e) {
             console.error(`Something went wrong in getCarById: ${e}`);
             throw e;
+        }
+    }
+
+    static async updateCar(carId, rented) {
+        try {
+            const updateResponse = await cars.updateOne(
+                { _id: ObjectId(carId) },
+                { $set: { 
+                        rented: rented
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update car in DAO: ${e}`);
+        
+        return { error: e };
         }
     }
 }

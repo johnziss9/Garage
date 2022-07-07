@@ -138,7 +138,7 @@ function Reminders() {
               until_text={"until"}
               rental_end_date={moment(car.rentals.dates.end_date).format('DD/MM/YYYY')}
               button_value={"RETURN"}
-              rental_Id={car.rentals._id}
+              rental_id={car.rentals._id}
               expiringRentals={expiringRentalsList}
               allRentals={allRentalsList}
             />

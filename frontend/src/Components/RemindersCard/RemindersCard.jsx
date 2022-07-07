@@ -71,7 +71,7 @@ function RemindersCard(props) {
             'x-access-token': sessionStorage.getItem('token')
         },
         body: JSON.stringify({
-            rental_id: props.rental_Id,
+            rental_id: props.rental_id,
             dates: {
               start_date: props.rental_start_date,
               end_date: moment(carReturnDate).add(1, 'hour')
