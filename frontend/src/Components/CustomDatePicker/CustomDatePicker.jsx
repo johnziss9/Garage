@@ -115,6 +115,8 @@ function CustomDatePicker(props) {
                     style={{ width: "55%", marginBottom: "30px" }}
                     shouldDisableDate={rentalDates}
                     showTodayButton={true}
+                    disabled={props.disabled}
+                    disablePast={props.disablePast}
                 />
             </ThemeProvider>
         </MuiPickersUtilsProvider>

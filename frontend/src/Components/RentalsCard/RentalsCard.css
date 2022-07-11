@@ -18,3 +18,37 @@
     color: #fff;
     font-size: 17px;
 }
+
+.rentals-card-dialog-label {
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rentals-card-icons {
+    margin-left: auto;
+}
+
+.rentals-card-rental-status-text {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.rentals-card-rentals-list {
+    max-width: 350px;
+    width: 90%;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    max-height: 250px;
+    overflow: "hidden";
+    overflow-y: scroll;
+}
+
+.rentals-card-view-history {
+    margin-top: 10px !important;
+    cursor: pointer;
+}
