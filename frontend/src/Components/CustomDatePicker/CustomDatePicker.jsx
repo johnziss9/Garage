@@ -112,7 +112,8 @@ function CustomDatePicker(props) {
                     format="dd/MM/yyyy"
                     variant='dialog'
                     renderDay={renderDayInPicker}
-                    style={{ width: "55%", marginBottom: "30px" }}
+                    margin={props.margin}
+                    // style={{ width: "55%", marginBottom: "30px" }}
                     shouldDisableDate={rentalDates}
                     showTodayButton={true}
                     disabled={props.disabled}

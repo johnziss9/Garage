@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './RentalsCard.css';
 import moment from 'moment';
 import _ from 'lodash';
 import CustomButton from '../CustomButton/CustomButton';
 import { Box } from '@mui/system';
-import { Divider, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Link } from '@mui/material';
+import { Divider, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Link, TextField } from '@mui/material';
 import CustomDatePicker from '../CustomDatePicker/CustomDatePicker';
+import CustomTextField from '../CustomTextField/CustomTextField';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -15,14 +16,22 @@ function RemindersCard(props) {
     const currentDate = moment(new Date()).format('YYYY-MM-DD');
 
     const [open, setOpen] = React.useState(false);
+    const [openSecondDialog, setOpenSecondDialog] = React.useState(false);
     const [disableMOT, setDisableMOT] = React.useState(true);
     const [disableRT, setDisableRT] = React.useState(true);
+    const [disableCustomer, setDisableCustomer] = React.useState(true);
+    const [disableDates, setDisableDates] = React.useState(true);
     const [rentedStatus, setRentedStatus] = React.useState(false);
     const [allRentals, setAllRentals] = React.useState([]);
     const [expiredRentals, setExpiredRentals] = React.useState([]);
     const [futureRentals, setFutureRentals] = React.useState([]);
     const [currentRental, setCurrentRental] = React.useState({});
     const [fullHistory, setFullHistory] = React.useState(false);
+    const [firstName, setFirstName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
+    const [phone, setPhone] = React.useState('');
+    const [address, setAddress] = React.useState('');
+    const [rentalDetails, setRentalDetails] = React.useState({});
 
     const handleRentals = () => {
         let rentals = [];
@@ -52,27 +61,35 @@ function RemindersCard(props) {
         handleRentals();
         handleStatusText();
     }
-
     const handleClose = () => setOpen(false);
 
-    const handleMOTEdit = () => {
-        setDisableMOT(false);
-    }
+    const handleOpenSecondDialog = () => setOpenSecondDialog(true)
+    const handleCloseSecondDialog = () => setOpenSecondDialog(false);
 
-    const handleMOTSave = () => {
-        setDisableMOT(true);
-    }
+    const handleMOTEdit = () => setDisableMOT(false);
+    const handleMOTSave = () => setDisableMOT(true);
 
-    const handleRTEdit = () => {
-        setDisableRT(false);
-    }
+    const handleRTEdit = () => setDisableRT(false);
+    const handleRTSave = () => setDisableRT(true);
 
-    const handleRTSave = () => {
-        setDisableRT(true);
-    }
+    const handleCustomerEdit = () => setDisableCustomer(false);
+    const handleCustomerSave = () => setDisableCustomer(true);
+
+    const handleDatesEdit = () => setDisableDates(false);
+    const handleDatesSave = () => setDisableDates(true);
 
     const handleShowFullHistory = () => setFullHistory(true);
     const handleHideFullHistory = () => setFullHistory(false);
+
+    const wrappedFunction = (rental) => {
+        setRentalDetails(rental);
+        setRentalDetails((state) => {
+            console.log(state)
+            return state;
+        })
+
+        handleOpenSecondDialog();
+    }
 
     const handleStatusText = () => {
         props.car.rentals.forEach(rental => {
@@ -90,7 +107,7 @@ function RemindersCard(props) {
             <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Details'} color={'#fff'} onClick={handleOpen}></CustomButton>
             <Dialog open={open} onClose={handleClose} fullWidth={true}>
                 <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center', flexDirection: 'column', minWidth: '300px' }} >
-                    <div>{props.car.make} {props.car.model} {(props.car.number_plate)}</div>
+                    <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -129,7 +146,7 @@ function RemindersCard(props) {
                             {fullHistory ?
                             <List>
                                 {_.orderBy(allRentals, ['dates.start_date'], ['asc']).map((rental) => (
-                                <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: moment(rental.dates.start_date).format('YYYY-MM-DD') <= currentDate && moment(rental.dates.end_date).format('YYYY-MM-DD') >= currentDate ? '#00cc99' : '#fff' }}>
+                                <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: moment(rental.dates.start_date).format('YYYY-MM-DD') <= currentDate && moment(rental.dates.end_date).format('YYYY-MM-DD') >= currentDate ? '#00cc99' : '#fff' }} onClick={() => wrappedFunction(rental)}>
                                     <ListItemButton>
                                             <ListItemIcon>
                                                 <ArrowCircleRightIcon />
@@ -142,7 +159,7 @@ function RemindersCard(props) {
                             :
                             <List>
                                 {_.orderBy(expiredRentals.length > 3 ? expiredRentals.slice(0, 3) : expiredRentals, ['dates.start_date'], ['asc']).map((rental) => (
-                                <ListItem disablePadding style={{ padding: '0 5px' }}>
+                                <ListItem disablePadding style={{ padding: '0 5px' }} onClick={() => wrappedFunction(rental)}>
                                     <ListItemButton>
                                             <ListItemIcon>
                                                 <ArrowCircleRightIcon />
@@ -151,7 +168,7 @@ function RemindersCard(props) {
                                     </ListItemButton>
                                 </ListItem>
                                 ))}
-                                <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: '#00cc99' }}>
+                                <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: '#00cc99' }} onClick={() => wrappedFunction(currentRental)}>
                                     <ListItemButton>
                                             <ListItemIcon>
                                                 <ArrowCircleRightIcon />
@@ -160,7 +177,7 @@ function RemindersCard(props) {
                                     </ListItemButton>
                                 </ListItem>
                                 {_.orderBy(futureRentals.length > 3 ? futureRentals.slice(0, 3) : futureRentals, ['dates.start_date'], ['asc']).map((rental) => (
-                                <ListItem disablePadding style={{ padding: '0 5px' }}>
+                                <ListItem disablePadding style={{ padding: '0 5px' }} onClick={() => wrappedFunction(rental)}>
                                     <ListItemButton>
                                             <ListItemIcon>
                                                 <ArrowCircleRightIcon />
@@ -177,6 +194,42 @@ function RemindersCard(props) {
                         :
                         <Link className='rentals-card-view-history' onClick={handleShowFullHistory}>View Full History</Link>                        
                     }
+                    <Dialog open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
+                        <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <div className='rentals-card-dialog-label'>
+                                Customer Details
+                                <span className='rentals-card-icons'>
+                                    <IconButton onClick={handleCustomerEdit} style={{display: disableCustomer ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleCustomerSave} style={{display: !disableCustomer ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>
+                                </span>
+                            </div>
+                            <form className='rentals-card-customer-form'>
+                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomer} labelMargin={-5} fullWidth={true} height={25} margin={'dense'} />
+                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomer} labelMargin={-5} fullWidth={true} height={25} margin={'dense'} />
+                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomer} labelMargin={-5} fullWidth={true} height={25} margin={'dense'} />
+                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomer} labelMargin={-5} fullWidth={true} height={25} margin={'dense'} />
+                            </form>
+                            <div className='rentals-card-dialog-label'>
+                                Dates
+                                <span className='rentals-card-icons'>
+                                    <IconButton onClick={handleDatesEdit} style={{display: disableDates ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleDatesSave} style={{display: !disableDates ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>
+                                </span>
+                            </div>
+                            <form className='rentals-card-customer-form'>
+                                <CustomDatePicker label="Start Date" value={props.car.mot.start_date} allRentals={null} disabled={disableDates} margin={'dense'} />
+                                <CustomDatePicker label="End Date" value={props.car.mot.end_date} allRentals={null} disabled={disableDates} margin={'normal'} />
+                            </form>
+                        </DialogContent>
+                    </Dialog>
                 </DialogContent>
             </Dialog>
         </div>

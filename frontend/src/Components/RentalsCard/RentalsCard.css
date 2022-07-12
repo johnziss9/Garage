@@ -52,3 +52,10 @@
     margin-top: 10px !important;
     cursor: pointer;
 }
+
+.rentals-card-customer-form {
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
