@@ -84,12 +84,7 @@ function CustomDatePicker(props) {
         },
         notInMonth: {
             backgroundColor: '#fff'
-        },
-        // formControl: {
-        //     '&:hover': {
-        //         border: '1px solid red'
-        //     }        
-        // }
+        }
     }))
 
     const classes = useStyles();
@@ -124,9 +119,6 @@ function CustomDatePicker(props) {
                     variant='dialog'
                     renderDay={renderDayInPicker}
                     margin={props.margin}
-                    // classes={{
-                    //     root: classes.formControl
-                    // }}
                     shouldDisableDate={rentalDates}
                     showTodayButton={true}
                     disabled={props.disabled}
