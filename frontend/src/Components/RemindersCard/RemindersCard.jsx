@@ -109,9 +109,9 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="M.O.T. Start Date" value={newMOTStartDate} onChange={setNewMOTStartDate} allRentals={null} />
-                  <CustomDatePicker label="M.O.T. End Date" value={newMOTEndDate} onChange={setNewMOTEndDate} allRentals={null} />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewMOT}></CustomButton>
+                  <CustomDatePicker label="M.O.T. Start Date" value={newMOTStartDate} onChange={setNewMOTStartDate} allRentals={null} margin={'dense'} />
+                  <CustomDatePicker label="M.O.T. End Date" value={newMOTEndDate} onChange={setNewMOTEndDate} allRentals={null} margin={'dense'} />
+                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewMOT} marginTop={20}></CustomButton>
                 </DialogContent>
               </div>
             case 'ROAD TAX':
@@ -122,9 +122,9 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="Road Tax Start Date" value={newRTStartDate} onChange={setNewRTStartDate} allRentals={null} />
-                  <CustomDatePicker label="Road Tax End Date" value={newRTEndDate} onChange={setNewRTEndDate} allRentals={null} />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewRT}></CustomButton>
+                  <CustomDatePicker label="Road Tax Start Date" value={newRTStartDate} onChange={setNewRTStartDate} allRentals={null} margin={'dense'} />
+                  <CustomDatePicker label="Road Tax End Date" value={newRTEndDate} onChange={setNewRTEndDate} allRentals={null} margin={'dense'} />
+                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewRT} marginTop={20}></CustomButton>
                 </DialogContent>
               </div>
             case 'RENTAL':
@@ -135,8 +135,8 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <CustomDatePicker label="Car returned on" value={carReturnDate} onChange={setCarReturnDate} expiringRentals={props.expiringRentals} allRentals={props.allRentals} number_plate={props.number_plate} />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Return'} color={'#fff'} onClick={handleCarReturn}></CustomButton>
+                  <CustomDatePicker label="Car returned on" value={carReturnDate} onChange={setCarReturnDate} expiringRentals={props.expiringRentals} allRentals={props.allRentals} number_plate={props.number_plate} margin={'dense'} />
+                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Return'} color={'#fff'} onClick={handleCarReturn} marginTop={20}></CustomButton>
                 </DialogContent>
               </div>
             default:

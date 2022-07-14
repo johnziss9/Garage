@@ -4,7 +4,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import CustomButton from '../CustomButton/CustomButton';
 import { Box } from '@mui/system';
-import { Divider, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Link, TextField } from '@mui/material';
+import { Divider, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Link } from '@mui/material';
 import CustomDatePicker from '../CustomDatePicker/CustomDatePicker';
 import CustomTextField from '../CustomTextField/CustomTextField';
 import IconButton from '@mui/material/IconButton';
@@ -84,7 +84,6 @@ function RemindersCard(props) {
     const wrappedFunction = (rental) => {
         setRentalDetails(rental);
         setRentalDetails((state) => {
-            console.log(state)
             return state;
         })
 
@@ -122,8 +121,10 @@ function RemindersCard(props) {
                             </IconButton>
                         </span>
                     </div>
-                    <CustomDatePicker label="M.O.T. Start Date" value={props.car.mot.start_date} allRentals={null} disabled={disableMOT} />
-                    <CustomDatePicker label="M.O.T. End Date" value={props.car.mot.end_date} allRentals={null} disabled={disableMOT} disablePast={true} />
+                    <form className='rentals-card-customer-form'>
+                        <CustomDatePicker label="M.O.T. Start Date" value={props.car.mot.start_date} allRentals={null} disabled={disableMOT} margin={'dense'} />
+                        <CustomDatePicker label="M.O.T. End Date" value={props.car.mot.end_date} allRentals={null} disabled={disableMOT} disablePast={true} margin={'dense'} />
+                    </form>
                     <div className='rentals-card-dialog-label'>
                         Road Tax
                         <span className='rentals-card-icons'>
@@ -135,11 +136,12 @@ function RemindersCard(props) {
                             </IconButton>
                         </span>
                     </div>
-                    <CustomDatePicker label="Road Tax Start Date" value={props.car.road_tax.start_date} allRentals={null} disabled={disableRT} />
-                    <CustomDatePicker label="Road Tax End Date" value={props.car.road_tax.end_date} allRentals={null} disabled={disableRT} disablePast={true} />
-                    <Divider style={{width:'100%'}} />
-                    <div className='rentals-card-rental-status-text'>
-                        {rentedStatus ? 'The car is rented out' : 'The car is not rented out'}
+                    <form className='rentals-card-customer-form'>
+                        <CustomDatePicker label="Road Tax Start Date" value={props.car.road_tax.start_date} allRentals={null} disabled={disableRT} margin={'dense'} />
+                        <CustomDatePicker label="Road Tax End Date" value={props.car.road_tax.end_date} allRentals={null} disabled={disableRT} disablePast={true} margin={'dense'} />
+                    </form>
+                    <div className='rentals-card-rental-status-text' style={{ backgroundColor: rentedStatus ? '#E57D97' : '#00cc99' }}>
+                        {rentedStatus ? 'The car is rented out.' : 'The car is not rented out.'}
                     </div>
                     <Box className="rentals-card-rentals-list">
                         <nav>
@@ -194,7 +196,12 @@ function RemindersCard(props) {
                         :
                         <Link className='rentals-card-view-history' onClick={handleShowFullHistory}>View Full History</Link>                        
                     }
+                    <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableMOT || !disableRT ? true : false} marginTop={20}></CustomButton>
                     <Dialog open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
+                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center', flexDirection: 'column', minWidth: '300px' }} >
+                            <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
+                        </DialogTitle>
+                        <Divider style={{width:'100%'}} />
                         <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div className='rentals-card-dialog-label'>
                                 Customer Details
@@ -228,6 +235,7 @@ function RemindersCard(props) {
                                 <CustomDatePicker label="Start Date" value={props.car.mot.start_date} allRentals={null} disabled={disableDates} margin={'dense'} />
                                 <CustomDatePicker label="End Date" value={props.car.mot.end_date} allRentals={null} disabled={disableDates} margin={'normal'} />
                             </form>
+                            <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleCloseSecondDialog} disabled={!disableCustomer || !disableDates ? true : false}  marginTop={20}></CustomButton>
                         </DialogContent>
                     </Dialog>
                 </DialogContent>
