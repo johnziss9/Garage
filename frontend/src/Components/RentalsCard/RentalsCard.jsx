@@ -110,7 +110,7 @@ function RemindersCard(props) {
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div className='rentals-card-dialog-label'>
+                    <div className='card-section-header'>
                         M.O.T.
                         <span className='rentals-card-icons'>
                             <IconButton onClick={handleMOTEdit} style={{display: disableMOT ? 'flex' : 'none'}}>
@@ -121,11 +121,11 @@ function RemindersCard(props) {
                             </IconButton>
                         </span>
                     </div>
-                    <form className='rentals-card-customer-form'>
+                    <form className='card-form'>
                         <CustomDatePicker label="M.O.T. Start Date" value={props.car.mot.start_date} allRentals={null} disabled={disableMOT} margin={'dense'} />
                         <CustomDatePicker label="M.O.T. End Date" value={props.car.mot.end_date} allRentals={null} disabled={disableMOT} disablePast={true} margin={'dense'} />
                     </form>
-                    <div className='rentals-card-dialog-label'>
+                    <div className='card-section-header'>
                         Road Tax
                         <span className='rentals-card-icons'>
                             <IconButton onClick={handleRTEdit} style={{display: disableRT ? 'flex' : 'none'}}>
@@ -136,7 +136,7 @@ function RemindersCard(props) {
                             </IconButton>
                         </span>
                     </div>
-                    <form className='rentals-card-customer-form'>
+                    <form className='card-form'>
                         <CustomDatePicker label="Road Tax Start Date" value={props.car.road_tax.start_date} allRentals={null} disabled={disableRT} margin={'dense'} />
                         <CustomDatePicker label="Road Tax End Date" value={props.car.road_tax.end_date} allRentals={null} disabled={disableRT} disablePast={true} margin={'dense'} />
                     </form>
@@ -170,14 +170,17 @@ function RemindersCard(props) {
                                     </ListItemButton>
                                 </ListItem>
                                 ))}
-                                <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: '#00cc99' }} onClick={() => wrappedFunction(currentRental)}>
+                                {Object.keys(currentRental).length !== 0 ?
+                                    <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: '#00cc99' }} onClick={() => wrappedFunction(currentRental)}>
                                     <ListItemButton>
                                             <ListItemIcon>
                                                 <ArrowCircleRightIcon />
                                             </ListItemIcon>
-                                            <ListItemText primary={Object.keys(currentRental).length === 0 ? null : `${moment(currentRental.dates.start_date).format('DD/MM/YYYY')} - ${moment(currentRental.dates.end_date).format('DD/MM/YYYY')}`} />
+                                            <ListItemText primary={`${moment(currentRental.dates.start_date).format('DD/MM/YYYY')} - ${moment(currentRental.dates.end_date).format('DD/MM/YYYY')}`} />
                                     </ListItemButton>
                                 </ListItem>
+                                :
+                                null}
                                 {_.orderBy(futureRentals.length > 3 ? futureRentals.slice(0, 3) : futureRentals, ['dates.start_date'], ['asc']).map((rental) => (
                                 <ListItem disablePadding style={{ padding: '0 5px' }} onClick={() => wrappedFunction(rental)}>
                                     <ListItemButton>
@@ -203,7 +206,7 @@ function RemindersCard(props) {
                         </DialogTitle>
                         <Divider style={{width:'100%'}} />
                         <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div className='rentals-card-dialog-label'>
+                            <div className='card-section-header'>
                                 Customer Details
                                 <span className='rentals-card-icons'>
                                     <IconButton onClick={handleCustomerEdit} style={{display: disableCustomer ? 'flex' : 'none'}}>
@@ -214,13 +217,13 @@ function RemindersCard(props) {
                                     </IconButton>
                                 </span>
                             </div>
-                            <form className='rentals-card-customer-form'>
-                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomer} labelMargin={-5} fullWidth={true} height={25} margin={'dense'} />
-                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomer} labelMargin={-5} fullWidth={true} height={25} margin={'dense'} />
-                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomer} labelMargin={-5} fullWidth={true} height={25} margin={'dense'} />
-                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomer} labelMargin={-5} fullWidth={true} height={25} margin={'dense'} />
+                            <form className='card-form'>
+                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomer} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
+                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomer} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
+                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomer} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
+                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomer} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
                             </form>
-                            <div className='rentals-card-dialog-label'>
+                            <div className='card-section-header'>
                                 Dates
                                 <span className='rentals-card-icons'>
                                     <IconButton onClick={handleDatesEdit} style={{display: disableDates ? 'flex' : 'none'}}>
@@ -231,7 +234,7 @@ function RemindersCard(props) {
                                     </IconButton>
                                 </span>
                             </div>
-                            <form className='rentals-card-customer-form'>
+                            <form className='card-form'>
                                 <CustomDatePicker label="Start Date" value={props.car.mot.start_date} allRentals={null} disabled={disableDates} margin={'dense'} />
                                 <CustomDatePicker label="End Date" value={props.car.mot.end_date} allRentals={null} disabled={disableDates} margin={'normal'} />
                             </form>

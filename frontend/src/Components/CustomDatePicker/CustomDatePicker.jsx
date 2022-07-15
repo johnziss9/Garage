@@ -73,8 +73,9 @@ function CustomDatePicker(props) {
         // Datepicker color when entered
         palette: {
             primary: {
-                main: '#00cc99'
-            },
+                main: '#00cc99',
+                contrastText: '#fff'
+            }
         }
     });
 

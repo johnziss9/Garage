@@ -14,6 +14,7 @@ body {
     display: flex;
     justify-content: center;
     padding: 20px 0;
+    position: relative;
 }
 
 .title {
@@ -26,6 +27,22 @@ body {
 }
 
 /* Card content */
+
+.card-form {
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.card-section-header {
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .card-number-plate {
     margin: 10px 0;
