@@ -83,17 +83,13 @@ export default class RentalsController {
             const lastName = req.body.last_name;
             const phoneNumber = req.body.phone_number;
             const address = req.body.address;
-            const rentalStartDate = new Date(req.body.dates.start_date);
-            const rentalEndDate = new Date(req.body.dates.end_date);
  
             const rentalResponse = await RentalsDAO.updateRental(
                 rentalId,
                 firstName,
                 lastName,
                 phoneNumber,
-                address,
-                rentalStartDate,
-                rentalEndDate
+                address
             );
  
             var { error } = rentalResponse;

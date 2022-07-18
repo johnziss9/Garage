@@ -27,11 +27,17 @@ function RemindersCard(props) {
     const [futureRentals, setFutureRentals] = React.useState([]);
     const [currentRental, setCurrentRental] = React.useState({});
     const [fullHistory, setFullHistory] = React.useState(false);
+    const [rentalDetails, setRentalDetails] = React.useState({});
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [address, setAddress] = React.useState('');
-    const [rentalDetails, setRentalDetails] = React.useState({});
+    const [MOTStartDate, setMOTStartDate] = React.useState(props.car.mot.start_date);
+    const [MOTEndDate, setMOTEndDate] = React.useState(props.car.mot.end_date);
+    const [RTStartDate, setRTStartDate] = React.useState(props.car.road_tax.start_date);
+    const [RTEndDate, setRTEndDate] = React.useState(props.car.road_tax.end_date);
+    const [rentalStartDate, setRentalStartDate] = React.useState(new Date());
+    const [rentalEndDate, setRentalEndDate] = React.useState(new Date());
 
     const handleRentals = () => {
         let rentals = [];
@@ -67,25 +73,112 @@ function RemindersCard(props) {
     const handleCloseSecondDialog = () => setOpenSecondDialog(false);
 
     const handleMOTEdit = () => setDisableMOT(false);
-    const handleMOTSave = () => setDisableMOT(true);
+    const handleMOTSave = () => {
+        fetch('http://localhost:5000/api/cars/updateMOT', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: props.car._id,
+                mot: {
+                    start_date: MOTStartDate,
+                    end_date: MOTEndDate
+                }
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
+
+        setDisableMOT(true);
+    }
 
     const handleRTEdit = () => setDisableRT(false);
-    const handleRTSave = () => setDisableRT(true);
+    const handleRTSave = () => {
+        fetch('http://localhost:5000/api/cars/updateRT', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: props.car._id,
+                road_tax: {
+                    start_date: RTStartDate,
+                    end_date: RTEndDate
+                }
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
+
+        setDisableRT(true);
+    }
 
     const handleCustomerEdit = () => setDisableCustomer(false);
-    const handleCustomerSave = () => setDisableCustomer(true);
+    const handleCustomerSave = () => {
+        fetch('http://localhost:5000/api/rentals/update', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                rental_id: rentalDetails._id,
+                first_name: firstName,
+                last_name: lastName,
+                phone_number: phone,
+                address: address
+            })
+        })
+        .then((Response) => Response.json())
+        
+        setDisableCustomer(true);
+    }
 
     const handleDatesEdit = () => setDisableDates(false);
-    const handleDatesSave = () => setDisableDates(true);
+    const handleDatesSave = () => {
+        fetch('http://localhost:5000/api/rentals/updateDates', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                rental_id: rentalDetails._id,
+                dates: {
+                    start_date: rentalStartDate,
+                    end_date: rentalEndDate
+                }
+            })
+        })
+        .then((Response) => Response.json())
+
+        setDisableDates(true);
+    }
 
     const handleShowFullHistory = () => setFullHistory(true);
     const handleHideFullHistory = () => setFullHistory(false);
 
     const wrappedFunction = (rental) => {
         setRentalDetails(rental);
+
+        // This is done so the setRentalDetails above gets updated instantly.
         setRentalDetails((state) => {
             return state;
         })
+
+        setFirstName(rental.first_name);
+        setLastName(rental.last_name);
+        setPhone(rental.phone_number);
+        setAddress(rental.address);
+        setRentalStartDate(rental.dates.start_date);
+        setRentalEndDate(rental.dates.end_date);
 
         handleOpenSecondDialog();
     }
@@ -122,8 +215,8 @@ function RemindersCard(props) {
                         </span>
                     </div>
                     <form className='card-form'>
-                        <CustomDatePicker label="M.O.T. Start Date" value={props.car.mot.start_date} allRentals={null} disabled={disableMOT} margin={'dense'} />
-                        <CustomDatePicker label="M.O.T. End Date" value={props.car.mot.end_date} allRentals={null} disabled={disableMOT} disablePast={true} margin={'dense'} />
+                        <CustomDatePicker label="M.O.T. Start Date" value={MOTStartDate} allRentals={null} onChange={setMOTStartDate} disabled={disableMOT} margin={'dense'} />
+                        <CustomDatePicker label="M.O.T. End Date" value={MOTEndDate} allRentals={null} onChange={setMOTEndDate} disabled={disableMOT} disablePast={true} margin={'dense'} />
                     </form>
                     <div className='card-section-header'>
                         Road Tax
@@ -137,68 +230,72 @@ function RemindersCard(props) {
                         </span>
                     </div>
                     <form className='card-form'>
-                        <CustomDatePicker label="Road Tax Start Date" value={props.car.road_tax.start_date} allRentals={null} disabled={disableRT} margin={'dense'} />
-                        <CustomDatePicker label="Road Tax End Date" value={props.car.road_tax.end_date} allRentals={null} disabled={disableRT} disablePast={true} margin={'dense'} />
+                        <CustomDatePicker label="Road Tax Start Date" value={RTStartDate} onChange={setRTStartDate} allRentals={null} disabled={disableRT} margin={'dense'} />
+                        <CustomDatePicker label="Road Tax End Date" value={RTEndDate} onChange={setRTEndDate} allRentals={null} disabled={disableRT} disablePast={true} margin={'dense'} />
                     </form>
                     <div className='rentals-card-rental-status-text' style={{ backgroundColor: rentedStatus ? '#E57D97' : '#00cc99' }}>
-                        {rentedStatus ? 'The car is rented out.' : 'The car is not rented out.'}
+                        {rentedStatus ? 'The car is rented out.' : 'The car is available.'}
                     </div>
-                    <Box className="rentals-card-rentals-list">
-                        <nav>
-                            {fullHistory ?
-                            <List>
-                                {_.orderBy(allRentals, ['dates.start_date'], ['asc']).map((rental) => (
-                                <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: moment(rental.dates.start_date).format('YYYY-MM-DD') <= currentDate && moment(rental.dates.end_date).format('YYYY-MM-DD') >= currentDate ? '#00cc99' : '#fff' }} onClick={() => wrappedFunction(rental)}>
-                                    <ListItemButton>
-                                            <ListItemIcon>
-                                                <ArrowCircleRightIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary={`${moment(rental.dates.start_date).format('DD/MM/YYYY')} - ${moment(rental.dates.end_date).format('DD/MM/YYYY')}`} />
-                                    </ListItemButton>
-                                </ListItem>
-                                ))}
-                            </List>
-                            :
-                            <List>
-                                {_.orderBy(expiredRentals.length > 3 ? expiredRentals.slice(0, 3) : expiredRentals, ['dates.start_date'], ['asc']).map((rental) => (
-                                <ListItem disablePadding style={{ padding: '0 5px' }} onClick={() => wrappedFunction(rental)}>
-                                    <ListItemButton>
-                                            <ListItemIcon>
-                                                <ArrowCircleRightIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary={`${moment(rental.dates.start_date).format('DD/MM/YYYY')} - ${moment(rental.dates.end_date).format('DD/MM/YYYY')}`} />
-                                    </ListItemButton>
-                                </ListItem>
-                                ))}
-                                {Object.keys(currentRental).length !== 0 ?
-                                    <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: '#00cc99' }} onClick={() => wrappedFunction(currentRental)}>
-                                    <ListItemButton>
-                                            <ListItemIcon>
-                                                <ArrowCircleRightIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary={`${moment(currentRental.dates.start_date).format('DD/MM/YYYY')} - ${moment(currentRental.dates.end_date).format('DD/MM/YYYY')}`} />
-                                    </ListItemButton>
-                                </ListItem>
+                    {allRentals.length === 0 ?
+                    <div className='rentals-card-no-rentals'>No rentals for this car.</div> :
+                    <div style={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                        <Box className="rentals-card-rentals-list">
+                            <nav>
+                                {fullHistory ?
+                                <List>
+                                    {_.orderBy(allRentals, ['dates.start_date'], ['asc']).map((rental) => (
+                                    <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: moment(rental.dates.start_date).format('YYYY-MM-DD') <= currentDate && moment(rental.dates.end_date).format('YYYY-MM-DD') >= currentDate ? '#00cc99' : '#fff' }} onClick={() => wrappedFunction(rental)}>
+                                        <ListItemButton>
+                                                <ListItemIcon>
+                                                    <ArrowCircleRightIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={`${moment(rental.dates.start_date).format('DD/MM/YYYY')} - ${moment(rental.dates.end_date).format('DD/MM/YYYY')}`} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    ))}
+                                </List>
                                 :
-                                null}
-                                {_.orderBy(futureRentals.length > 3 ? futureRentals.slice(0, 3) : futureRentals, ['dates.start_date'], ['asc']).map((rental) => (
-                                <ListItem disablePadding style={{ padding: '0 5px' }} onClick={() => wrappedFunction(rental)}>
-                                    <ListItemButton>
-                                            <ListItemIcon>
-                                                <ArrowCircleRightIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary={`${moment(rental.dates.start_date).format('DD/MM/YYYY')} - ${moment(rental.dates.end_date).format('DD/MM/YYYY')}`} />
-                                    </ListItemButton>
-                                </ListItem>
-                                ))}
-                            </List>}
-                        </nav>
-                    </Box>
-                    {fullHistory ?
-                        <Link className='rentals-card-view-history' onClick={handleHideFullHistory}>View Less</Link>
-                        :
-                        <Link className='rentals-card-view-history' onClick={handleShowFullHistory}>View Full History</Link>                        
-                    }
+                                <List>
+                                    {_.orderBy(expiredRentals.length > 3 ? expiredRentals.slice(0, 3) : expiredRentals, ['dates.start_date'], ['asc']).map((rental) => (
+                                    <ListItem disablePadding style={{ padding: '0 5px' }} onClick={() => wrappedFunction(rental)}>
+                                        <ListItemButton>
+                                                <ListItemIcon>
+                                                    <ArrowCircleRightIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={`${moment(rental.dates.start_date).format('DD/MM/YYYY')} - ${moment(rental.dates.end_date).format('DD/MM/YYYY')}`} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    ))}
+                                    {Object.keys(currentRental).length !== 0 ?
+                                        <ListItem disablePadding style={{ padding: '0 5px', backgroundColor: '#00cc99' }} onClick={() => wrappedFunction(currentRental)}>
+                                        <ListItemButton>
+                                                <ListItemIcon>
+                                                    <ArrowCircleRightIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={`${moment(currentRental.dates.start_date).format('DD/MM/YYYY')} - ${moment(currentRental.dates.end_date).format('DD/MM/YYYY')}`} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    :
+                                    null}
+                                    {_.orderBy(futureRentals.length > 3 ? futureRentals.slice(0, 3) : futureRentals, ['dates.start_date'], ['asc']).map((rental) => (
+                                    <ListItem disablePadding style={{ padding: '0 5px' }} onClick={() => wrappedFunction(rental)}>
+                                        <ListItemButton>
+                                                <ListItemIcon>
+                                                    <ArrowCircleRightIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={`${moment(rental.dates.start_date).format('DD/MM/YYYY')} - ${moment(rental.dates.end_date).format('DD/MM/YYYY')}`} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    ))}
+                                </List>}
+                            </nav>
+                        </Box>
+                        {fullHistory ?
+                            <Link className='rentals-card-view-history' onClick={handleHideFullHistory}>View Less</Link>
+                            :
+                            <Link className='rentals-card-view-history' onClick={handleShowFullHistory}>View Full History</Link>                        
+                        }
+                    </div>}
                     <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableMOT || !disableRT ? true : false} marginTop={20}></CustomButton>
                     <Dialog open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
                         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center', flexDirection: 'column', minWidth: '300px' }} >
@@ -235,8 +332,8 @@ function RemindersCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomDatePicker label="Start Date" value={props.car.mot.start_date} allRentals={null} disabled={disableDates} margin={'dense'} />
-                                <CustomDatePicker label="End Date" value={props.car.mot.end_date} allRentals={null} disabled={disableDates} margin={'normal'} />
+                                <CustomDatePicker label="Start Date" value={rentalStartDate} onChange={setRentalStartDate} allRentals={null} disabled={disableDates} margin={'dense'} />
+                                <CustomDatePicker label="End Date" value={rentalEndDate} onChange={setRentalEndDate} allRentals={null} disabled={disableDates} margin={'normal'} />
                             </form>
                             <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleCloseSecondDialog} disabled={!disableCustomer || !disableDates ? true : false}  marginTop={20}></CustomButton>
                         </DialogContent>

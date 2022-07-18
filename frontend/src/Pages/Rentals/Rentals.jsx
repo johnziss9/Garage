@@ -89,6 +89,34 @@ function Rentals() {
       .then((Response) => Response.json())
     }
 
+    const handleSaveCar = () => {
+      fetch('http://localhost:5000/api/cars/add', {
+        method: 'post',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': sessionStorage.getItem('token')
+        },
+        body: JSON.stringify({
+            make: make,
+            model: model,
+            number_plate: numberPlate,
+            mot: {
+              start_date: MOTStartDate,
+              end_date: MOTEndDate
+            },
+            road_tax: {
+              start_date: RTStartDate,
+              end_date: MOTEndDate
+            },
+            deleted: false,
+            type: 'rental',
+            rented: false
+        })
+      })
+      .then((Response) => Response.json())
+    }
+
   return (
     <>
       <div className='top'>
@@ -121,15 +149,15 @@ function Rentals() {
           </form>
           <div className='card-section-header' style={{ justifyContent: 'left' }}>M.O.T.</div>
           <form className='card-form'>
-            <CustomDatePicker label="M.O.T Start Date" value={moment(new Date()).format('YYYY-MM-DD')} allRentals={null} margin={'dense'} onChange={setMOTStartDate} />
-            <CustomDatePicker label="M.O.T End Date" value={moment(new Date()).format('YYYY-MM-DD')} allRentals={null} margin={'dense'} onChange={setMOTEndDate} />
+            <CustomDatePicker label="M.O.T Start Date" value={MOTStartDate} allRentals={null} margin={'dense'} onChange={setMOTStartDate} />
+            <CustomDatePicker label="M.O.T End Date" value={MOTEndDate} allRentals={null} margin={'dense'} onChange={setMOTEndDate} />
           </form>
           <div className='card-section-header' style={{ justifyContent: 'left' }}>Road Tax</div>
           <form className='card-form'>
-            <CustomDatePicker label="Road Tax Start Date" value={moment(new Date()).format('YYYY-MM-DD')} allRentals={null} margin={'dense'}  onChange={setRTStartDate} />
-            <CustomDatePicker label="Road Tax End Date" value={moment(new Date()).format('YYYY-MM-DD')} allRentals={null} margin={'dense'} onChange={setRTEndDate} />
+            <CustomDatePicker label="Road Tax Start Date" value={RTStartDate} allRentals={null} margin={'dense'}  onChange={setRTStartDate} />
+            <CustomDatePicker label="Road Tax End Date" value={RTEndDate} allRentals={null} margin={'dense'} onChange={setRTEndDate} />
           </form>
-          <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Save'} color={'#fff'} marginTop={20}></CustomButton>
+          <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Save'} onClick={handleSaveCar} color={'#fff'} marginTop={20}></CustomButton>
         </DialogContent>
       </Dialog>
     </>

@@ -143,7 +143,7 @@ export default class RentalsDAO {
         } 
     }
 
-    static async updateRental(rentalId, firstName, lastName, phoneNumber, address, rentalStartDate, rentalEndDate) {
+    static async updateRental(rentalId, firstName, lastName, phoneNumber, address) {
         try {
             const updateResponse = await rentals.updateOne(
                 { _id: ObjectId(rentalId) },
@@ -151,11 +151,7 @@ export default class RentalsDAO {
                         first_name: firstName,
                         last_name: lastName,
                         phone_number: phoneNumber,
-                        address: address,
-                        dates: {
-                            start_date: rentalStartDate,
-                            end_date: rentalEndDate
-                        }
+                        address: address
                     }
                 }
             );

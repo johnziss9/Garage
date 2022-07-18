@@ -9,7 +9,6 @@ body {
 
 .bottom {
     height: auto;
-    min-height: 75vh;
     border-top: 5px solid #00cc99;
     display: flex;
     justify-content: center;
