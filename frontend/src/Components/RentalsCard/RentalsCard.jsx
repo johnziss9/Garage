@@ -2,21 +2,24 @@ import React from 'react';
 import './RentalsCard.css';
 import moment from 'moment';
 import _ from 'lodash';
-import CustomButton from '../CustomButton/CustomButton';
 import { Box } from '@mui/system';
 import { Divider, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Link } from '@mui/material';
 import CustomDatePicker from '../CustomDatePicker/CustomDatePicker';
 import CustomTextField from '../CustomTextField/CustomTextField';
+import CustomButton from '../CustomButton/CustomButton';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Alert, Snackbar } from '@mui/material';
 
 function RemindersCard(props) {
     const currentDate = moment(new Date()).format('YYYY-MM-DD');
 
     const [open, setOpen] = React.useState(false);
     const [openSecondDialog, setOpenSecondDialog] = React.useState(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [disableMOT, setDisableMOT] = React.useState(true);
     const [disableRT, setDisableRT] = React.useState(true);
     const [disableCustomer, setDisableCustomer] = React.useState(true);
@@ -38,6 +41,7 @@ function RemindersCard(props) {
     const [RTEndDate, setRTEndDate] = React.useState(props.car.road_tax.end_date);
     const [rentalStartDate, setRentalStartDate] = React.useState(new Date());
     const [rentalEndDate, setRentalEndDate] = React.useState(new Date());
+    const [carDeleted, setCarDeleted] = React.useState(false);
 
     const handleRentals = () => {
         let rentals = [];
@@ -71,6 +75,9 @@ function RemindersCard(props) {
 
     const handleOpenSecondDialog = () => setOpenSecondDialog(true)
     const handleCloseSecondDialog = () => setOpenSecondDialog(false);
+
+    const handleOpenDeleteDialog = () => setOpenDeleteDialog(true)
+    const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
 
     const handleMOTEdit = () => setDisableMOT(false);
     const handleMOTSave = () => {
@@ -190,16 +197,58 @@ function RemindersCard(props) {
         });
     }
 
+    const handleDeleteCar = () => {
+        fetch('http://localhost:5000/api/cars/delete', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: props.car._id,
+                deleted: true
+            })
+        })
+        .then((Response) => Response.json())
+
+        handleCloseDeleteDialog();
+        handleClose();
+
+        setCarDeleted(true);
+
+        setTimeout(function(){
+            window.location.reload();
+         }, 2000);
+    }
+
+    const handleShowCarDeletedSB = () => setCarDeleted(true);
+    const handleHideCarDeletedSB = () => setCarDeleted(false);
+
     return (
-        <div className='rentals-card-wrapper'>
+        <>
+            {carDeleted ? 
+            <Snackbar
+                autoHideDuration={4000}
+                open={handleShowCarDeletedSB}
+                onClose={handleHideCarDeletedSB}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert severity='success' onClose={handleHideCarDeletedSB}>Car successfully deleted.</Alert>
+            </Snackbar>
+            : null}
+            <div className='rentals-card-wrapper'>
             <div className='rentals-cars-status' style={props.car.rented ? { backgroundColor: "grey" } : { backgroundColor: "#00cc99" }}>{props.car.rented ? "Rented" : "Available"}</div>
             <div className='card-number-plate'>{props.car.number_plate}</div> 
             <div className='card-make'>{props.car.make}</div>
             <div className='card-model'>{props.car.model}</div>
             <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Details'} color={'#fff'} onClick={handleOpen}></CustomButton>
             <Dialog open={open} onClose={handleClose} fullWidth={true}>
-                <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center', flexDirection: 'column', minWidth: '300px' }} >
-                    <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
+                <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
+                    <div style={{ marginLeft: 'auto', marginRight: '-59px' /*  Used to center the title */ }}>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
+                    <IconButton style={{ marginLeft: 'auto' }} onClick={handleOpenDeleteDialog}>
+                        <DeleteForeverIcon fontSize="large" style={{ color: '#fff' }} />
+                    </IconButton>                
                 </DialogTitle>
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -298,7 +347,7 @@ function RemindersCard(props) {
                     </div>}
                     <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableMOT || !disableRT ? true : false} marginTop={20}></CustomButton>
                     <Dialog open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
-                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center', flexDirection: 'column', minWidth: '300px' }} >
+                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center' }} >
                             <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                         </DialogTitle>
                         <Divider style={{width:'100%'}} />
@@ -338,9 +387,27 @@ function RemindersCard(props) {
                             <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleCloseSecondDialog} disabled={!disableCustomer || !disableDates ? true : false}  marginTop={20}></CustomButton>
                         </DialogContent>
                     </Dialog>
+                    <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog} fullWidth={true}>
+                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+                            <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
+                        </DialogTitle>
+                        <Divider style={{width:'100%'}} />
+                        <DialogContent>
+                            <div className='card-confirmation-message'>Are you sure you want to delete this car?</div>
+                            <div className='card-confirmation-buttons'>
+                                <Box m={1}>
+                                    <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
+                                </Box>
+                                <Box m={1}>
+                                    <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteCar} />
+                                </Box>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                 </DialogContent>
             </Dialog>
         </div>
+        </>
     );
 }
 

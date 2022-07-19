@@ -72,3 +72,15 @@ body {
     font-size: 20px;
     margin-bottom: 15px;
 }
+
+.card-confirmation-message {
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+}
+
+.card-confirmation-buttons {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}

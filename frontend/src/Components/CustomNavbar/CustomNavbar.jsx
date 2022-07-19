@@ -7,8 +7,8 @@ function CustomNavbar() {
     return (
         <label>
             <input type="checkbox" />
-            <span class="menu">
-                <span class="hamburger"></span>
+            <span className="menu">
+                <span className="hamburger"></span>
             </span>
             <ul>
                 <li>
