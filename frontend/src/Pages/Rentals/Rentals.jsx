@@ -3,11 +3,10 @@ import './Rentals.css';
 import CustomNavbar from '../../Components/CustomNavbar/CustomNavbar';
 import RentalsCard from '../../Components/RentalsCard/RentalsCard';
 import AddNewButton from '../../Components/AddNewButton/AddNewButton';
-import { Divider, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import { Divider, Dialog, DialogTitle, DialogContent, Box } from '@mui/material';
 import CustomTextField from '../../Components/CustomTextField/CustomTextField';
 import CustomDatePicker from '../../Components/CustomDatePicker/CustomDatePicker';
 import CustomButton from '../../Components/CustomButton/CustomButton';
-import moment from 'moment';
 
 function Rentals() {
   const [allRentalCars, setAllRentalCars] = useState([]);
@@ -135,7 +134,7 @@ function Rentals() {
         </div>
       </div>
       <AddNewButton onClick={handleOpen} />
-      <Dialog open={open} onClose={handleClose} fullWidth={true}>
+      <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={open} onClose={handleClose} fullWidth={true}>
         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center', flexDirection: 'column', minWidth: '300px' }} >
           Add New Vehicle
         </DialogTitle>
@@ -157,7 +156,14 @@ function Rentals() {
             <CustomDatePicker label="Road Tax Start Date" value={RTStartDate} allRentals={null} margin={'dense'}  onChange={setRTStartDate} />
             <CustomDatePicker label="Road Tax End Date" value={RTEndDate} allRentals={null} margin={'dense'} onChange={setRTEndDate} />
           </form>
-          <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Save'} onClick={handleSaveCar} color={'#fff'} marginTop={20}></CustomButton>
+          <div className='card-confirmation-buttons'>
+            <Box m={1}>
+              <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Cancel'} onClick={handleClose} color={'#fff'} marginTop={20}></CustomButton>
+            </Box>
+            <Box m={1}>
+              <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Save'} onClick={handleSaveCar} color={'#fff'} marginTop={20}></CustomButton>
+            </Box>
+          </div>
         </DialogContent>
       </Dialog>
     </>

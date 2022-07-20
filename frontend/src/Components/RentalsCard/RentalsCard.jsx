@@ -71,7 +71,7 @@ function RemindersCard(props) {
         handleRentals();
         handleStatusText();
     }
-    const handleClose = () => setOpen(false);
+    const handleClose = (reason) => setOpen(false);
 
     const handleOpenSecondDialog = () => setOpenSecondDialog(true)
     const handleCloseSecondDialog = () => setOpenSecondDialog(false);
@@ -243,7 +243,7 @@ function RemindersCard(props) {
             <div className='card-make'>{props.car.make}</div>
             <div className='card-model'>{props.car.model}</div>
             <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Details'} color={'#fff'} onClick={handleOpen}></CustomButton>
-            <Dialog open={open} onClose={handleClose} fullWidth={true}>
+            <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={open} onClose={handleClose} fullWidth={true}>
                 <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                     <div style={{ marginLeft: 'auto', marginRight: '-59px' /*  Used to center the title */ }}>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                     <IconButton style={{ marginLeft: 'auto' }} onClick={handleOpenDeleteDialog}>
@@ -339,14 +339,18 @@ function RemindersCard(props) {
                                 </List>}
                             </nav>
                         </Box>
-                        {fullHistory ?
-                            <Link className='rentals-card-view-history' onClick={handleHideFullHistory}>View Less</Link>
-                            :
-                            <Link className='rentals-card-view-history' onClick={handleShowFullHistory}>View Full History</Link>                        
-                        }
+                        {allRentals.length > 7 ?
+                        <div style={{ marginTop: '15px' }}>
+                            {fullHistory ?
+                                <Link className='rentals-card-view-history' onClick={handleHideFullHistory}>View Less</Link>
+                                :
+                                <Link className='rentals-card-view-history' onClick={handleShowFullHistory}>View Full History</Link>                        
+                            }
+                        </div> :
+                        null}
                     </div>}
                     <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableMOT || !disableRT ? true : false} marginTop={20}></CustomButton>
-                    <Dialog open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
+                    <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
                         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center' }} >
                             <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                         </DialogTitle>
@@ -387,7 +391,7 @@ function RemindersCard(props) {
                             <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleCloseSecondDialog} disabled={!disableCustomer || !disableDates ? true : false}  marginTop={20}></CustomButton>
                         </DialogContent>
                     </Dialog>
-                    <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog} fullWidth={true}>
+                    <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openDeleteDialog} onClose={handleCloseDeleteDialog} fullWidth={true}>
                         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
                             <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                         </DialogTitle>
