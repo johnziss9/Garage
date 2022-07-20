@@ -1,28 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
 import './CustomNavbar.css';
 
-function CustomNavbar() {
+function CustomNavbar2() {
     return (
-        <label>
-            <input type="checkbox" />
-            <span className="menu">
-                <span className="hamburger"></span>
-            </span>
-            <ul>
-                <li>
-                    <Link to="/Reminders">Reminders</Link>
-                </li>
-                <li>
-                    <Link to="/Rentals">Rentals</Link>
-                </li>
-                <li>
-                    <Link to="/Repairs">Repairs</Link>
-                </li>
-            </ul>
-        </label>
+        <nav role='navigation'>
+            <div id="menuToggle">
+                <input type="checkbox" />
+                <span></span>
+                <span></span>
+                <span></span>
+                <ul id="menu">
+                    <li className='nav-link-list-item'><Link className='nav-link' to="/Reminders">Reminders</Link></li>
+                    <li className='nav-link-list-item'><Link className='nav-link' to="/Rentals">Rentals</Link></li>
+                    <li className='nav-link-list-item'><Link className='nav-link' to="/Repairs">Repairs</Link></li>
+                </ul>
+            </div>
+        </nav>
     );
 }
 
-export default CustomNavbar;
+export default CustomNavbar2;

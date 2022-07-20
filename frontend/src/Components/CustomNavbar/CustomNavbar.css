@@ -1,104 +1,114 @@
-*, *:before, *:after 
-{ box-sizing: border-box; }
-
-/* Burger Menu Background */
-label .menu {
-  position: absolute;
-  right: -100px;
-  top: -100px;
-  z-index: 100;
-  width: 200px;
-  height: 200px;
-  background: #FFF;
-  border-radius: 50% 50% 50% 50%;
-  -webkit-transition: .5s ease-in-out;
-  transition: .5s ease-in-out;
-  box-shadow: 0 0 0 0 #FFF, 0 0 0 0 #FFF;
-  cursor: pointer;
+/* Links on menu */
+.nav-link {
+    text-decoration: none;
+    color: #232323;
+    transition: color 0.3s ease;
 }
-
-/* Burger Menu */
-label .hamburger {
-  position: absolute;
-  top: 135px;
-  left: 50px;
-  width: 30px;
-  height: 3px;
-  background: #00cc99;
-  display: block;
-  -webkit-transform-origin: center;
-  transform-origin: center;
-  -webkit-transition: .5s ease-in-out;
-  transition: .5s ease-in-out;
-}
-
-label .hamburger:after, label .hamburger:before {
-  -webkit-transition: .5s ease-in-out;
-  transition: .5s ease-in-out;
-  content: "";
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: #00cc99;
-}
-
-label .hamburger:before { top: -10px; }
-
-label .hamburger:after { bottom: -10px; }
-
-label input { display: none; }
-
-label input:checked + .menu {
-  box-shadow: 0 0 0 100vw #FFF, 0 0 0 100vh #FFF;
-  border-radius: 0;
-}
-
-/* X Button */
-label input:checked + .menu .hamburger {
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg); 
-}
-
-label input:checked + .menu .hamburger:after {
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
-  bottom: 0;
-}
-
-label input:checked + .menu .hamburger:before {
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
-  top: 0;
-}
-
-/* Opacity of menu */
-label input:checked + .menu + ul { opacity: 1; }
-
-/* Menu Links */
-label ul {
-  z-index: 200;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  -webkit-transition: .25s 0s ease-in-out;
-  transition: .25s 0s ease-in-out;
-  list-style: none;
-  padding: 0;
-  text-align: center;
-}
-
-label a {
-  margin: 25px 0;
-  display: block;
-  color: #000;
-  text-decoration: none;
-  font-size: 25px;
-}
-
-label a:hover {
+ 
+.nav-link:hover {
     color: #00cc99;
-  }
+}
+ 
+/* Menu Button (Burger) Placement */
+#menuToggle {
+    display: block;
+    position: absolute;
+    top: 110px;
+    right: 70px;
+    z-index: 1;    
+    -webkit-user-select: none;
+    user-select: none;
+}
+ 
+#menuToggle input {
+    display: block;
+    width: 410px;
+    height: 32px;
+    position: absolute;
+    top: -7px;
+    left: -5px;
+    cursor: pointer;
+    opacity: 0; /* hide this */
+    z-index: 2; /* and place it over the hamburger */
+    -webkit-touch-callout: none;
+}
+ 
+/* Burger Icon */
+#menuToggle span {
+    display: block;
+    width: 33px;
+    height: 4px;
+    margin-bottom: 5px;
+    position: relative;
+    background: #cdcdcd;
+    border-radius: 3px;
+    z-index: 1;
+    transform-origin: 4px 0px;
+    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+                background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+                opacity 0.55s ease;
+}
+ 
+#menuToggle span:first-child {
+    transform-origin: 0% 0%;
+}
+ 
+#menuToggle span:nth-last-child(2) {
+    transform-origin: 0% 100%;
+}
+ 
+/* Burger top line into a part of X */
+#menuToggle input:checked ~ span {
+    opacity: 1;
+    transform: rotate(45deg) translate(-2px, -1px);
+    background: #232323;
+}
+ 
+/* Hide the middle line */
+#menuToggle input:checked ~ span:nth-last-child(3) {
+    opacity: 0;
+    transform: rotate(0deg) scale(0.2, 0.2);
+}
+ 
+/* Burger bottom line into a part of X */
+#menuToggle input:checked ~ span:nth-last-child(2) {
+    opacity: 1;
+    transform: rotate(-45deg) translate(0, -1px);
+}
+ 
+/* Menu Box */
+#menu {
+    position: absolute;
+    width: 300px;
+    height: 100vh;
+    margin: -100px 0 0 0;
+    padding: 50px;
+    padding-top: 125px;
+    right: -100px;
+    background: #fff;
+    list-style-type: none;
+    /* to stop flickering of text in safari */
+    -webkit-font-smoothing: antialiased;
+    transform-origin: 0% 0%;
+    transform: translate(100%, 0);
+    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+}
+ 
+#menu .nav-link-list-item {
+    padding: 10px 0;
+    font-size: 28px;
+}
+ 
+ /* Fade menu in */
+#menuToggle input:checked ~ #menu {
+    transform: none;
+    opacity: 1;
+}
+ 
+@media screen and (max-width: 768px) {
+    #menu {
+        transform: none;
+        opacity: 0;
+        transition: opacity 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+    }
+}
