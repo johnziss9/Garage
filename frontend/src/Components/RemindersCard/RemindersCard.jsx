@@ -1,7 +1,7 @@
 import React from 'react';
 import './RemindersCard.css';
 import moment from 'moment';
-import { Divider, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import { Divider, Dialog, DialogTitle, DialogContent, Box } from '@mui/material';
 import CustomButton from '../CustomButton/CustomButton';
 import CustomDatePicker from '../CustomDatePicker/CustomDatePicker';
 
@@ -98,7 +98,7 @@ function RemindersCard(props) {
       <div className='reminders-button'>
         <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={props.button_value} color={'#fff'} onClick={handleOpen} />
       </div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={open} onClose={handleClose}>
         {(() => {
           switch (props.type) {
             case 'M.O.T.':
@@ -111,7 +111,14 @@ function RemindersCard(props) {
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <CustomDatePicker label="M.O.T. Start Date" value={newMOTStartDate} onChange={setNewMOTStartDate} allRentals={null} margin={'dense'} />
                   <CustomDatePicker label="M.O.T. End Date" value={newMOTEndDate} onChange={setNewMOTEndDate} allRentals={null} margin={'dense'} />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewMOT} marginTop={20}></CustomButton>
+                  <div className='reminders-card-dialog-buttons'>
+                    <Box m={1}>
+                      <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Cancel'} color={'#fff'} onClick={handleClose} marginTop={10}></CustomButton>
+                    </Box>
+                    <Box m={1}>
+                      <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewMOT} marginTop={10}></CustomButton>
+                    </Box>              
+                  </div>  
                 </DialogContent>
               </div>
             case 'ROAD TAX':
@@ -124,7 +131,14 @@ function RemindersCard(props) {
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <CustomDatePicker label="Road Tax Start Date" value={newRTStartDate} onChange={setNewRTStartDate} allRentals={null} margin={'dense'} />
                   <CustomDatePicker label="Road Tax End Date" value={newRTEndDate} onChange={setNewRTEndDate} allRentals={null} margin={'dense'} />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewRT} marginTop={20}></CustomButton>
+                  <div className='reminders-card-dialog-buttons'>
+                    <Box m={1}>
+                      <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Cancel'} color={'#fff'} onClick={handleClose} marginTop={10}></CustomButton>
+                    </Box>
+                    <Box m={1}>
+                      <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Renew'} color={'#fff'} onClick={handleRenewRT} marginTop={10}></CustomButton>
+                    </Box>
+                  </div>
                 </DialogContent>
               </div>
             case 'RENTAL':
@@ -136,7 +150,14 @@ function RemindersCard(props) {
                 <Divider style={{width:'100%'}} />
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <CustomDatePicker label="Car returned on" value={carReturnDate} onChange={setCarReturnDate} expiringRentals={props.expiringRentals} allRentals={props.allRentals} number_plate={props.number_plate} margin={'dense'} />
-                  <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Return'} color={'#fff'} onClick={handleCarReturn} marginTop={20}></CustomButton>
+                  <div className='reminders-card-dialog-buttons'>
+                    <Box m={1}>
+                      <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Cancel'} color={'#fff'} onClick={handleClose} marginTop={10}></CustomButton>
+                    </Box>
+                    <Box m={1}>
+                      <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Return'} color={'#fff'} onClick={handleCarReturn} marginTop={10}></CustomButton>
+                    </Box>
+                  </div>
                 </DialogContent>
               </div>
             default:
