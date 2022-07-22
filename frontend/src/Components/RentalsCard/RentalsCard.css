@@ -21,6 +21,7 @@
 
 .rentals-card-icons {
     margin-left: auto;
+    display: flex;
 }
 
 .rentals-card-rental-status-text {

@@ -12,6 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { Alert, Snackbar } from '@mui/material';
 
 function RemindersCard(props) {
@@ -80,6 +81,7 @@ function RemindersCard(props) {
     const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
 
     const handleMOTEdit = () => setDisableMOT(false);
+    const handleMOTCancel = () => setDisableMOT(true);
     const handleMOTSave = () => {
         fetch('http://localhost:5000/api/cars/updateMOT', {
             method: 'put',
@@ -103,6 +105,7 @@ function RemindersCard(props) {
     }
 
     const handleRTEdit = () => setDisableRT(false);
+    const handleRTCancel = () => setDisableRT(true);
     const handleRTSave = () => {
         fetch('http://localhost:5000/api/cars/updateRT', {
             method: 'put',
@@ -126,6 +129,7 @@ function RemindersCard(props) {
     }
 
     const handleCustomerEdit = () => setDisableCustomer(false);
+    const handleCustomerCancel = () => setDisableCustomer(true);
     const handleCustomerSave = () => {
         fetch('http://localhost:5000/api/rentals/update', {
             method: 'put',
@@ -148,6 +152,7 @@ function RemindersCard(props) {
     }
 
     const handleDatesEdit = () => setDisableDates(false);
+    const handleDatesCancel = () => setDisableDates(true);
     const handleDatesSave = () => {
         fetch('http://localhost:5000/api/rentals/updateDates', {
             method: 'put',
@@ -258,9 +263,12 @@ function RemindersCard(props) {
                             <IconButton onClick={handleMOTEdit} style={{display: disableMOT ? 'flex' : 'none'}}>
                                 <EditIcon fontSize="small" />
                             </IconButton>
+                            <IconButton onClick={handleMOTCancel} style={{display: !disableMOT ? 'flex' : 'none'}}>
+                                <DisabledByDefaultIcon fontSize="small" />
+                            </IconButton>
                             <IconButton onClick={handleMOTSave} style={{display: !disableMOT ? 'flex' : 'none'}}>
                                 <SaveIcon fontSize="small" />
-                            </IconButton>
+                            </IconButton>                            
                         </span>
                     </div>
                     <form className='card-form'>
@@ -272,6 +280,9 @@ function RemindersCard(props) {
                         <span className='rentals-card-icons'>
                             <IconButton onClick={handleRTEdit} style={{display: disableRT ? 'flex' : 'none'}}>
                                 <EditIcon fontSize="small" />
+                            </IconButton>
+                            <IconButton onClick={handleRTCancel} style={{display: !disableRT ? 'flex' : 'none'}}>
+                                <DisabledByDefaultIcon fontSize="small" />
                             </IconButton>
                             <IconButton onClick={handleRTSave} style={{display: !disableRT ? 'flex' : 'none'}}>
                                 <SaveIcon fontSize="small" />
@@ -362,6 +373,9 @@ function RemindersCard(props) {
                                     <IconButton onClick={handleCustomerEdit} style={{display: disableCustomer ? 'flex' : 'none'}}>
                                         <EditIcon fontSize="small" />
                                     </IconButton>
+                                    <IconButton onClick={handleCustomerCancel} style={{display: !disableCustomer ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
                                     <IconButton onClick={handleCustomerSave} style={{display: !disableCustomer ? 'flex' : 'none'}}>
                                         <SaveIcon fontSize="small" />
                                     </IconButton>
@@ -378,6 +392,9 @@ function RemindersCard(props) {
                                 <span className='rentals-card-icons'>
                                     <IconButton onClick={handleDatesEdit} style={{display: disableDates ? 'flex' : 'none'}}>
                                         <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleDatesCancel} style={{display: !disableDates ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
                                     </IconButton>
                                     <IconButton onClick={handleDatesSave} style={{display: !disableDates ? 'flex' : 'none'}}>
                                         <SaveIcon fontSize="small" />
