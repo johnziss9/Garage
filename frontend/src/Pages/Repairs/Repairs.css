@@ -1,0 +1,6 @@
+.repairs-content {
+    width: 1020px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
