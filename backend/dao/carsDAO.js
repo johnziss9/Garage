@@ -201,7 +201,7 @@ export default class CarsDAO {
         }
     }
 
-    static async addCar(make, model, numberPlate, mot, road_tax, deleted, type, rented) {
+    static async addCar(make, model, numberPlate, mot, road_tax, deleted, type, rented, hasActiveRepair) {
         try {
             const car = { 
                 make: make,
@@ -217,7 +217,8 @@ export default class CarsDAO {
                 },
                 deleted: deleted,
                 type: type,
-                rented: rented
+                rented: rented,
+                has_active_repair: hasActiveRepair
             };
  
             return await cars.insertOne(car);
@@ -432,7 +433,8 @@ export default class CarsDAO {
                 },
                 {
                     $unwind: {
-                        path: '$repairs'
+                        path: '$repairs',
+                        preserveNullAndEmptyArrays: true
                     }
                 },
                 {
@@ -453,7 +455,9 @@ export default class CarsDAO {
                         mot: { $first: '$mot' },
                         road_tax: { $first: '$road_tax' },
                         type: { $first: '$type' },
-                        deleted: { $first: '$deleted' }
+                        deleted: { $first: '$deleted' },
+                        rented: { $first: '$rented' },
+                        has_active_repair: { $first: '$has_active_repair' }
                     }
                 },
                 {

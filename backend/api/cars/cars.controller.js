@@ -135,6 +135,7 @@ export default class CarsController {
             const deleted = req.body.deleted;
             const type = req.body.type;
             const rented = req.body.rented;
+            const hasActiveRepair = req.body.has_active_repair;
  
             const addCarResponse = await CarsDAO.addCar(
                 make,
@@ -144,7 +145,8 @@ export default class CarsController {
                 road_tax,
                 deleted,
                 type,
-                rented
+                rented,
+                hasActiveRepair
             );
             res.json({ status: "success" });
         } catch (e) {
