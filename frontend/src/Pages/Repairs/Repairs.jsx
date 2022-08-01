@@ -36,11 +36,11 @@ function Repairs() {
         else
           inactiveRepairs.push(car);
       });
-    });
 
       setAllRepairs(allRepairs);
       setActiveRepairs(activeRepairs);
       setInactiveRepairs(inactiveRepairs);
+    });
   }, []);
 
   const handleActiveClick = () => {
