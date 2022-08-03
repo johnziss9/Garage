@@ -86,3 +86,12 @@ body {
     justify-content: center;
     margin: 20px 0;
 }
+
+.card-icons {
+    margin-left: auto;
+    display: flex;
+}
+
+.card-view-history {
+    cursor: pointer;
+}

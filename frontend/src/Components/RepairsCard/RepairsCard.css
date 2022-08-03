@@ -18,3 +18,21 @@
     color: #fff;
     font-size: 17px;
 }
+
+.repairs-card-no-repairs {
+    font-size: 17px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.repairs-card-repairs-list {
+    max-width: 350px;
+    width: 90%;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    max-height: 250px;
+    overflow: "hidden";
+    overflow-y: scroll;
+    margin-top: 15px;
+}

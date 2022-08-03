@@ -259,7 +259,7 @@ function RemindersCard(props) {
                 <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div className='card-section-header'>
                         M.O.T.
-                        <span className='rentals-card-icons'>
+                        <span className='card-icons'>
                             <IconButton onClick={handleMOTEdit} style={{display: disableMOT ? 'flex' : 'none'}}>
                                 <EditIcon fontSize="small" />
                             </IconButton>
@@ -277,7 +277,7 @@ function RemindersCard(props) {
                     </form>
                     <div className='card-section-header'>
                         Road Tax
-                        <span className='rentals-card-icons'>
+                        <span className='card-icons'>
                             <IconButton onClick={handleRTEdit} style={{display: disableRT ? 'flex' : 'none'}}>
                                 <EditIcon fontSize="small" />
                             </IconButton>
@@ -353,9 +353,9 @@ function RemindersCard(props) {
                         {allRentals.length > 7 ?
                         <div style={{ marginTop: '15px' }}>
                             {fullHistory ?
-                                <Link className='rentals-card-view-history' onClick={handleHideFullHistory}>View Less</Link>
+                                <Link className='card-view-history' onClick={handleHideFullHistory}>View Less</Link>
                                 :
-                                <Link className='rentals-card-view-history' onClick={handleShowFullHistory}>View Full History</Link>                        
+                                <Link className='card-view-history' onClick={handleShowFullHistory}>View Full History</Link>                        
                             }
                         </div> :
                         null}
@@ -369,7 +369,7 @@ function RemindersCard(props) {
                         <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div className='card-section-header'>
                                 Customer Details
-                                <span className='rentals-card-icons'>
+                                <span className='card-icons'>
                                     <IconButton onClick={handleCustomerEdit} style={{display: disableCustomer ? 'flex' : 'none'}}>
                                         <EditIcon fontSize="small" />
                                     </IconButton>
@@ -389,7 +389,7 @@ function RemindersCard(props) {
                             </form>
                             <div className='card-section-header'>
                                 Dates
-                                <span className='rentals-card-icons'>
+                                <span className='card-icons'>
                                     <IconButton onClick={handleDatesEdit} style={{display: disableDates ? 'flex' : 'none'}}>
                                         <EditIcon fontSize="small" />
                                     </IconButton>

@@ -19,11 +19,6 @@
     font-size: 17px;
 }
 
-.rentals-card-icons {
-    margin-left: auto;
-    display: flex;
-}
-
 .rentals-card-rental-status-text {
     margin: 20px 0;
     padding: 10px 0;
@@ -43,10 +38,6 @@
     max-height: 250px;
     overflow: "hidden";
     overflow-y: scroll;
-}
-
-.rentals-card-view-history {
-    cursor: pointer;
 }
 
 .rentals-card-no-rentals {
