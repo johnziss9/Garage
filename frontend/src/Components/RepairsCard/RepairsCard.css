@@ -22,7 +22,12 @@
 .repairs-card-no-repairs {
     font-size: 17px;
     font-weight: bold;
-    margin: 10px 0;
+    margin: 20px 0 5px 0;
+    border: 1px solid black;
+    max-width: 350px;
+    width: 90%;
+    text-align: center;
+    padding: 10px 0;
 }
 
 .repairs-card-repairs-list {
@@ -34,5 +39,5 @@
     max-height: 250px;
     overflow: "hidden";
     overflow-y: scroll;
-    margin-top: 15px;
+    margin-top: 20px;
 }

@@ -736,12 +736,31 @@ export default class CarsDAO {
         }
     }
 
-    static async updateCar(carId, rented) {
+    static async updateCarRentalStatus(carId, rented) {
         try {
             const updateResponse = await cars.updateOne(
                 { _id: ObjectId(carId) },
                 { $set: { 
                         rented: rented
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update car in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updateCarDetails(carId, frameNumber, kmMiles) {
+        try {
+            const updateResponse = await cars.updateOne(
+                { _id: ObjectId(carId) },
+                { $set: { 
+                        frame_number: frameNumber,
+                        km_miles: kmMiles
                     }
                 }
             );

@@ -73,7 +73,7 @@ function Rentals() {
     }
 
     const handleCarRentalStatus = (car_id, rentalStatus) => {
-      fetch('http://localhost:5000/api/cars/update', {
+      fetch('http://localhost:5000/api/cars/updateRentalStatus', {
         method: 'put',
         headers: {
           'Accept': 'application/json',

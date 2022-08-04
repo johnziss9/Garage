@@ -256,14 +256,41 @@ export default class CarsController {
         }
     }
 
-    static async apiUpdateCar(req, res, next) {
+    static async apiUpdateCarRentalStatus(req, res, next) {
         try {
             const carId = req.body.car_id;
             const rented = req.body.rented;
  
-            const updateCarResponse = await CarsDAO.updateCar(
+            const updateCarResponse = await CarsDAO.updateCarRentalStatus(
                 carId,
                 rented
+            );
+ 
+            var { error } = updateCarResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (updateCarResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the car in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdateCarDetails(req, res, next) {
+        try {
+            const carId = req.body.car_id;
+            const frameNumber = req.body.frame_number;
+            const kmMiles = req.body.km_miles;
+ 
+            const updateCarResponse = await CarsDAO.updateCarDetails(
+                carId,
+                frameNumber,
+                kmMiles
             );
  
             var { error } = updateCarResponse;

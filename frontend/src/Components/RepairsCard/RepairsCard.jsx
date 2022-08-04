@@ -10,22 +10,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
 
 function RepairsCard(props) {
     const [open, setOpen] = React.useState(false);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [carDeleted, setCarDeleted] = React.useState(false);
     const [disableCarDetails, setDisableCarDetails] = React.useState(true);
-    const [disableCustomerDetails, setDisableCustomerDetails] = React.useState(true);
 
-    const [arithmosPlaisiou, setArithmosPlaisiou] = React.useState('');
+    const [frameNumber, setFrameNumber] = React.useState('');
     const [kmMiles, setKmMiles] = React.useState('');
-    const [firstName, setFirstName] = React.useState('');
-    const [lastName, setLastName] = React.useState('');
-    const [phone, setPhone] = React.useState('');
-    const [address, setAddress] = React.useState('');
-    const [email, setEmail] = React.useState('');
 
     const [allRepairs, setAllRepairs] = React.useState([]);
     const [expiredRepairs, setExpiredRepairs] = React.useState([]);
@@ -72,49 +65,23 @@ function RepairsCard(props) {
     const handleCarEdit = () => setDisableCarDetails(false);
     const handleCarCancel = () => setDisableCarDetails(true);
     const handleCarSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateMOT', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         mot: {
-        //             start_date: MOTStartDate,
-        //             end_date: MOTEndDate
-        //         }
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/cars/updateCarDetails', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: props.car._id,
+                frame_number: frameNumber,
+                km_miles: kmMiles
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
-        // setDisableMOT(true);
-    }
-
-    const handleCustomerEdit = () => setDisableCustomerDetails(false);
-    const handleCustomerCancel = () => setDisableCustomerDetails(true);
-    const handleCustomerSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateMOT', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         mot: {
-        //             start_date: MOTStartDate,
-        //             end_date: MOTEndDate
-        //         }
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
-
-        // setDisableMOT(true);
+        setDisableCarDetails(true);
     }
 
     const handleShowFullHistory = () => setFullHistory(true);
@@ -212,29 +179,8 @@ function RepairsCard(props) {
                         </span>
                     </div>
                     <form className='card-form'>
-                        <CustomTextField label={"Arithmos Plaisiou"} size={"small"} onChange={e => setArithmosPlaisiou(e.target.value)} value={arithmosPlaisiou} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
+                        <CustomTextField label={"Frame Number"} size={"small"} onChange={e => setFrameNumber(e.target.value)} value={frameNumber} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
                         <CustomTextField label={"Km/Miles"} size={"small"} onChange={e => setKmMiles(e.target.value)} value={kmMiles} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
-                    </form>
-                    <div className='card-section-header'>
-                        Customer Details
-                        <span className='card-icons'>
-                            <IconButton onClick={handleCustomerEdit} style={{display: disableCustomerDetails ? 'flex' : 'none'}}>
-                                <EditIcon fontSize="small" />
-                            </IconButton>
-                            <IconButton onClick={handleCustomerCancel} style={{display: !disableCustomerDetails ? 'flex' : 'none'}}>
-                                <DisabledByDefaultIcon fontSize="small" />
-                            </IconButton>
-                            <IconButton onClick={handleCustomerSave} style={{display: !disableCustomerDetails ? 'flex' : 'none'}}>
-                                <SaveIcon fontSize="small" />
-                            </IconButton>                            
-                        </span>
-                    </div>
-                    <form className='card-form'>
-                        <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
-                        <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
-                        <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
-                        <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
-                        <CustomTextField label={"Email"} size={"small"} onChange={e => setEmail(e.target.value)} value={email} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
                     </form>
                     {allRepairs.length === 0 ?
                     <div className='repairs-card-no-repairs'>No repairs for this car.</div> :
@@ -290,7 +236,7 @@ function RepairsCard(props) {
                         </div> :
                         null}
                     </div>}
-                    <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableCarDetails || !disableCustomerDetails ? true : false} marginTop={20}></CustomButton>
+                    <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableCarDetails ? true : false} marginTop={20}></CustomButton>
                     {/* SECOND DIALOG CONTENT GOES HERE */}
                     <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openDeleteDialog} onClose={handleCloseDeleteDialog} fullWidth={true}>
                         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >

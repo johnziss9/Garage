@@ -7,7 +7,8 @@ const router = express.Router();
 // Cars of any type
 router.route("/add").post(verifyToken, CarsController.apiAddCar); // Adds a new car (rental or repair)
 router.route("/delete").put(verifyToken, CarsController.apiDeleteCar); // Soft delete of a car (rental or repair)
-router.route("/update").put(verifyToken, CarsController.apiUpdateCar); // Updating a car (rental or repair)
+router.route("/updateRentalStatus").put(verifyToken, CarsController.apiUpdateCarRentalStatus); // Updating a car (rental or repair)
+router.route("/updateCarDetails").put(verifyToken, CarsController.apiUpdateCarDetails); // Updating a car (rental or repair)
 
 // Rental Cars
 router.route("/getRentals").get(verifyToken, CarsController.apiGetRentalCars); // Gets all the rental cars
