@@ -382,10 +382,10 @@ function RemindersCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                             </form>
                             <div className='card-section-header'>
                                 Dates

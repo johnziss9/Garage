@@ -22,11 +22,11 @@ function CustomTextField(props) {
             "& label.Mui-focused": { color: '#00cc99' },
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
-                borderColor: props.borderColour,
+                borderColor: '#b3b3b3',
                 borderRadius: 0
               },
               '&:hover fieldset': {
-                borderColor: props.borderColour,
+                borderColor: '#b3b3b3',
               },
               '&.Mui-focused fieldset': {
                 borderColor: '#00cc99',

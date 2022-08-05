@@ -416,8 +416,8 @@ function RepairsCard(props) {
                         </span>
                     </div>
                     <form className='card-form'>
-                        <CustomTextField label={"Frame Number"} size={"small"} onChange={e => setFrameNumber(e.target.value)} value={frameNumber} disabled={disableCarDetails} fullWidth={true} margin={'dense'} borderColour={"#b3b3b3"} />
-                        <CustomTextField label={"Km/Miles"} size={"small"} onChange={e => setKmMiles(e.target.value)} value={kmMiles} disabled={disableCarDetails} fullWidth={true} margin={'dense'} borderColour={"#b3b3b3"} />
+                        <CustomTextField label={"Frame Number"} size={"small"} onChange={e => setFrameNumber(e.target.value)} value={frameNumber} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
+                        <CustomTextField label={"Km/Miles"} size={"small"} onChange={e => setKmMiles(e.target.value)} value={kmMiles} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
                     </form>
                     {allRepairs.length === 0 ?
                     <div className='repairs-card-no-repairs'>No repairs for this car.</div> :
@@ -496,11 +496,11 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Email"} size={"small"} onChange={e => setEmail(e.target.value)} value={email} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Email"} size={"small"} onChange={e => setEmail(e.target.value)} value={email} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                             </form>
                             {/* Insurance Details */}
                             <div className='card-section-header'>
@@ -518,13 +518,13 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"Insurance Name"} size={"small"} onChange={e => setInsuranceName(e.target.value)} value={insuranceName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Assessor Name"} size={"small"} onChange={e => setAssessorName(e.target.value)} value={assessorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Assessor Phone"} size={"small"} onChange={e => setAssessorPhone(e.target.value)} value={assessorPhone} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Operator Name"} size={"small"} onChange={e => setOperatorName(e.target.value)} value={operatorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Operator Phone"} size={"small"} onChange={e => setOperatorPhone(e.target.value)} value={operatorPhone} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Claim Number"} size={"small"} onChange={e => setClaimNumber(e.target.value)} value={claimNumber} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
-                                <CustomTextField label={"Paid Amount"} size={"small"} onChange={e => setPaidAmount(e.target.value)} value={paidAmount} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Insurance Name"} size={"small"} onChange={e => setInsuranceName(e.target.value)} value={insuranceName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Assessor Name"} size={"small"} onChange={e => setAssessorName(e.target.value)} value={assessorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Assessor Phone"} size={"small"} onChange={e => setAssessorPhone(e.target.value)} value={assessorPhone} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Operator Name"} size={"small"} onChange={e => setOperatorName(e.target.value)} value={operatorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Operator Phone"} size={"small"} onChange={e => setOperatorPhone(e.target.value)} value={operatorPhone} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Claim Number"} size={"small"} onChange={e => setClaimNumber(e.target.value)} value={claimNumber} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Paid Amount"} size={"small"} onChange={e => setPaidAmount(e.target.value)} value={paidAmount} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                             </form>
                             {/* Repair Dates */}
                             <div className='card-section-header'>
@@ -562,7 +562,7 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"Alignments"} size={"small"} onChange={e => setAlignments(e.target.value)} value={alignments} disabled={disableAlignments} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Alignments"} size={"small"} onChange={e => setAlignments(e.target.value)} value={alignments} disabled={disableAlignments} multiline rows={6} labelMargin={-7} fullWidth={true} />
                             </form>
                             {/* Paintings */}
                             <div className='card-section-header'>
@@ -580,7 +580,7 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"Paintings"} size={"small"} onChange={e => setPaintings(e.target.value)} value={paintings} disabled={disablePaintings} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Paintings"} size={"small"} onChange={e => setPaintings(e.target.value)} value={paintings} disabled={disablePaintings} multiline rows={6} labelMargin={-7} fullWidth={true} />
                             </form>
                             {/* Mechanical */}
                             <div className='card-section-header'>
@@ -598,7 +598,7 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"Mechanical"} size={"small"} onChange={e => setMechanical(e.target.value)} value={mechanical} disabled={disableMechanical} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Mechanical"} size={"small"} onChange={e => setMechanical(e.target.value)} value={mechanical} disabled={disableMechanical} multiline rows={6} labelMargin={-7} fullWidth={true} />
                             </form>
                             {/* Electrical */}
                             <div className='card-section-header'>
@@ -616,7 +616,7 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"Electrical"} size={"small"} onChange={e => setElectrical(e.target.value)} value={electrical} disabled={disableElectrical} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Electrical"} size={"small"} onChange={e => setElectrical(e.target.value)} value={electrical} disabled={disableElectrical} multiline rows={6} labelMargin={-7} fullWidth={true} />
                             </form>
                             {/* Air Condition */}
                             <div className='card-section-header'>
@@ -634,7 +634,7 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"AirCondition"} size={"small"} onChange={e => setAirCondition(e.target.value)} value={airCondition} disabled={disableAirCondition} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"AirCondition"} size={"small"} onChange={e => setAirCondition(e.target.value)} value={airCondition} disabled={disableAirCondition} multiline rows={6} labelMargin={-7} fullWidth={true} />
                             </form>
                             {/* Additional Work */}
                             <div className='card-section-header'>
@@ -652,7 +652,7 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"Additional Work"} size={"small"} onChange={e => setAdditionalWork(e.target.value)} value={additionalWork} disabled={disableAdditionalWork} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Additional Work"} size={"small"} onChange={e => setAdditionalWork(e.target.value)} value={additionalWork} disabled={disableAdditionalWork} multiline rows={6} labelMargin={-7} fullWidth={true} />
                             </form>
                             {/* The button height wasn't working below so I placed it inside a div */}
                             <div style={{ width: '100%', height: '60px', display: 'flex', justifyContent: 'center' }}> 

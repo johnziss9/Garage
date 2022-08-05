@@ -67,8 +67,8 @@ function Login() {
           {!showForm ?
             <CustomButton backgroundColor={'#00cc99'} width={'200px'} height={'45px'} value={'Login'} onClick={handleShowForm}></CustomButton> :
             <form className='login-form'>
-              <CustomTextField label={"Username"} size={"small"} onChange={e => setUsername(e.target.value)} value={username} borderColour={"#00cc99"}></CustomTextField>
-              <CustomTextField label={"Password"} size={"small"} type={'password'} onChange={e => setPassword(e.target.value)} value={password} borderColour={"#00cc99"}></CustomTextField>
+              <CustomTextField label={"Username"} size={"small"} onChange={e => setUsername(e.target.value)} value={username}></CustomTextField>
+              <CustomTextField label={"Password"} size={"small"} type={'password'} onChange={e => setPassword(e.target.value)} value={password}></CustomTextField>
               <div className='login-buttons'>
                 <CustomButton backgroundColor={'#b3b3b3'} width={'120px'} height={'40px'} value={'Cancel'} onClick={handleHideForm}></CustomButton>
                 <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Login'} onClick={handleLogin}></CustomButton>
