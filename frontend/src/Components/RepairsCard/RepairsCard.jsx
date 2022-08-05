@@ -4,21 +4,57 @@ import moment from 'moment';
 import _ from 'lodash';
 import CustomButton from '../../Components/CustomButton/CustomButton';
 import CustomTextField from '../CustomTextField/CustomTextField';
-import { Divider, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Link, IconButton, Box, Alert, Snackbar } from '@mui/material';
+import CustomDatePicker from '../CustomDatePicker/CustomDatePicker';
+import { Divider, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Link, IconButton, Box, Alert, Snackbar, TextField } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import {ThemeProvider} from "@material-ui/styles";
+import {makeStyles} from "@material-ui/core/styles";
+import DateFnsUtils from '@date-io/date-fns';
 
 function RepairsCard(props) {
     const [open, setOpen] = React.useState(false);
+    const [openSecondDialog, setOpenSecondDialog] = React.useState(false);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [carDeleted, setCarDeleted] = React.useState(false);
     const [disableCarDetails, setDisableCarDetails] = React.useState(true);
+    const [disableCustomerDetails, setDisableCustomerDetails] = React.useState(true);
+    const [disableInsuranceDetails, setDisableInsuranceDetails] = React.useState(true);
+    const [disableRepairDates, setDisableRepairDates] = React.useState(true);
+    const [disableAlignments, setDisableAlignments] = React.useState(true);
+    const [disablePaintings, setDisablePaintings] = React.useState(true);
+    const [disableMechanical, setDisableMechanical] = React.useState(true);
+    const [disableElectrical, setDisableElectrical] = React.useState(true);
+    const [disableAirCondition, setDisableAirCondition] = React.useState(true);
+    const [disableAdditionalWork, setDisableAdditionalWork] = React.useState(true);
 
     const [frameNumber, setFrameNumber] = React.useState('');
     const [kmMiles, setKmMiles] = React.useState('');
+    const [firstName, setFirstName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
+    const [phone, setPhone] = React.useState('');
+    const [address, setAddress] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [insuranceName, setInsuranceName] = React.useState('');
+    const [assessorName, setAssessorName] = React.useState('');
+    const [assessorPhone, setAssessorPhone] = React.useState('');
+    const [operatorName, setOperatorName] = React.useState('');
+    const [operatorPhone, setOperatorPhone] = React.useState('');
+    const [claimNumber, setClaimNumber] = React.useState('');
+    const [paidAmount, setPaidAmount] = React.useState('');
+    const [repairAcceptanceDate, setRepairAcceptanceDate] = React.useState(new Date());
+    const [receivedDate, setReceivedDate] = React.useState(new Date());
+    const [deliveryDate, setDeliveryDate] = React.useState(new Date());
+    const [alignments, setAlignments] = React.useState('');
+    const [paintings, setPaintings] = React.useState('');
+    const [mechanical, setMechanical] = React.useState('');
+    const [electrical, setElectrical] = React.useState('');
+    const [airCondition, setAirCondition] = React.useState('');
+    const [additionalWork, setAdditionalWork] = React.useState('');
 
     const [allRepairs, setAllRepairs] = React.useState([]);
     const [expiredRepairs, setExpiredRepairs] = React.useState([]);
@@ -30,6 +66,9 @@ function RepairsCard(props) {
         setOpen(true);
     }
     const handleClose = () => setOpen(false);
+
+    const handleOpenSecondDialog = () => setOpenSecondDialog(true)
+    const handleCloseSecondDialog = () => setOpenSecondDialog(false);
 
     const handleOpenDeleteDialog = () => setOpenDeleteDialog(true)
     const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
@@ -84,6 +123,204 @@ function RepairsCard(props) {
         setDisableCarDetails(true);
     }
 
+    const handleCustomerDetailsEdit = () => setDisableCustomerDetails(false);
+    const handleCustomerDetailsCancel = () => setDisableCustomerDetails(true);
+    const handleCustomerDetailsSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisableCustomerDetails(true);
+    }
+
+    const handleInsuranceDetailsEdit = () => setDisableInsuranceDetails(false);
+    const handleInsuranceDetailsCancel = () => setDisableInsuranceDetails(true);
+    const handleInsuranceDetailsSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisableInsuranceDetails(true);
+    }
+
+    const handleRepairDatesEdit = () => setDisableRepairDates(false);
+    const handleRepairDatesCancel = () => setDisableRepairDates(true);
+    const handleRepairDatesSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisableRepairDates(true);
+    }
+
+    const handleAlignmentsEdit = () => setDisableAlignments(false);
+    const handleAlignmentsCancel = () => setDisableAlignments(true);
+    const handleAlignmentsSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisableAlignments(true);
+    }
+
+    const handlePaintingsEdit = () => setDisablePaintings(false);
+    const handlePaintingsCancel = () => setDisablePaintings(true);
+    const handlePaintingsSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisablePaintings(true);
+    }
+
+    const handleMechanicalEdit = () => setDisableMechanical(false);
+    const handleMechanicalCancel = () => setDisableMechanical(true);
+    const handleMechanicalSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisableMechanical(true);
+    }
+
+    const handleElectricalEdit = () => setDisableElectrical(false);
+    const handleElectricalCancel = () => setDisableElectrical(true);
+    const handleElectricalSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisableElectrical(true);
+    }
+
+    const handleAirConditionEdit = () => setDisableAirCondition(false);
+    const handleAirConditionCancel = () => setDisableAirCondition(true);
+    const handleAirConditionSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisableAirCondition(true);
+    }
+
+    const handleAdditionalWorkEdit = () => setDisableAdditionalWork(false);
+    const handleAdditionalWorkCancel = () => setDisableAdditionalWork(true);
+    const handleAdditionalWorkSave = () => {
+        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
+        //     method: 'put',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'x-access-token': sessionStorage.getItem('token')
+        //     },
+        //     body: JSON.stringify({
+        //         car_id: props.car._id,
+        //         frame_number: frameNumber,
+        //         km_miles: kmMiles
+        //     })
+        // })
+        // .then((Response) => Response.json())
+        // .then(handleClose(), window.location.reload())
+
+        setDisableAdditionalWork(true);
+    }
+
     const handleShowFullHistory = () => setFullHistory(true);
     const handleHideFullHistory = () => setFullHistory(false);
 
@@ -135,7 +372,7 @@ function RepairsCard(props) {
         // setRentalStartDate(rental.dates.start_date);
         // setRentalEndDate(rental.dates.end_date);
 
-        // handleOpenSecondDialog();
+        handleOpenSecondDialog();
     }
 
     return (
@@ -179,8 +416,8 @@ function RepairsCard(props) {
                         </span>
                     </div>
                     <form className='card-form'>
-                        <CustomTextField label={"Frame Number"} size={"small"} onChange={e => setFrameNumber(e.target.value)} value={frameNumber} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
-                        <CustomTextField label={"Km/Miles"} size={"small"} onChange={e => setKmMiles(e.target.value)} value={kmMiles} disabled={disableCarDetails} fullWidth={true} margin={'dense'} />
+                        <CustomTextField label={"Frame Number"} size={"small"} onChange={e => setFrameNumber(e.target.value)} value={frameNumber} disabled={disableCarDetails} fullWidth={true} margin={'dense'} borderColour={"#b3b3b3"} />
+                        <CustomTextField label={"Km/Miles"} size={"small"} onChange={e => setKmMiles(e.target.value)} value={kmMiles} disabled={disableCarDetails} fullWidth={true} margin={'dense'} borderColour={"#b3b3b3"} />
                     </form>
                     {allRepairs.length === 0 ?
                     <div className='repairs-card-no-repairs'>No repairs for this car.</div> :
@@ -237,7 +474,201 @@ function RepairsCard(props) {
                         null}
                     </div>}
                     <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableCarDetails ? true : false} marginTop={20}></CustomButton>
-                    {/* SECOND DIALOG CONTENT GOES HERE */}
+                    <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
+                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center' }} >
+                            <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
+                        </DialogTitle>
+                        <Divider style={{width:'100%'}} />
+                        <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            {/* Customer Details */}
+                            <div className='card-section-header'>
+                                Customer Details
+                                <span className='card-icons'>
+                                    <IconButton onClick={handleCustomerDetailsEdit} style={{display: disableCustomerDetails ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleCustomerDetailsCancel} style={{display: !disableCustomerDetails ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleCustomerDetailsSave} style={{display: !disableCustomerDetails ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Email"} size={"small"} onChange={e => setEmail(e.target.value)} value={email} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                            </form>
+                            {/* Insurance Details */}
+                            <div className='card-section-header'>
+                                Insurance Details
+                                <span className='card-icons'>
+                                    <IconButton onClick={handleInsuranceDetailsEdit} style={{display: disableInsuranceDetails ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleInsuranceDetailsCancel} style={{display: !disableInsuranceDetails ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleInsuranceDetailsSave} style={{display: !disableInsuranceDetails ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomTextField label={"Insurance Name"} size={"small"} onChange={e => setInsuranceName(e.target.value)} value={insuranceName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Assessor Name"} size={"small"} onChange={e => setAssessorName(e.target.value)} value={assessorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Assessor Phone"} size={"small"} onChange={e => setAssessorPhone(e.target.value)} value={assessorPhone} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Operator Name"} size={"small"} onChange={e => setOperatorName(e.target.value)} value={operatorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Operator Phone"} size={"small"} onChange={e => setOperatorPhone(e.target.value)} value={operatorPhone} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Claim Number"} size={"small"} onChange={e => setClaimNumber(e.target.value)} value={claimNumber} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Paid Amount"} size={"small"} onChange={e => setPaidAmount(e.target.value)} value={paidAmount} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                            </form>
+                            {/* Repair Dates */}
+                            <div className='card-section-header'>
+                                Repair Dates
+                                <span className='card-icons'>
+                                    <IconButton onClick={handleRepairDatesEdit} style={{display: disableRepairDates ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleRepairDatesCancel} style={{display: !disableRepairDates ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleRepairDatesSave} style={{display: !disableRepairDates ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomDatePicker label="Repair Acceptance Date" value={repairAcceptanceDate} onChange={setRepairAcceptanceDate} disabled={disableRepairDates} allRentals={null} margin={'dense'} />
+                                <CustomDatePicker label="Date Received" value={receivedDate} onChange={setReceivedDate} allRentals={null} disabled={disableRepairDates} margin={'dense'} />
+                                <CustomDatePicker label="Date Delivered" value={deliveryDate} onChange={setDeliveryDate} allRentals={null} disabled={disableRepairDates} margin={'dense'} />
+                            </form>
+                            {/* Alignments */}
+                            <div className='card-section-header'>
+                                Alignments
+                                <span className='card-icons'>
+                                    <IconButton onClick={handleAlignmentsEdit} style={{display: disableAlignments ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleAlignmentsCancel} style={{display: !disableAlignments ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleAlignmentsSave} style={{display: !disableAlignments ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomTextField label={"Alignments"} size={"small"} onChange={e => setAlignments(e.target.value)} value={alignments} disabled={disableAlignments} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                            </form>
+                            {/* Paintings */}
+                            <div className='card-section-header'>
+                                Paintings
+                                <span className='card-icons'>
+                                    <IconButton onClick={handlePaintingsEdit} style={{display: disablePaintings ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handlePaintingsCancel} style={{display: !disablePaintings ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handlePaintingsSave} style={{display: !disablePaintings ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomTextField label={"Paintings"} size={"small"} onChange={e => setPaintings(e.target.value)} value={paintings} disabled={disablePaintings} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                            </form>
+                            {/* Mechanical */}
+                            <div className='card-section-header'>
+                                Mechanical
+                                <span className='card-icons'>
+                                    <IconButton onClick={handleMechanicalEdit} style={{display: disableMechanical ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleMechanicalCancel} style={{display: !disableMechanical ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleMechanicalSave} style={{display: !disableMechanical ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomTextField label={"Mechanical"} size={"small"} onChange={e => setMechanical(e.target.value)} value={mechanical} disabled={disableMechanical} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                            </form>
+                            {/* Electrical */}
+                            <div className='card-section-header'>
+                                Electrical
+                                <span className='card-icons'>
+                                    <IconButton onClick={handleElectricalEdit} style={{display: disableElectrical ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleElectricalCancel} style={{display: !disableElectrical ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleElectricalSave} style={{display: !disableElectrical ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomTextField label={"Electrical"} size={"small"} onChange={e => setElectrical(e.target.value)} value={electrical} disabled={disableElectrical} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                            </form>
+                            {/* Air Condition */}
+                            <div className='card-section-header'>
+                                Air Condition
+                                <span className='card-icons'>
+                                    <IconButton onClick={handleAirConditionEdit} style={{display: disableAirCondition ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleAirConditionCancel} style={{display: !disableAirCondition ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleAirConditionSave} style={{display: !disableAirCondition ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomTextField label={"AirCondition"} size={"small"} onChange={e => setAirCondition(e.target.value)} value={airCondition} disabled={disableAirCondition} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                            </form>
+                            {/* Additional Work */}
+                            <div className='card-section-header'>
+                                Additional Work
+                                <span className='card-icons'>
+                                    <IconButton onClick={handleAdditionalWorkEdit} style={{display: disableAdditionalWork ? 'flex' : 'none'}}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleAdditionalWorkCancel} style={{display: !disableAdditionalWork ? 'flex' : 'none'}}>
+                                        <DisabledByDefaultIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={handleAdditionalWorkSave} style={{display: !disableAdditionalWork ? 'flex' : 'none'}}>
+                                        <SaveIcon fontSize="small" />
+                                    </IconButton>                            
+                                </span>
+                            </div>
+                            <form className='card-form'>
+                                <CustomTextField label={"Additional Work"} size={"small"} onChange={e => setAdditionalWork(e.target.value)} value={additionalWork} disabled={disableAdditionalWork} multiline rows={6} labelMargin={-7} fullWidth={true} borderColour={"#b3b3b3"} />
+                            </form>
+                            {/* The button height wasn't working below so I placed it inside a div */}
+                            <div style={{ width: '100%', height: '60px', display: 'flex', justifyContent: 'center' }}> 
+                                <CustomButton 
+                                    backgroundColor={'#00cc99'} 
+                                    width={'120px'} 
+                                    height={'40px'} 
+                                    value={'Done'} 
+                                    color={'#fff'} 
+                                    onClick={handleCloseSecondDialog} 
+                                    disabled={!disableCustomerDetails || !disableInsuranceDetails || !disableRepairDates || !disableAlignments || !disablePaintings || !disableMechanical || !disableElectrical || !disableAirCondition || !disableAdditionalWork ? true : false} 
+                                    marginTop={20}>
+                                </CustomButton>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                     <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openDeleteDialog} onClose={handleCloseDeleteDialog} fullWidth={true}>
                         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
                             <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>

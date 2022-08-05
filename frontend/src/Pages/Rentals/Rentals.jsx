@@ -142,9 +142,9 @@ function Rentals() {
         <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div className='card-section-header' style={{ justifyContent: 'left' }}>Vehicle Details</div>
           <form className='card-form'>
-            <CustomTextField label={"Make"} size={"small"} onChange={e => setMake(e.target.value)} value={make} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
-            <CustomTextField label={"Model"} size={"small"} onChange={e => setModel(e.target.value)} value={model} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
-            <CustomTextField label={"Number Plate"} size={"small"} onChange={e => setNumberPlate(e.target.value)} value={numberPlate} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
+            <CustomTextField label={"Make"} size={"small"} onChange={e => setMake(e.target.value)} value={make} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+            <CustomTextField label={"Model"} size={"small"} onChange={e => setModel(e.target.value)} value={model} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+            <CustomTextField label={"Number Plate"} size={"small"} onChange={e => setNumberPlate(e.target.value)} value={numberPlate} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
           </form>
           <div className='card-section-header' style={{ justifyContent: 'left' }}>M.O.T.</div>
           <form className='card-form'>

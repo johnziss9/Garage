@@ -362,7 +362,7 @@ function RemindersCard(props) {
                     </div>}
                     <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableMOT || !disableRT ? true : false} marginTop={20}></CustomButton>
                     <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
-                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', alignItems: 'center' }} >
+                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center' }} >
                             <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                         </DialogTitle>
                         <Divider style={{width:'100%'}} />
@@ -382,10 +382,10 @@ function RemindersCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomer} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
-                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomer} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
-                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomer} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
-                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomer} labelMargin={-3} fullWidth={true} height={33} margin={'dense'} />
+                                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
+                                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomer} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} borderColour={"#b3b3b3"} />
                             </form>
                             <div className='card-section-header'>
                                 Dates
@@ -403,7 +403,7 @@ function RemindersCard(props) {
                             </div>
                             <form className='card-form'>
                                 <CustomDatePicker label="Start Date" value={rentalStartDate} onChange={setRentalStartDate} allRentals={null} disabled={disableDates} margin={'dense'} />
-                                <CustomDatePicker label="End Date" value={rentalEndDate} onChange={setRentalEndDate} allRentals={null} disabled={disableDates} margin={'normal'} />
+                                <CustomDatePicker label="End Date" value={rentalEndDate} onChange={setRentalEndDate} allRentals={null} disabled={disableDates} margin={'dense'} />
                             </form>
                             <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleCloseSecondDialog} disabled={!disableCustomer || !disableDates ? true : false}  marginTop={20}></CustomButton>
                         </DialogContent>
