@@ -11,10 +11,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import {ThemeProvider} from "@material-ui/styles";
-import {makeStyles} from "@material-ui/core/styles";
-import DateFnsUtils from '@date-io/date-fns';
 
 function RepairsCard(props) {
     const [open, setOpen] = React.useState(false);
@@ -40,10 +36,10 @@ function RepairsCard(props) {
     const [address, setAddress] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [insuranceName, setInsuranceName] = React.useState('');
-    const [assessorName, setAssessorName] = React.useState('');
-    const [assessorPhone, setAssessorPhone] = React.useState('');
+    const [insurerName, setInsurerName] = React.useState('');
+    const [insurerPhoneNumber, setInsurerPhoneNumber] = React.useState('');
     const [operatorName, setOperatorName] = React.useState('');
-    const [operatorPhone, setOperatorPhone] = React.useState('');
+    const [operatorPhoneNumber, setOperatorPhoneNumber] = React.useState('');
     const [claimNumber, setClaimNumber] = React.useState('');
     const [paidAmount, setPaidAmount] = React.useState('');
     const [repairAcceptanceDate, setRepairAcceptanceDate] = React.useState(new Date());
@@ -519,10 +515,10 @@ function RepairsCard(props) {
                             </div>
                             <form className='card-form'>
                                 <CustomTextField label={"Insurance Name"} size={"small"} onChange={e => setInsuranceName(e.target.value)} value={insuranceName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
-                                <CustomTextField label={"Assessor Name"} size={"small"} onChange={e => setAssessorName(e.target.value)} value={assessorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
-                                <CustomTextField label={"Assessor Phone"} size={"small"} onChange={e => setAssessorPhone(e.target.value)} value={assessorPhone} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Insurer Name"} size={"small"} onChange={e => setInsurerName(e.target.value)} value={insurerName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Insurer Phone Number"} size={"small"} onChange={e => setInsurerPhoneNumber(e.target.value)} value={insurerPhoneNumber} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                                 <CustomTextField label={"Operator Name"} size={"small"} onChange={e => setOperatorName(e.target.value)} value={operatorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
-                                <CustomTextField label={"Operator Phone"} size={"small"} onChange={e => setOperatorPhone(e.target.value)} value={operatorPhone} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Operator Phone Number"} size={"small"} onChange={e => setOperatorPhoneNumber(e.target.value)} value={operatorPhoneNumber} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                                 <CustomTextField label={"Claim Number"} size={"small"} onChange={e => setClaimNumber(e.target.value)} value={claimNumber} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                                 <CustomTextField label={"Paid Amount"} size={"small"} onChange={e => setPaidAmount(e.target.value)} value={paidAmount} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                             </form>

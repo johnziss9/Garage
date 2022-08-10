@@ -98,7 +98,7 @@ export default class RepairsController {
         res.json(response);
     }
 
-    static async apiUpdateRepair(req, res, next) {
+    static async apiUpdateCustomerDetails(req, res, next) {
         try {
             const repairId = req.body.repair_id;
             const firstName = req.body.customer_details.first_name;
@@ -106,44 +106,230 @@ export default class RepairsController {
             const phoneNumber = req.body.customer_details.phone_number;
             const address = req.body.customer_details.address;
             const email = req.body.customer_details.email;
-            const insuranceName = req.body.insurance_details.name;
-            const insurerName = req.body.insurance_details.insurer_name;
-            const insurerPhoneNumber = req.body.insurance_details.insurer_phone_number;
-            const operatorName = req.body.insurance_details.operator_name;
-            const operatorPhoneNumber = req.body.insurance_details.operator_phone_number;
-            const amount = req.body.insurance_details.amount;
-            const repairDate = req.body.repair_details.repair_date;
-            const receievedDate = req.body.repair_details.received_date;
-            const dueDate = req.body.repair_details.due_date;
-            const isiomata = req.body.isiomata;
-            const paintings = req.body.paintings;
-            const mechanical = req.body.mechanical;
-            const electric = req.body.electric;
-            const aircon = req.body.aircon;
-            const additionalNotes = req.body.additional_notes;
  
-            const repairResponse = await RepairsDAO.updateRepair(
+            const repairResponse = await RepairsDAO.updateCustomerDetails(
                 repairId,
                 firstName,
                 lastName,
                 phoneNumber,
                 address,
-                email,
+                email
+            );
+ 
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdateInsuranceDetails(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const insuranceName = req.body.insurance_details.name;
+            const insurerName = req.body.insurance_details.insurer_name;
+            const insurerPhoneNumber = req.body.insurance_details.insurer_phone_number;
+            const operatorName = req.body.insurance_details.operator_name;
+            const operatorPhoneNumber = req.body.insurance_details.operator_phone_number;
+            const claimNumber = req.body.insurance_details.claim_number;
+            const amount = req.body.insurance_details.amount;
+ 
+            const repairResponse = await RepairsDAO.updateInsuranceDetails(
+                repairId,
                 insuranceName,
                 insurerName,
                 insurerPhoneNumber,
                 operatorName,
                 operatorPhoneNumber,
-                amount,
-                repairDate,
+                claimNumber,
+                amount
+            );
+ 
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdateDates(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const acceptanceDate = req.body.repair_dates.acceptance_date;
+            const receievedDate = req.body.repair_dates.received_date;
+            const deliveryDate = req.body.repair_dates.delivery_date;
+ 
+            const repairResponse = await RepairsDAO.updateDates(
+                repairId,
+                acceptanceDate,
                 receievedDate,
-                dueDate,
-                isiomata,
-                paintings,
-                mechanical,
-                electric,
-                aircon,
-                additionalNotes
+                deliveryDate
+            );
+ 
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdateAlignments(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const alignments = req.body.alignments;
+ 
+            const repairResponse = await RepairsDAO.updateAlignments(
+                repairId,
+                alignments
+            );
+ 
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdatePaintings(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const paintings = req.body.paintings;
+ 
+            const repairResponse = await RepairsDAO.updatePaintings(
+                repairId,
+                paintings
+            );
+ 
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdateMechanical(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const mechanical = req.body.mechanical;
+            
+            const repairResponse = await RepairsDAO.updateMechanical(
+                repairId,
+                mechanical
+            );
+ 
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdateElectrical(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const electrical = req.body.electrical;
+
+            const repairResponse = await RepairsDAO.updateElectrical(
+                repairId,
+                electrical
+            );
+ 
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdateAirCondition(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const airCondition = req.body.air_condition;
+ 
+            const repairResponse = await RepairsDAO.updateAirCondition(
+                repairId,
+                airCondition
+            );
+ 
+            var { error } = repairResponse;
+            if (error) {
+                res.status(400).json({ error });
+            }
+ 
+            if (repairResponse.modifiedCount === 0) {
+                throw new Error("Unable to update the repair in controller.")
+            }
+ 
+            res.json({ status: "success" });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    }
+
+    static async apiUpdateAdditionalWork(req, res, next) {
+        try {
+            const repairId = req.body.repair_id;
+            const additionalWork = req.body.additional_work;
+ 
+            const repairResponse = await RepairsDAO.updateAdditionalWork(
+                repairId,
+                additionalWork
             );
  
             var { error } = repairResponse;

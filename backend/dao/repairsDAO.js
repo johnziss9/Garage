@@ -161,28 +161,13 @@ export default class RepairsDAO {
         } 
     }
 
-    static async updateRepair(
+    static async updateCustomerDetails(
         repairId,
         firstName,
         lastName,
         phoneNumber,
         address,
-        email,
-        insuranceName,
-        insurerName,
-        insurerPhoneNumber,
-        operatorName,
-        operatorPhoneNumber,
-        amount,
-        repairDate,
-        receievedDate,
-        dueDate,
-        isiomata,
-        paintings,
-        mechanical,
-        electric,
-        aircon,
-        additionalNotes) {
+        email) {
         try {
             const updateResponse = await repairs.updateOne(
                 { _id: ObjectId(repairId) },
@@ -193,26 +178,187 @@ export default class RepairsDAO {
                             phone_number: phoneNumber,
                             address: address,
                             email: email
-                        },
+                        }
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updateInsuranceDetails(
+        repairId,
+        insuranceName,
+        insurerName,
+        insurerPhoneNumber,
+        operatorName,
+        operatorPhoneNumber,
+        claimNumber,
+        amount) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
                         insurance_details: {
                             name: insuranceName,
                             insurer_name: insurerName,
                             insurer_phone_number: insurerPhoneNumber,
                             operator_name: operatorName,
                             operator_phone_number: operatorPhoneNumber,
+                            claim_number: claimNumber,
                             amount: amount
-                        },
-                        repair_details: {
-                            repair_date: repairDate,
+                        }
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updateDates(
+        repairId,
+        acceptanceDate,
+        receievedDate,
+        deliveryDate) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        repair_dates: {
+                            acceptance_date: acceptanceDate,
                             received_date: receievedDate,
-                            due_date: dueDate
-                        },
-                        isiomata: isiomata,
-                        paintings: paintings,
-                        mechanical: mechanical,
-                        electric: electric,
-                        aircon: aircon,
-                        additional_notes: additionalNotes
+                            delivery_date: deliveryDate
+                        }
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updateAlignments(
+        repairId,
+        alignments) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        alignments: alignments
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updatePaintings(
+        repairId,
+        paintings) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        paintings: paintings
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updateMechanical(
+        repairId,
+        mechanical) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        mechanical: mechanical
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updateElectrical(
+        repairId,
+        electrical) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        electrical: electrical
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updateAirCondition(
+        repairId,
+        airCondition) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        air_condition: airCondition
+                    }
+                }
+            );
+ 
+            return updateResponse;
+        } catch (e) {
+            console.error(`Unable to update repair in DAO: ${e}`);
+        
+        return { error: e };
+        }
+    }
+
+    static async updateAdditionalWork(
+        repairId,
+        additionalWork) {
+        try {
+            const updateResponse = await repairs.updateOne(
+                { _id: ObjectId(repairId) },
+                { $set: { 
+                        additional_work: additionalWork
                     }
                 }
             );

@@ -9,7 +9,15 @@ router.route("/getAll").get(verifyToken, RepairsController.apiGetRepairs);
 router.route("/getPast").get(verifyToken, RepairsController.apiGetPastRepairs);
 router.route("/getFuture").get(verifyToken, RepairsController.apiGetFutureRepairs);
 router.route("/getCurrent").get(verifyToken, RepairsController.apiGetCurrentRepairs);
-router.route("/update").put(verifyToken, RepairsController.apiUpdateRepair);
+router.route("/updateCustomerDetails").put(verifyToken, RepairsController.apiUpdateCustomerDetails);
+router.route("/updateInsuranceDetails").put(verifyToken, RepairsController.apiUpdateInsuranceDetails);
+router.route("/updateDates").put(verifyToken, RepairsController.apiUpdateDates);
+router.route("/updateAlignments").put(verifyToken, RepairsController.apiUpdateAlignments);
+router.route("/updatePaintings").put(verifyToken, RepairsController.apiUpdatePaintings);
+router.route("/updateMechanical").put(verifyToken, RepairsController.apiUpdateMechanical);
+router.route("/updateElectrical").put(verifyToken, RepairsController.apiUpdateElectrical);
+router.route("/updateAirCondition").put(verifyToken, RepairsController.apiUpdateAirCondition);
+router.route("/updateAdditionalWork").put(verifyToken, RepairsController.apiUpdateAdditionalWork);
 router.route("/delete").put(verifyToken, RepairsController.apiDeleteRepair);
 
 export default router;
