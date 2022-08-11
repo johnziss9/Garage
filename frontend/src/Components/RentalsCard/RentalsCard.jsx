@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './RentalsCard.css';
 import moment from 'moment';
 import _ from 'lodash';
@@ -31,7 +31,7 @@ function RemindersCard(props) {
     const [futureRentals, setFutureRentals] = React.useState([]);
     const [currentRental, setCurrentRental] = React.useState({});
     const [fullHistory, setFullHistory] = React.useState(false);
-    const [rentalDetails, setRentalDetails] = React.useState({});
+    const [rentalId, setRentalId] = React.useState({});
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [phone, setPhone] = React.useState('');
@@ -139,7 +139,7 @@ function RemindersCard(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                rental_id: rentalDetails._id,
+                rental_id: rentalId,
                 first_name: firstName,
                 last_name: lastName,
                 phone_number: phone,
@@ -162,7 +162,7 @@ function RemindersCard(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                rental_id: rentalDetails._id,
+                rental_id: rentalId,
                 dates: {
                     start_date: rentalStartDate,
                     end_date: rentalEndDate
@@ -177,13 +177,11 @@ function RemindersCard(props) {
     const handleShowFullHistory = () => setFullHistory(true);
     const handleHideFullHistory = () => setFullHistory(false);
 
-    const wrappedFunction = (rental) => {
-        setRentalDetails(rental);
+    // This is called every time the rentalId is updated using setRentalId.
+    useEffect(() => {}, [rentalId]);
 
-        // This is done so the setRentalDetails above gets updated instantly.
-        setRentalDetails((state) => {
-            return state;
-        })
+    const wrappedFunction = (rental) => {
+        setRentalId(rental);
 
         setFirstName(rental.first_name);
         setLastName(rental.last_name);

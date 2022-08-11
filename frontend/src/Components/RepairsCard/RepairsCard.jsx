@@ -30,6 +30,7 @@ function RepairsCard(props) {
 
     const [frameNumber, setFrameNumber] = React.useState('');
     const [kmMiles, setKmMiles] = React.useState('');
+    const [repairId, setRepairId] = React.useState('');
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [phone, setPhone] = React.useState('');
@@ -353,14 +354,12 @@ function RepairsCard(props) {
         setExpiredRepairs(expRepairs);
     }
 
+    // This is called every time the repairId is updated using setRepairId.
+    useEffect(() => {console.log(repairId)}, [repairId]);
+
     const wrappedFunction = (repair) => {
-        // setRentalDetails(rental);
-
-        // // This is done so the setRentalDetails above gets updated instantly.
-        // setRentalDetails((state) => {
-        //     return state;
-        // })
-
+        setRepairId(repair._id);
+        
         // setFirstName(rental.first_name);
         // setLastName(rental.last_name);
         // setPhone(rental.phone_number);
@@ -422,26 +421,26 @@ function RepairsCard(props) {
                             <nav>
                                 {fullHistory ?
                                 <List>
-                                    {_.orderBy(allRepairs, ['repair_details.receieved_date'], ['asc']).map((repair) => (
+                                    {_.orderBy(allRepairs, ['repair_dates.received_date'], ['asc']).map((repair) => (
                                     <ListItem disablePadding style={{ padding: '0 5px', height: '32px', backgroundColor: repair.completed ? '#fff' : '#00cc99' }} onClick={() => wrappedFunction(repair)}>
                                         <ListItemButton>
                                                 <ListItemIcon>
                                                     <ArrowCircleRightIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={`Date Received - ${moment(repair.repair_details.receieved_date).format('DD/MM/YYYY')}`} />
+                                                <ListItemText primary={`Date Received - ${moment(repair.repair_dates.received_date).format('DD/MM/YYYY')}`} />
                                         </ListItemButton>
                                     </ListItem>
                                     ))}
                                 </List>
                                 :
                                 <List>
-                                    {_.orderBy(expiredRepairs.length > 3 ? expiredRepairs.slice(0, 3) : expiredRepairs, ['repair_details.receieved_date'], ['asc']).map((repair) => (
+                                    {_.orderBy(expiredRepairs.length > 3 ? expiredRepairs.slice(0, 3) : expiredRepairs, ['repair_dates.received_date'], ['asc']).map((repair) => (
                                     <ListItem disablePadding style={{ padding: '0 5px', height: '32px' }} onClick={() => wrappedFunction(repair)}>
                                         <ListItemButton>
                                                 <ListItemIcon>
                                                     <ArrowCircleRightIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={`Date Received - ${moment(repair.repair_details.receieved_date).format('DD/MM/YYYY')}`} />
+                                                <ListItemText primary={`Date Received - ${moment(repair.repair_dates.received_date).format('DD/MM/YYYY')}`} />
                                         </ListItemButton>
                                     </ListItem>
                                     ))}
@@ -451,7 +450,7 @@ function RepairsCard(props) {
                                                 <ListItemIcon>
                                                     <ArrowCircleRightIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={`Date Received - ${moment(currentRepair.repair_details.receieved_date).format('DD/MM/YYYY')}`} />
+                                                <ListItemText primary={`Date Received - ${moment(currentRepair.repair_dates.received_date).format('DD/MM/YYYY')}`} />
                                         </ListItemButton>
                                     </ListItem>
                                     :
