@@ -35,7 +35,7 @@ export default class RepairsDAO {
                     insurer_phone_number: insuranceDetails.insurer_phone_number,
                     operator_name: insuranceDetails.operator_name,
                     operator_phone_number: insuranceDetails.operator_phone_number,
-                    amount: insuranceDetails.amount
+                    paid_amount: insuranceDetails.paid_amount
                 },
                 repair_details: {
                     repair_date: repairDetails.repair_date,
@@ -199,7 +199,7 @@ export default class RepairsDAO {
         operatorName,
         operatorPhoneNumber,
         claimNumber,
-        amount) {
+        paidAmount) {
         try {
             const updateResponse = await repairs.updateOne(
                 { _id: ObjectId(repairId) },
@@ -211,7 +211,7 @@ export default class RepairsDAO {
                             operator_name: operatorName,
                             operator_phone_number: operatorPhoneNumber,
                             claim_number: claimNumber,
-                            amount: amount
+                            paid_amount: paidAmount
                         }
                     }
                 }

@@ -33,7 +33,7 @@ function RepairsCard(props) {
     const [repairId, setRepairId] = React.useState('');
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
-    const [phone, setPhone] = React.useState('');
+    const [phoneNumber, setPhoneNumber] = React.useState('');
     const [address, setAddress] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [insuranceName, setInsuranceName] = React.useState('');
@@ -42,7 +42,7 @@ function RepairsCard(props) {
     const [operatorName, setOperatorName] = React.useState('');
     const [operatorPhoneNumber, setOperatorPhoneNumber] = React.useState('');
     const [claimNumber, setClaimNumber] = React.useState('');
-    const [paidAmount, setPaidAmount] = React.useState('');
+    const [paidAmount, setPaidAmount] = React.useState(0);
     const [repairAcceptanceDate, setRepairAcceptanceDate] = React.useState(new Date());
     const [receivedDate, setReceivedDate] = React.useState(new Date());
     const [deliveryDate, setDeliveryDate] = React.useState(new Date());
@@ -355,17 +355,35 @@ function RepairsCard(props) {
     }
 
     // This is called every time the repairId is updated using setRepairId.
-    useEffect(() => {console.log(repairId)}, [repairId]);
+    useEffect(() => {}, [repairId]);
 
     const wrappedFunction = (repair) => {
         setRepairId(repair._id);
-        
-        // setFirstName(rental.first_name);
-        // setLastName(rental.last_name);
-        // setPhone(rental.phone_number);
-        // setAddress(rental.address);
-        // setRentalStartDate(rental.dates.start_date);
-        // setRentalEndDate(rental.dates.end_date);
+
+        setFirstName(repair.customer_details.first_name);
+        setLastName(repair.customer_details.last_name);
+        setPhoneNumber(repair.customer_details.phone_number);
+        setAddress(repair.customer_details.address);
+        setEmail(repair.customer_details.email);
+
+        setInsuranceName(repair.insurance_details.insuranceName);
+        setInsurerName(repair.insurance_details.insurer_name);
+        setInsurerPhoneNumber(repair.insurance_details.insurer_phone_number);
+        setOperatorName(repair.insurance_details.operator_name);
+        setOperatorPhoneNumber(repair.insurance_details.operator_phone_number);
+        setClaimNumber(repair.insurance_details.claim_number);
+        setPaidAmount(repair.insurance_details.paid_amount);
+
+        setRepairAcceptanceDate(repair.repair_dates.acceptance_date);
+        setReceivedDate(repair.repair_dates.received_date);
+        setDeliveryDate(repair.repair_dates.delivery_date);
+
+        setAlignments(repair.alignments);
+        setPaintings(repair.paintings);
+        setMechanical(repair.mechanical);
+        setElectrical(repair.electrical);
+        setAirCondition(repair.air_condition);
+        setAdditionalWork(repair.additional_work);
 
         handleOpenSecondDialog();
     }
@@ -493,7 +511,7 @@ function RepairsCard(props) {
                             <form className='card-form'>
                                 <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                                 <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
-                                <CustomTextField label={"Phone"} size={"small"} onChange={e => setPhone(e.target.value)} value={phone} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Phone Number"} size={"small"} onChange={e => setPhoneNumber(e.target.value)} value={phoneNumber} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                                 <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                                 <CustomTextField label={"Email"} size={"small"} onChange={e => setEmail(e.target.value)} value={email} disabled={disableCustomerDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                             </form>
@@ -519,7 +537,7 @@ function RepairsCard(props) {
                                 <CustomTextField label={"Operator Name"} size={"small"} onChange={e => setOperatorName(e.target.value)} value={operatorName} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                                 <CustomTextField label={"Operator Phone Number"} size={"small"} onChange={e => setOperatorPhoneNumber(e.target.value)} value={operatorPhoneNumber} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                                 <CustomTextField label={"Claim Number"} size={"small"} onChange={e => setClaimNumber(e.target.value)} value={claimNumber} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
-                                <CustomTextField label={"Paid Amount"} size={"small"} onChange={e => setPaidAmount(e.target.value)} value={paidAmount} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
+                                <CustomTextField label={"Paid Amount"} size={"small"} onChange={e => setPaidAmount(parseFloat(e.target.value))} value={paidAmount} disabled={disableInsuranceDetails} labelMargin={-7} fullWidth={true} height={27} margin={'dense'} />
                             </form>
                             {/* Repair Dates */}
                             <div className='card-section-header'>

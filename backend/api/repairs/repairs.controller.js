@@ -18,7 +18,7 @@ export default class RepairsController {
                 insurer_phone_number: req.body.insurance_details.insurer_phone_number,
                 operator_name: req.body.insurance_details.operator_name,
                 operator_phone_number: req.body.insurance_details.operator_phone_number,
-                amount: req.body.insurance_details.amount
+                paid_amount: req.body.insurance_details.paid_amount
             };
             const repair_details = {
                 repair_date: new Date(req.body.repair_details.repair_date),
@@ -140,7 +140,7 @@ export default class RepairsController {
             const operatorName = req.body.insurance_details.operator_name;
             const operatorPhoneNumber = req.body.insurance_details.operator_phone_number;
             const claimNumber = req.body.insurance_details.claim_number;
-            const amount = req.body.insurance_details.amount;
+            const paidAmount = req.body.insurance_details.paid_amount;
  
             const repairResponse = await RepairsDAO.updateInsuranceDetails(
                 repairId,
@@ -150,7 +150,7 @@ export default class RepairsController {
                 operatorName,
                 operatorPhoneNumber,
                 claimNumber,
-                amount
+                paidAmount
             );
  
             var { error } = repairResponse;
