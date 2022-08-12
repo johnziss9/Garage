@@ -28,8 +28,8 @@ function RepairsCard(props) {
     const [disableAirCondition, setDisableAirCondition] = React.useState(true);
     const [disableAdditionalWork, setDisableAdditionalWork] = React.useState(true);
 
-    const [frameNumber, setFrameNumber] = React.useState('');
-    const [kmMiles, setKmMiles] = React.useState('');
+    const [frameNumber, setFrameNumber] = React.useState(props.car.frame_number);
+    const [kmMiles, setKmMiles] = React.useState(props.car.km_miles);
     const [repairId, setRepairId] = React.useState('');
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
@@ -43,7 +43,7 @@ function RepairsCard(props) {
     const [operatorPhoneNumber, setOperatorPhoneNumber] = React.useState('');
     const [claimNumber, setClaimNumber] = React.useState('');
     const [paidAmount, setPaidAmount] = React.useState(0);
-    const [repairAcceptanceDate, setRepairAcceptanceDate] = React.useState(new Date());
+    const [acceptanceDate, setAcceptanceDate] = React.useState(new Date());
     const [receivedDate, setReceivedDate] = React.useState(new Date());
     const [deliveryDate, setDeliveryDate] = React.useState(new Date());
     const [alignments, setAlignments] = React.useState('');
@@ -123,21 +123,26 @@ function RepairsCard(props) {
     const handleCustomerDetailsEdit = () => setDisableCustomerDetails(false);
     const handleCustomerDetailsCancel = () => setDisableCustomerDetails(true);
     const handleCustomerDetailsSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updateCustomerDetails', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                customer_details: {
+                    first_name: firstName,
+                    last_name: lastName,
+                    phone_number: phoneNumber,
+                    address: address,
+                    email: email
+                }
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisableCustomerDetails(true);
     }
@@ -145,21 +150,28 @@ function RepairsCard(props) {
     const handleInsuranceDetailsEdit = () => setDisableInsuranceDetails(false);
     const handleInsuranceDetailsCancel = () => setDisableInsuranceDetails(true);
     const handleInsuranceDetailsSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updateInsuranceDetails', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                insurance_details: {
+                    name: insuranceName,
+                    insurer_name: insurerName,
+                    insurer_phone_number: insurerPhoneNumber,
+                    operator_name: operatorName,
+                    operator_phone_number: operatorPhoneNumber,
+                    claim_number: claimNumber,
+                    paid_amount: paidAmount
+                }
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisableInsuranceDetails(true);
     }
@@ -167,21 +179,24 @@ function RepairsCard(props) {
     const handleRepairDatesEdit = () => setDisableRepairDates(false);
     const handleRepairDatesCancel = () => setDisableRepairDates(true);
     const handleRepairDatesSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updateDates', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                repair_dates: {
+                    acceptance_date: acceptanceDate,
+                    received_date: receivedDate,
+                    delivery_date: deliveryDate
+                }
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisableRepairDates(true);
     }
@@ -189,21 +204,20 @@ function RepairsCard(props) {
     const handleAlignmentsEdit = () => setDisableAlignments(false);
     const handleAlignmentsCancel = () => setDisableAlignments(true);
     const handleAlignmentsSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updateAlignments', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                alignments: alignments
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisableAlignments(true);
     }
@@ -211,21 +225,20 @@ function RepairsCard(props) {
     const handlePaintingsEdit = () => setDisablePaintings(false);
     const handlePaintingsCancel = () => setDisablePaintings(true);
     const handlePaintingsSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updatePaintings', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                paintings: paintings
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisablePaintings(true);
     }
@@ -233,21 +246,20 @@ function RepairsCard(props) {
     const handleMechanicalEdit = () => setDisableMechanical(false);
     const handleMechanicalCancel = () => setDisableMechanical(true);
     const handleMechanicalSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updateMechanical', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                mechanical: mechanical
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisableMechanical(true);
     }
@@ -255,21 +267,20 @@ function RepairsCard(props) {
     const handleElectricalEdit = () => setDisableElectrical(false);
     const handleElectricalCancel = () => setDisableElectrical(true);
     const handleElectricalSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updateElectrical', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                electrical: electrical
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisableElectrical(true);
     }
@@ -277,21 +288,20 @@ function RepairsCard(props) {
     const handleAirConditionEdit = () => setDisableAirCondition(false);
     const handleAirConditionCancel = () => setDisableAirCondition(true);
     const handleAirConditionSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updateAirCondition', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                air_condition: airCondition
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisableAirCondition(true);
     }
@@ -299,21 +309,20 @@ function RepairsCard(props) {
     const handleAdditionalWorkEdit = () => setDisableAdditionalWork(false);
     const handleAdditionalWorkCancel = () => setDisableAdditionalWork(true);
     const handleAdditionalWorkSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: props.car._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/repairs/updateAdditionalWork', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: repairId,
+                additional_work: additionalWork
+            })
+        })
+        .then((Response) => Response.json())
+        .then(handleClose(), window.location.reload())
 
         setDisableAdditionalWork(true);
     }
@@ -374,7 +383,7 @@ function RepairsCard(props) {
         setClaimNumber(repair.insurance_details.claim_number);
         setPaidAmount(repair.insurance_details.paid_amount);
 
-        setRepairAcceptanceDate(repair.repair_dates.acceptance_date);
+        setAcceptanceDate(repair.repair_dates.acceptance_date);
         setReceivedDate(repair.repair_dates.received_date);
         setDeliveryDate(repair.repair_dates.delivery_date);
 
@@ -555,7 +564,7 @@ function RepairsCard(props) {
                                 </span>
                             </div>
                             <form className='card-form'>
-                                <CustomDatePicker label="Repair Acceptance Date" value={repairAcceptanceDate} onChange={setRepairAcceptanceDate} disabled={disableRepairDates} allRentals={null} margin={'dense'} />
+                                <CustomDatePicker label="Acceptance Date" value={acceptanceDate} onChange={setAcceptanceDate} disabled={disableRepairDates} allRentals={null} margin={'dense'} />
                                 <CustomDatePicker label="Date Received" value={receivedDate} onChange={setReceivedDate} allRentals={null} disabled={disableRepairDates} margin={'dense'} />
                                 <CustomDatePicker label="Date Delivered" value={deliveryDate} onChange={setDeliveryDate} allRentals={null} disabled={disableRepairDates} margin={'dense'} />
                             </form>
