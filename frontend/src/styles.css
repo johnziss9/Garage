@@ -95,3 +95,49 @@ body {
 .card-view-history {
     cursor: pointer;
 }
+
+/**/
+.car-details-header {
+    width: 700px;
+    background-color: #00cc99;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.car-details-content {
+    width: 700px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.car-details-content-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.car-details-content-header-icons {
+    margin-left: auto;
+    display: flex;
+}
+
+.car-details-form {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.car-details-listbox {
+    border: 1px solid grey;
+    width: 300px;
+}

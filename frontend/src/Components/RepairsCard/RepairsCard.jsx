@@ -58,7 +58,10 @@ function RepairsCard(props) {
     const [currentRepair, setCurrentRepair] = React.useState({});
     const [fullHistory, setFullHistory] = React.useState(false);
 
-    const handleOpen = () => {
+    const handleOpen = (car) => {
+        props.clickShowCar();
+        props.selectedCar(car)
+
         handleRepairsCount();
         setOpen(true);
     }
@@ -414,7 +417,7 @@ function RepairsCard(props) {
             <div className='card-number-plate'>{props.car.number_plate}</div> 
             <div className='card-make'>{props.car.make}</div>
             <div className='card-model'>{props.car.model}</div>
-            <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Details'} color={'#fff'} onClick={handleOpen}></CustomButton>
+            <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Details'} color={'#fff'} onClick={() => handleOpen(props.car)}></CustomButton>
             <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={open} onClose={handleClose} fullWidth={true}>
                 <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                     <div style={{ marginLeft: 'auto', marginRight: '-59px' /*  Used to center the title */ }}>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
