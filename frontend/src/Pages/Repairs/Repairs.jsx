@@ -19,7 +19,7 @@ function Repairs() {
   const [allRepairCars, setAllRepairCars] = React.useState([]);
   const [activeRepairCars, setActiveRepairCars] = React.useState([]);
   const [inactiveRepairCars, setInactiveRepairCars] = React.useState([]);
-  const [showCarDetails, setShowCarDetails] = React.useState(false);
+  const [showCarContent, setShowCarContent] = React.useState(false);
   const [selectedCar, setSelectedCar] = React.useState({});
   const [disableCarDetailsContent, setDisableCarDetailsContent] = React.useState(true);
 
@@ -74,8 +74,8 @@ function Repairs() {
     setRadioAllClicked(true);
   }
 
-  const handleShowCarDetails = () => setShowCarDetails(true);
-  const handleHideCarDetails = () => setShowCarDetails(false);
+  const handleShowCarContent = () => setShowCarContent(true);
+  const handleHideCarContent = () => setShowCarContent(false);
 
   const handleSelectedCar = (car) => setSelectedCar(car);
 
@@ -109,10 +109,10 @@ function Repairs() {
           <CustomNavbar />
         </div>
       </div>
-      {showCarDetails ?
+      {showCarContent ?
       <div className='bottom'>
         <div className='car-details-header'>
-          <IconButton onClick={handleHideCarDetails}>
+          <IconButton onClick={handleHideCarContent}>
             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
           </IconButton>
           <div>{selectedCar.make} {selectedCar.model} ({selectedCar.number_plate})</div>
@@ -156,13 +156,13 @@ function Repairs() {
         </ButtonGroup>
         <div className='repairs-content'>
           {radioAllClicked && Array.isArray(allRepairCars) ? allRepairCars.map((car) => (
-            <RepairsCard car={car} clickShowCar={handleShowCarDetails} selectedCar={handleSelectedCar} />
+            <RepairsCard car={car} clickShowCar={handleShowCarContent} selectedCar={handleSelectedCar} />
           )) : null}
           {radioActiveClicked && Array.isArray(activeRepairCars) ? activeRepairCars.map((car) => (
-            <RepairsCard car={car} clickShowCar={handleShowCarDetails} selectedCar={handleSelectedCar} />
+            <RepairsCard car={car} clickShowCar={handleShowCarContent} selectedCar={handleSelectedCar} />
           )) : null}
           {radioInactiveClicked && Array.isArray(inactiveRepairCars) ? inactiveRepairCars.map((car) => (
-            <RepairsCard car={car} clickShowCar={handleShowCarDetails} selectedCar={handleSelectedCar} />
+            <RepairsCard car={car} clickShowCar={handleShowCarContent} selectedCar={handleSelectedCar} />
           )) : null}
         </div>
       </div>}
