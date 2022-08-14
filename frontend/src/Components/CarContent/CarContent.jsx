@@ -16,21 +16,20 @@ function CarContent(props) {
     const handleCarEdit = () => setDisableCarDetailsContent(false);
     const handleCarCancel = () => setDisableCarDetailsContent(true);
     const handleCarSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: selectedCar._id,
-        //         frame_number: selectedCar.frame_number,
-        //         km_miles: selectedCar.km_miles
-        //     })
-        // })
-        // .then((Response) => Response.json())
-        // .then(handleClose(), window.location.reload())
+        fetch('http://localhost:5000/api/cars/updateCarDetails', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: props.car._id,
+                frame_number: frameNumber,
+                km_miles: kmMiles
+            })
+        })
+        .then((Response) => Response.json())
 
         setDisableCarDetailsContent(true);
     }

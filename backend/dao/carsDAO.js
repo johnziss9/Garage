@@ -201,7 +201,7 @@ export default class CarsDAO {
         }
     }
 
-    static async addCar(make, model, numberPlate, mot, road_tax, deleted, type, rented, hasActiveRepair) {
+    static async addCar(make, model, numberPlate, mot, road_tax, deleted, type, rented, hasActiveRepair, frameNumber, kmMiles) {
         try {
             const car = { 
                 make: make,
@@ -218,7 +218,9 @@ export default class CarsDAO {
                 deleted: deleted,
                 type: type,
                 rented: rented,
-                has_active_repair: hasActiveRepair
+                has_active_repair: hasActiveRepair,
+                frame_number: frameNumber,
+                km_miles: kmMiles
             };
  
             return await cars.insertOne(car);
@@ -457,7 +459,9 @@ export default class CarsDAO {
                         type: { $first: '$type' },
                         deleted: { $first: '$deleted' },
                         rented: { $first: '$rented' },
-                        has_active_repair: { $first: '$has_active_repair' }
+                        has_active_repair: { $first: '$has_active_repair' },
+                        frame_number: { $first: '$frame_number' },
+                        km_miles: { $first: '$km_miles' }
                     }
                 },
                 {
@@ -528,7 +532,11 @@ export default class CarsDAO {
                         mot: { $first: '$mot' },
                         road_tax: { $first: '$road_tax' },
                         type: { $first: '$type' },
-                        deleted: { $first: '$deleted' }
+                        deleted: { $first: '$deleted' },
+                        rented: { $first: '$rented' },
+                        has_active_repair: { $first: '$has_active_repair' },
+                        frame_number: { $first: '$frame_number' },
+                        km_miles: { $first: '$km_miles' }
                     }
                 },
                 {
@@ -622,7 +630,11 @@ export default class CarsDAO {
                         mot: { $first: '$mot' },
                         road_tax: { $first: '$road_tax' },
                         type: { $first: '$type' },
-                        deleted: { $first: '$deleted' }
+                        deleted: { $first: '$deleted' },
+                        rented: { $first: '$rented' },
+                        has_active_repair: { $first: '$has_active_repair' },
+                        frame_number: { $first: '$frame_number' },
+                        km_miles: { $first: '$km_miles' }
                     }
                 },
                 {
