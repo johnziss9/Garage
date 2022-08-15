@@ -98,7 +98,7 @@ body {
 
 /**/
 .car-details-header {
-    width: 700px;
+    width: 650px;
     background-color: #00cc99;
     color: #fff;
     display: flex;
@@ -110,7 +110,7 @@ body {
 }
 
 .car-details-content {
-    width: 700px;
+    width: 650px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -120,24 +120,39 @@ body {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     font-weight: bold;
     margin: 10px 0;
 }
 
+.car-details-content-header-no-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
 .car-details-content-header-icons {
-    margin-left: auto;
     display: flex;
 }
 
 .car-details-form {
-    width: 60%;
+    width: 400px;
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
 }
 
 .car-details-listbox {
-    border: 1px solid grey;
+    box-shadow: rgb(180, 183, 187) 0px 0px 7px 0px inset;
+    padding: 0 10px;
     width: 300px;
+}
+
+.car_details_full_history_button {
+    margin-top: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+    color: rgb(0, 0, 0);
 }
