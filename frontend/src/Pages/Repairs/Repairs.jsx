@@ -4,7 +4,7 @@ import { ButtonGroup } from '@mui/material';
 import CustomNavbar from '../../Components/CustomNavbar/CustomNavbar';
 import RepairsCard from '../../Components/RepairsCard/RepairsCard';
 import CustomButton from '../../Components/CustomButton/CustomButton';
-import CarContent from '../../Components/CarContent/CarContent';
+import RepairCarContent from '../../Components/RepairCarContent/RepairCarContent';
 
 function Repairs() {
   const [radioActiveClicked, setRadioActiveClicked] = React.useState(true);
@@ -80,7 +80,7 @@ function Repairs() {
       </div>
       <div className='bottom'>
         {showSelectedCar ?
-          <CarContent 
+          <RepairCarContent 
             car={selectedCar}
             clickHideCar={handleHideSelectedCar}
           /> :

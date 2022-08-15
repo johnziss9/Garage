@@ -2,7 +2,7 @@ import React from 'react';
 import { Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import _ from 'lodash';
 import moment from 'moment';
-import CustomTextField from '../../Components/CustomTextField/CustomTextField';
+import CustomTextField from '../CustomTextField/CustomTextField';
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -11,7 +11,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
-function CarContent(props) {
+function RepairCarContent(props) {
     const [disableCarDetailsContent, setDisableCarDetailsContent] = React.useState(true);
     const [frameNumber, setFrameNumber] = React.useState(props.car.frame_number);
     const [kmMiles, setKmMiles] = React.useState(props.car.km_miles);
@@ -117,12 +117,15 @@ function CarContent(props) {
                 </nav>
             </div>}
           </div>
-          {fullHistory ?
-          <div className='car_details_full_history_button' onClick={handleHideFullHistory}>{'View Less'}</div> :
-          <div className='car_details_full_history_button' onClick={handleShowFullHistory}>{'View Full History'}</div>}
+          {props.car.repairs.length > 4 ?
+          <div>
+            {fullHistory ?
+            <div className='car_details_full_history_button' onClick={handleHideFullHistory}>{'View Less'}</div> :
+            <div className='car_details_full_history_button' onClick={handleShowFullHistory}>{'View Full History'}</div>}
+          </div> : null}
         </div>
     </>
   );
 }
 
-export default CarContent;
+export default RepairCarContent;
