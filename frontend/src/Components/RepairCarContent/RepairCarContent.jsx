@@ -10,39 +10,53 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import RepairContent from '../RepairContent/RepairContent';
 
 function RepairCarContent(props) {
     const [disableCarDetailsContent, setDisableCarDetailsContent] = React.useState(true);
     const [frameNumber, setFrameNumber] = React.useState(props.car.frame_number);
+    const [repair, setRepair] = React.useState({});
     const [kmMiles, setKmMiles] = React.useState(props.car.km_miles);
     const [fullHistory, setFullHistory] = React.useState(false);
+    const [showSelectedRepair, setShowSelectedRepair] = React.useState(false);
 
     const handleShowFullHistory = () => setFullHistory(true);
     const handleHideFullHistory = () => setFullHistory(false);
 
+    const handleShowSelectedRepair = () => setShowSelectedRepair(true);
+    const handleHideSelectedRepair = () => setShowSelectedRepair(false);
+
     const handleCarEdit = () => setDisableCarDetailsContent(false);
     const handleCarCancel = () => setDisableCarDetailsContent(true);
     const handleCarSave = () => {
-        fetch('http://localhost:5000/api/cars/updateCarDetails', {
-            method: 'put',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'x-access-token': sessionStorage.getItem('token')
-            },
-            body: JSON.stringify({
-                car_id: props.car._id,
-                frame_number: frameNumber,
-                km_miles: kmMiles
-            })
-        })
-        .then((Response) => Response.json())
+      fetch('http://localhost:5000/api/cars/updateCarDetails', {
+          method: 'put',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'x-access-token': sessionStorage.getItem('token')
+          },
+          body: JSON.stringify({
+              car_id: props.car._id,
+              frame_number: frameNumber,
+              km_miles: kmMiles
+          })
+      })
+      .then((Response) => Response.json())
 
-        setDisableCarDetailsContent(true);
-    }
+      setDisableCarDetailsContent(true);
+  }
+
+  const handleRepair = (repair) => {
+    setRepair(repair);
+    handleShowSelectedRepair();
+  }
 
   return (
     <>
+      {showSelectedRepair ?
+      <RepairContent clickHideRepair={handleHideSelectedRepair} car={props.car} repair={repair} /> :
+      <>
         <div className='car-details-header'>
           <IconButton onClick={props.clickHideCar}>
             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
@@ -81,7 +95,7 @@ function RepairCarContent(props) {
                     {fullHistory ?
                     <List>
                         {_.orderBy(props.car.repairs, ['repair_dates.received_date'], ['asc']).map((repair) => (
-                        <ListItem disablePadding style={{ backgroundColor: repair.completed ? '#fff' : '#00cc99' }} /* onClick={() => wrappedFunction(repair) } */ >
+                        <ListItem disablePadding style={{ backgroundColor: repair.completed ? '#fff' : '#00cc99' }} onClick={() => handleRepair(repair)} >
                             <ListItemButton>
                                     <ListItemIcon>
                                         <ArrowCircleRightIcon />
@@ -93,7 +107,7 @@ function RepairCarContent(props) {
                     </List> :
                     <List>
                       {_.orderBy(_.filter(props.car.repairs, ['completed', true]), ['repair_dates.received_date'], ['asc']).slice(-3).map((repair) => (
-                      <ListItem disablePadding style={{ backgroundColor: '#fff' }} /* onClick={() => wrappedFunction(repair) } */ >
+                      <ListItem disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleRepair(repair)} >
                           <ListItemButton>
                                   <ListItemIcon>
                                       <ArrowCircleRightIcon />
@@ -103,7 +117,7 @@ function RepairCarContent(props) {
                       </ListItem>
                       ))}
                       {_.filter(props.car.repairs, ['completed', false]).map((repair) => (
-                      <ListItem disablePadding style={{ backgroundColor: '#00cc99' }} /* onClick={() => wrappedFunction(repair) } */ >
+                      <ListItem disablePadding style={{ backgroundColor: '#00cc99' }} onClick={() => handleRepair(repair)} >
                           <ListItemButton>
                                   <ListItemIcon>
                                       <ArrowCircleRightIcon />
@@ -124,6 +138,7 @@ function RepairCarContent(props) {
             <div className='car_details_full_history_button' onClick={handleShowFullHistory}>{'View Full History'}</div>}
           </div> : null}
         </div>
+      </>}
     </>
   );
 }
