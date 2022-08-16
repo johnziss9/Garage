@@ -1,13 +1,7 @@
 import React, { useEffect } from 'react';
-import { Divider, IconButton, TextField } from '@mui/material';
-// import _ from 'lodash';
-// import moment from 'moment';
+import { Divider, IconButton } from '@mui/material';
 import CustomTextField from '../CustomTextField/CustomTextField';
-import CustomDatePicker from '../CustomDatePicker/CustomDatePicker';
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import CustomDatePicker2 from '../CustomDatePicker2/CustomDatePicker2';
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -352,21 +346,9 @@ function RepairContent(props) {
                 </span>
             </div>
             <form className='car-details-form'>
-                {/* <CustomDatePicker label="Acceptance Date" value={acceptanceDate} onChange={setAcceptanceDate} disabled={disableRepairDates} allRentals={null} margin={'dense'} />
-                <CustomDatePicker label="Date Received" value={receivedDate} onChange={setReceivedDate} allRentals={null} disabled={disableRepairDates} margin={'dense'} />
-                <CustomDatePicker label="Date Delivered" value={deliveryDate} onChange={setDeliveryDate} allRentals={null} disabled={disableRepairDates} margin={'dense'} /> */}
-
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DesktopDatePicker
-                        label="Date"
-                        disabled={disableRepairDates}
-                        inputFormat="MM/DD/YYYY"
-                        value={acceptanceDate}
-                        onChange={setAcceptanceDate}
-                        renderInput={(params) => <TextField {...params} />}
-
-                    />
-                </LocalizationProvider>
+                <CustomDatePicker2 label="Acceptance Date" value={acceptanceDate} disabled={disableRepairDates} onChange={setAcceptanceDate} margin={'10px 0'} />
+                <CustomDatePicker2 label="Date Received" value={receivedDate} disabled={disableRepairDates} onChange={setReceivedDate} margin={'10px 0'} />
+                <CustomDatePicker2 label="Date Delivered" value={deliveryDate} disabled={disableRepairDates} onChange={setDeliveryDate} margin={'10px 0'} />
             </form>
             
             
