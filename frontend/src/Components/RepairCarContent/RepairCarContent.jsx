@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import _ from 'lodash';
 import moment from 'moment';
@@ -15,10 +15,43 @@ import RepairContent from '../RepairContent/RepairContent';
 function RepairCarContent(props) {
     const [disableCarDetailsContent, setDisableCarDetailsContent] = React.useState(true);
     const [frameNumber, setFrameNumber] = React.useState(props.car.frame_number);
-    const [repair, setRepair] = React.useState({});
+    const [repair, setRepair] = React.useState({}); // Selected repair coming from RepairContent.jsx
+    const [repairs, setRepairs] = React.useState([]); // All repairs for selected car that are not deleted
+    const [completedRepairs, setCompletedRepairs] = React.useState([]); // All repairs for selected car that are not deleted and are completed
+    const [incompleteRepair, setIncompleteRepair] = React.useState({});
     const [kmMiles, setKmMiles] = React.useState(props.car.km_miles);
     const [fullHistory, setFullHistory] = React.useState(false);
     const [showSelectedRepair, setShowSelectedRepair] = React.useState(false);
+
+    useEffect(() => {
+      fetch(`http://localhost:5000/api/cars/repairCarId/${props.car._id}`, {
+        method: 'get',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': sessionStorage.getItem('token')
+        }
+      })
+      .then((Response) => Response.json())
+      .then (data => {
+        const carRepairs = [];
+        const carCompletedRepairs = [];
+
+        data.repairs.forEach(repair => {
+          if (repair.deleted === false) {
+            carRepairs.push(repair);
+
+            if (repair.completed === true)
+              carCompletedRepairs.push(repair);
+            else
+              setIncompleteRepair(repair);
+          }
+        });
+
+        setRepairs(carRepairs);
+        setCompletedRepairs(carCompletedRepairs);
+      });
+    }, []);
 
     const handleShowFullHistory = () => setFullHistory(true);
     const handleHideFullHistory = () => setFullHistory(false);
@@ -94,7 +127,7 @@ function RepairCarContent(props) {
                 <nav>
                     {fullHistory ?
                     <List>
-                        {_.orderBy(props.car.repairs, ['repair_dates.received_date'], ['asc']).map((repair) => (
+                        {_.orderBy(repairs, ['repair_dates.received_date'], ['asc']).map((repair) => (
                         <ListItem disablePadding style={{ backgroundColor: repair.completed ? '#fff' : '#00cc99' }} onClick={() => handleRepair(repair)} >
                             <ListItemButton>
                                     <ListItemIcon>
@@ -106,7 +139,7 @@ function RepairCarContent(props) {
                         ))}
                     </List> :
                     <List>
-                      {_.orderBy(_.filter(props.car.repairs, ['completed', true]), ['repair_dates.received_date'], ['asc']).slice(-3).map((repair) => (
+                      {_.orderBy(completedRepairs, ['repair_dates.received_date'], ['asc']).slice(-3).map((repair) => (
                       <ListItem disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleRepair(repair)} >
                           <ListItemButton>
                                   <ListItemIcon>
@@ -116,22 +149,21 @@ function RepairCarContent(props) {
                           </ListItemButton>
                       </ListItem>
                       ))}
-                      {_.filter(props.car.repairs, ['completed', false]).map((repair) => (
-                      <ListItem disablePadding style={{ backgroundColor: '#00cc99' }} onClick={() => handleRepair(repair)} >
+                      {Object.keys(incompleteRepair).length !== 0 ?
+                      <ListItem disablePadding style={{ backgroundColor: '#00cc99' }} onClick={() => handleRepair(incompleteRepair)} >
                           <ListItemButton>
                                   <ListItemIcon>
                                       <ArrowCircleRightIcon />
                                   </ListItemIcon>
-                                  <ListItemText primary={`Date Received - ${moment(repair.repair_dates.received_date).format('DD/MM/YYYY')}`} />
+                                  <ListItemText primary={`Date Received - ${moment(incompleteRepair.repair_dates.received_date).format('DD/MM/YYYY')}`} />
                           </ListItemButton>
-                      </ListItem>
-                      ))}
+                      </ListItem> : null}
                   </List>
                     }
                 </nav>
             </div>}
           </div>
-          {props.car.repairs.length > 4 ?
+          {repairs.length > 4 ?
           <div>
             {fullHistory ?
             <div className='car_details_full_history_button' onClick={handleHideFullHistory}>{'View Less'}</div> :
