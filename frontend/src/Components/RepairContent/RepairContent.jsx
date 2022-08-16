@@ -271,6 +271,22 @@ function RepairContent(props) {
         setDisableAdditionalWork(true);
     }
 
+    const handleDeleteRepair = () => {
+        fetch('http://localhost:5000/api/repairs/delete', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: props.repair._id,
+                deleted: true
+            })
+        })
+        .then((Response) => Response.json())
+    }
+
   return (
     <>
         <div className='car-details-header'>
@@ -278,7 +294,7 @@ function RepairContent(props) {
             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
           </IconButton>
           <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
-          <IconButton>
+          <IconButton onClick={handleDeleteRepair}>
             <DeleteForeverIcon fontSize="large" style={{ color: '#fff' }} />
           </IconButton>
         </div>
@@ -350,9 +366,6 @@ function RepairContent(props) {
                 <CustomDatePicker2 label="Date Received" value={receivedDate} disabled={disableRepairDates} onChange={setReceivedDate} margin={'10px 0'} />
                 <CustomDatePicker2 label="Date Delivered" value={deliveryDate} disabled={disableRepairDates} onChange={setDeliveryDate} margin={'10px 0'} />
             </form>
-            
-            
-      
             {/* Alignments */}
             <div className='car-details-content-header'>
                 Alignments
