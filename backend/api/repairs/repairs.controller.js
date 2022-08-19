@@ -98,6 +98,23 @@ export default class RepairsController {
         res.json(response);
     }
 
+    static async apiGetRepairById(req, res, next) {
+        try {
+            let id = req.params.id || {};
+            let repair = await RepairsDAO.getRepairById(id);
+ 
+            if (!repair) {
+                res.status(404).json({ error: "Not Found" });
+                return;
+            }
+ 
+            res.json(repair)
+        } catch (e) {
+            console.log(`api, ${e}`);
+            res.status(500).json({ error: e });
+        }
+    }
+
     static async apiUpdateCustomerDetails(req, res, next) {
         try {
             const repairId = req.body.repair_id;

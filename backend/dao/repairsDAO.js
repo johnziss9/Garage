@@ -161,6 +161,50 @@ export default class RepairsDAO {
         } 
     }
 
+    static async getRepairById(id) {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        _id: new ObjectId(id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "spare_parts",
+                        let: {
+                            id: "$_id"
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ["$repair_id", "$$id"]
+                                    }
+                                }
+                            },
+                            {
+                                $sort: {
+                                    date: -1
+                                }
+                            }
+                        ],
+                        as: "spare_parts"
+                    }
+                },
+                {
+                    $addFields: {
+                        spare_parts: "$spare_parts"
+                    }
+                }
+            ]
+            return await repairs.aggregate(pipeline).next();
+        } catch (e) {
+            console.error(`Something went wrong in getRepairById: ${e}`);
+            throw e;
+        }
+    }
+
     static async updateCustomerDetails(
         repairId,
         firstName,

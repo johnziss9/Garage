@@ -10,6 +10,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 
 function RepairContent(props) {
+    const [fetchedRepair, setFetchedRepair] = React.useState({});
+    
     const [disableCustomerDetails, setDisableCustomerDetails] = React.useState(true);
     const [disableInsuranceDetails, setDisableInsuranceDetails] = React.useState(true);
     const [disableRepairDates, setDisableRepairDates] = React.useState(true);
@@ -45,33 +47,51 @@ function RepairContent(props) {
     const [airCondition, setAirCondition] = React.useState('');
     const [additionalWork, setAdditionalWork] = React.useState('');
 
-    useEffect(() => {
-        setFirstName(props.repair.customer_details.first_name)
-        setLastName(props.repair.customer_details.last_name);
-        setPhoneNumber(props.repair.customer_details.phone_number);
-        setAddress(props.repair.customer_details.address);
-        setEmail(props.repair.customer_details.email);
-
-        setInsuranceName(props.repair.insurance_details.name);
-        setInsurerName(props.repair.insurance_details.insurer_name);
-        setInsurerPhoneNumber(props.repair.insurance_details.insurer_phone_number);
-        setOperatorName(props.repair.insurance_details.operator_name);
-        setOperatorPhoneNumber(props.repair.insurance_details.operator_phone_number);
-        setClaimNumber(props.repair.insurance_details.claim_number);
-        setPaidAmount(props.repair.insurance_details.paid_amount);
-
-        setAcceptanceDate(props.repair.repair_dates.acceptance_date);
-        setReceivedDate(props.repair.repair_dates.received_date);
-        setDeliveryDate(props.repair.repair_dates.delivery_date);
-
-        setAlignments(props.repair.alignments);
-        setPaintings(props.repair.paintings);
-        setMechanical(props.repair.mechanical);
-        setElectrical(props.repair.electrical);
-        setAirCondition(props.repair.air_condition);
-        setAdditionalWork(props.repair.additional_work);
-    }, []);
+    const [rerender, setRerender] = React.useState(false);
     
+    useEffect(() => {
+        handleFetchedRepair();
+    }, [fetchedRepair._id]); // Needed to pass the id here (instead of the whole object) to stop the infinite loop
+    
+    const handleFetchedRepair = () => {
+        fetch(`http://localhost:5000/api/repairs/repairId/${props.repairId}`, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            }
+        })
+        .then((Response) => Response.json())
+        .then (data => {
+            setFetchedRepair(data);
+
+            setFirstName(data.customer_details.first_name)
+            setLastName(data.customer_details.last_name);
+            setPhoneNumber(data.customer_details.phone_number);
+            setAddress(data.customer_details.address);
+            setEmail(data.customer_details.email);
+
+            setInsuranceName(data.insurance_details.name);
+            setInsurerName(data.insurance_details.insurer_name);
+            setInsurerPhoneNumber(data.insurance_details.insurer_phone_number);
+            setOperatorName(data.insurance_details.operator_name);
+            setOperatorPhoneNumber(data.insurance_details.operator_phone_number);
+            setClaimNumber(data.insurance_details.claim_number);
+            setPaidAmount(data.insurance_details.paid_amount);
+
+            setAcceptanceDate(data.repair_dates.acceptance_date);
+            setReceivedDate(data.repair_dates.received_date);
+            setDeliveryDate(data.repair_dates.delivery_date);
+
+            setAlignments(data.alignments);
+            setPaintings(data.paintings);
+            setMechanical(data.mechanical);
+            setElectrical(data.electrical);
+            setAirCondition(data.air_condition);
+            setAdditionalWork(data.additional_work);
+        });
+    }
 
     const handleCustomerDetailsEdit = () => setDisableCustomerDetails(false);
     const handleCustomerDetailsCancel = () => setDisableCustomerDetails(true);
@@ -95,6 +115,10 @@ function RepairContent(props) {
             })
         })
         .then((Response) => Response.json())
+
+        handleFetchedRepair();
+
+        setRerender(!rerender); // Forcing a re-render
 
         setDisableCustomerDetails(true);
     }

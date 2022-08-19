@@ -88,7 +88,7 @@ function RepairCarContent(props) {
   return (
     <>
       {showSelectedRepair ?
-      <RepairContent clickHideRepair={handleHideSelectedRepair} car={props.car} repair={repair} /> :
+      <RepairContent clickHideRepair={handleHideSelectedRepair} car={props.car} repairId={repair._id} /> :
       <>
         <div className='car-details-header'>
           <IconButton onClick={props.clickHideCar}>

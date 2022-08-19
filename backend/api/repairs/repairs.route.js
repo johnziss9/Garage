@@ -9,6 +9,7 @@ router.route("/getAll").get(verifyToken, RepairsController.apiGetRepairs);
 router.route("/getPast").get(verifyToken, RepairsController.apiGetPastRepairs);
 router.route("/getFuture").get(verifyToken, RepairsController.apiGetFutureRepairs);
 router.route("/getCurrent").get(verifyToken, RepairsController.apiGetCurrentRepairs);
+router.route("/repairId/:id").get(verifyToken, RepairsController.apiGetRepairById);
 router.route("/updateCustomerDetails").put(verifyToken, RepairsController.apiUpdateCustomerDetails);
 router.route("/updateInsuranceDetails").put(verifyToken, RepairsController.apiUpdateInsuranceDetails);
 router.route("/updateDates").put(verifyToken, RepairsController.apiUpdateDates);
