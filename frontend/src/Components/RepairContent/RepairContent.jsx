@@ -66,6 +66,8 @@ function RepairContent(props) {
         .then (data => {
             setFetchedRepair(data);
 
+            setRerender(!rerender); // Forcing a re-render
+
             setFirstName(data.customer_details.first_name)
             setLastName(data.customer_details.last_name);
             setPhoneNumber(data.customer_details.phone_number);
@@ -117,8 +119,6 @@ function RepairContent(props) {
         .then((Response) => Response.json())
 
         handleFetchedRepair();
-
-        setRerender(!rerender); // Forcing a re-render
 
         setDisableCustomerDetails(true);
     }
