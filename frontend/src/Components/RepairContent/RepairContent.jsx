@@ -104,7 +104,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 customer_details: {
                     first_name: firstName,
                     last_name: lastName,
@@ -134,7 +134,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 insurance_details: {
                     name: insuranceName,
                     insurer_name: insurerName,
@@ -162,7 +162,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 repair_dates: {
                     acceptance_date: acceptanceDate,
                     received_date: receivedDate,
@@ -186,7 +186,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 alignments: alignments
             })
         })
@@ -206,7 +206,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 paintings: paintings
             })
         })
@@ -226,7 +226,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 mechanical: mechanical
             })
         })
@@ -246,7 +246,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 electrical: electrical
             })
         })
@@ -266,7 +266,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 air_condition: airCondition
             })
         })
@@ -286,7 +286,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 additional_work: additionalWork
             })
         })
@@ -304,7 +304,7 @@ function RepairContent(props) {
                 'x-access-token': sessionStorage.getItem('token')
             },
             body: JSON.stringify({
-                repair_id: props.repair._id,
+                repair_id: fetchedRepair._id,
                 deleted: true
             })
         })
