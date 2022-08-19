@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { Divider, IconButton } from '@mui/material';
+import { Divider, IconButton, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert } from '@mui/material';
 import CustomTextField from '../CustomTextField/CustomTextField';
+import CustomButton from '../CustomButton/CustomButton';
 import CustomDatePicker2 from '../CustomDatePicker2/CustomDatePicker2';
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -11,6 +12,8 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 
 function RepairContent(props) {
     const [fetchedRepair, setFetchedRepair] = React.useState({});
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+    const [repairDeleted, setRepairDeleted] = React.useState(false);
     
     const [disableCustomerDetails, setDisableCustomerDetails] = React.useState(true);
     const [disableInsuranceDetails, setDisableInsuranceDetails] = React.useState(true);
@@ -94,6 +97,12 @@ function RepairContent(props) {
             setAdditionalWork(data.additional_work);
         });
     }
+
+    const handleOpenDeleteDialog = () => setOpenDeleteDialog(true)
+    const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
+
+    const handleShowRepairDeletedSB = () => setRepairDeleted(true);
+    const handleHideRepairDeletedSB = () => setRepairDeleted(false);
 
     const handleCustomerDetailsEdit = () => setDisableCustomerDetails(false);
     const handleCustomerDetailsCancel = () => setDisableCustomerDetails(true);
@@ -308,7 +317,10 @@ function RepairContent(props) {
                 deleted: true
             })
         })
-        .then((Response) => Response.json())
+        .then((Response) => Response.json());
+
+        setRepairDeleted(true);
+        handleCloseDeleteDialog();
     }
 
   return (
@@ -318,7 +330,7 @@ function RepairContent(props) {
             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
           </IconButton>
           <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
-          <IconButton onClick={handleDeleteRepair}>
+          <IconButton onClick={handleOpenDeleteDialog}>
             <DeleteForeverIcon fontSize="large" style={{ color: '#fff' }} />
           </IconButton>
         </div>
@@ -499,6 +511,32 @@ function RepairContent(props) {
                 <CustomTextField label={"Additional Work"} size={"small"} onChange={e => setAdditionalWork(e.target.value)} value={additionalWork} disabled={disableAdditionalWork} multiline rows={6} labelMargin={-7} fullWidth={true} />
             </form>
         </div>
+        <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openDeleteDialog} onClose={handleCloseDeleteDialog} fullWidth={true}>
+            <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+                <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+            </DialogTitle>
+            <Divider style={{width:'100%'}} />
+            <DialogContent>
+                <div className='card-confirmation-message'>Are you sure you want to delete this repair?</div>
+                <div className='card-confirmation-buttons'>
+                    <Box m={1}>
+                        <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
+                    </Box>
+                    <Box m={1}>
+                        <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteRepair} />
+                    </Box>
+                </div>
+            </DialogContent>
+        </Dialog>
+        {repairDeleted ?
+        <Snackbar
+            autoHideDuration={4000}
+            open={handleShowRepairDeletedSB}
+            onClose={handleHideRepairDeletedSB}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+            <Alert severity='success' onClose={handleHideRepairDeletedSB}>Repair Successfully Deleted.</Alert>
+        </Snackbar> : null}
     </>
   );
 }
