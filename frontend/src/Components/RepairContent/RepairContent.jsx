@@ -49,12 +49,10 @@ function RepairContent(props) {
     const [electrical, setElectrical] = React.useState('');
     const [airCondition, setAirCondition] = React.useState('');
     const [additionalWork, setAdditionalWork] = React.useState('');
-
-    const [rerender, setRerender] = React.useState(false);
     
     useEffect(() => {
         handleFetchedRepair();
-    }, [fetchedRepair._id]); // Needed to pass the id here (instead of the whole object) to stop the infinite loop
+    }, [fetchedRepair._id]); // Needed to pass the id here (instead of the whole object) as it doesn't accept it.
     
     const handleFetchedRepair = () => {
         fetch(`http://localhost:5000/api/repairs/repairId/${props.repairId}`, {
@@ -67,34 +65,33 @@ function RepairContent(props) {
         })
         .then((Response) => Response.json())
         .then (data => {
-            setFetchedRepair(data);
+            const newData = data // using a const before setting the state as it doesn't update immediately.
+            setFetchedRepair(newData);
 
-            setRerender(!rerender); // Forcing a re-render
+            setFirstName(newData.customer_details.first_name)
+            setLastName(newData.customer_details.last_name);
+            setPhoneNumber(newData.customer_details.phone_number);
+            setAddress(newData.customer_details.address);
+            setEmail(newData.customer_details.email);
 
-            setFirstName(data.customer_details.first_name)
-            setLastName(data.customer_details.last_name);
-            setPhoneNumber(data.customer_details.phone_number);
-            setAddress(data.customer_details.address);
-            setEmail(data.customer_details.email);
+            setInsuranceName(newData.insurance_details.name);
+            setInsurerName(newData.insurance_details.insurer_name);
+            setInsurerPhoneNumber(newData.insurance_details.insurer_phone_number);
+            setOperatorName(newData.insurance_details.operator_name);
+            setOperatorPhoneNumber(newData.insurance_details.operator_phone_number);
+            setClaimNumber(newData.insurance_details.claim_number);
+            setPaidAmount(newData.insurance_details.paid_amount);
 
-            setInsuranceName(data.insurance_details.name);
-            setInsurerName(data.insurance_details.insurer_name);
-            setInsurerPhoneNumber(data.insurance_details.insurer_phone_number);
-            setOperatorName(data.insurance_details.operator_name);
-            setOperatorPhoneNumber(data.insurance_details.operator_phone_number);
-            setClaimNumber(data.insurance_details.claim_number);
-            setPaidAmount(data.insurance_details.paid_amount);
+            setAcceptanceDate(newData.repair_dates.acceptance_date);
+            setReceivedDate(newData.repair_dates.received_date);
+            setDeliveryDate(newData.repair_dates.delivery_date);
 
-            setAcceptanceDate(data.repair_dates.acceptance_date);
-            setReceivedDate(data.repair_dates.received_date);
-            setDeliveryDate(data.repair_dates.delivery_date);
-
-            setAlignments(data.alignments);
-            setPaintings(data.paintings);
-            setMechanical(data.mechanical);
-            setElectrical(data.electrical);
-            setAirCondition(data.air_condition);
-            setAdditionalWork(data.additional_work);
+            setAlignments(newData.alignments);
+            setPaintings(newData.paintings);
+            setMechanical(newData.mechanical);
+            setElectrical(newData.electrical);
+            setAirCondition(newData.air_condition);
+            setAdditionalWork(newData.additional_work);
         });
     }
 
@@ -326,7 +323,7 @@ function RepairContent(props) {
   return (
     <>
         <div className='car-details-header'>
-          <IconButton onClick={props.clickHideRepair}>
+          <IconButton onClick={props.clickHideRepair} disabled={!disableCustomerDetails || !disableInsuranceDetails || !disableRepairDates || !disableAlignments || !disablePaintings || !disableMechanical || !disableElectrical || !disableAirCondition || !disableAdditionalWork ? true : false}>
             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
           </IconButton>
           <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
