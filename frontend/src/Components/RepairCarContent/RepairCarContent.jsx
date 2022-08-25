@@ -15,15 +15,20 @@ import RepairContent from '../RepairContent/RepairContent';
 function RepairCarContent(props) {
     const [disableCarDetailsContent, setDisableCarDetailsContent] = React.useState(true);
     const [frameNumber, setFrameNumber] = React.useState(props.car.frame_number);
+    const [kmMiles, setKmMiles] = React.useState(props.car.km_miles);
     const [repair, setRepair] = React.useState({}); // Selected repair coming from RepairContent.jsx
     const [repairs, setRepairs] = React.useState([]); // All repairs for selected car that are not deleted
     const [completedRepairs, setCompletedRepairs] = React.useState([]); // All repairs for selected car that are not deleted and are completed
     const [incompleteRepair, setIncompleteRepair] = React.useState({});
-    const [kmMiles, setKmMiles] = React.useState(props.car.km_miles);
     const [fullHistory, setFullHistory] = React.useState(false);
     const [showSelectedRepair, setShowSelectedRepair] = React.useState(false);
+    const [fetchedCar, setFetchedCar] = React.useState({});
 
     useEffect(() => {
+      handleFetchedCar();
+    }, []);
+
+    const handleFetchedCar = () => {
       fetch(`http://localhost:5000/api/cars/repairCarId/${props.car._id}`, {
         method: 'get',
         headers: {
@@ -34,6 +39,7 @@ function RepairCarContent(props) {
       })
       .then((Response) => Response.json())
       .then (data => {
+        const carData = data;
         const carRepairs = [];
         const carCompletedRepairs = [];
 
@@ -48,10 +54,14 @@ function RepairCarContent(props) {
           }
         });
 
+        setFetchedCar(carData);
         setRepairs(carRepairs);
         setCompletedRepairs(carCompletedRepairs);
+
+        setFrameNumber(carData.frame_number);
+        setKmMiles(carData.km_miles);
       });
-    }, []);
+    }
 
     const handleShowFullHistory = () => setFullHistory(true);
     const handleHideFullHistory = () => setFullHistory(false);
@@ -70,12 +80,14 @@ function RepairCarContent(props) {
               'x-access-token': sessionStorage.getItem('token')
           },
           body: JSON.stringify({
-              car_id: props.car._id,
+              car_id: fetchedCar._id,
               frame_number: frameNumber,
               km_miles: kmMiles
           })
       })
       .then((Response) => Response.json())
+
+      handleFetchedCar();
 
       setDisableCarDetailsContent(true);
   }

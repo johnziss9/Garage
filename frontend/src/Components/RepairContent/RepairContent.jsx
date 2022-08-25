@@ -52,7 +52,7 @@ function RepairContent(props) {
     
     useEffect(() => {
         handleFetchedRepair();
-    }, [fetchedRepair._id]); // Needed to pass the id here (instead of the whole object) as it doesn't accept it.
+    }, []); 
     
     const handleFetchedRepair = () => {
         fetch(`http://localhost:5000/api/repairs/repairId/${props.repairId}`, {
@@ -65,33 +65,33 @@ function RepairContent(props) {
         })
         .then((Response) => Response.json())
         .then (data => {
-            const newData = data // using a const before setting the state as it doesn't update immediately.
-            setFetchedRepair(newData);
+            const repairData = data; // using a const before setting the state as it doesn't update immediately.
+            setFetchedRepair(repairData);
 
-            setFirstName(newData.customer_details.first_name)
-            setLastName(newData.customer_details.last_name);
-            setPhoneNumber(newData.customer_details.phone_number);
-            setAddress(newData.customer_details.address);
-            setEmail(newData.customer_details.email);
+            setFirstName(data.customer_details.first_name)
+            setLastName(data.customer_details.last_name);
+            setPhoneNumber(data.customer_details.phone_number);
+            setAddress(data.customer_details.address);
+            setEmail(data.customer_details.email);
 
-            setInsuranceName(newData.insurance_details.name);
-            setInsurerName(newData.insurance_details.insurer_name);
-            setInsurerPhoneNumber(newData.insurance_details.insurer_phone_number);
-            setOperatorName(newData.insurance_details.operator_name);
-            setOperatorPhoneNumber(newData.insurance_details.operator_phone_number);
-            setClaimNumber(newData.insurance_details.claim_number);
-            setPaidAmount(newData.insurance_details.paid_amount);
+            setInsuranceName(data.insurance_details.name);
+            setInsurerName(data.insurance_details.insurer_name);
+            setInsurerPhoneNumber(data.insurance_details.insurer_phone_number);
+            setOperatorName(data.insurance_details.operator_name);
+            setOperatorPhoneNumber(data.insurance_details.operator_phone_number);
+            setClaimNumber(data.insurance_details.claim_number);
+            setPaidAmount(data.insurance_details.paid_amount);
 
-            setAcceptanceDate(newData.repair_dates.acceptance_date);
-            setReceivedDate(newData.repair_dates.received_date);
-            setDeliveryDate(newData.repair_dates.delivery_date);
+            setAcceptanceDate(data.repair_dates.acceptance_date);
+            setReceivedDate(data.repair_dates.received_date);
+            setDeliveryDate(data.repair_dates.delivery_date);
 
-            setAlignments(newData.alignments);
-            setPaintings(newData.paintings);
-            setMechanical(newData.mechanical);
-            setElectrical(newData.electrical);
-            setAirCondition(newData.air_condition);
-            setAdditionalWork(newData.additional_work);
+            setAlignments(data.alignments);
+            setPaintings(data.paintings);
+            setMechanical(data.mechanical);
+            setElectrical(data.electrical);
+            setAirCondition(data.air_condition);
+            setAdditionalWork(data.additional_work);
         });
     }
 
@@ -154,6 +154,8 @@ function RepairContent(props) {
         })
         .then((Response) => Response.json())
 
+        handleFetchedRepair();
+
         setDisableInsuranceDetails(true);
     }
 
@@ -178,6 +180,8 @@ function RepairContent(props) {
         })
         .then((Response) => Response.json())
 
+        handleFetchedRepair();
+
         setDisableRepairDates(true);
     }
 
@@ -197,6 +201,8 @@ function RepairContent(props) {
             })
         })
         .then((Response) => Response.json())
+
+        handleFetchedRepair();
 
         setDisableAlignments(true);
     }
@@ -218,6 +224,8 @@ function RepairContent(props) {
         })
         .then((Response) => Response.json())
 
+        handleFetchedRepair();
+
         setDisablePaintings(true);
     }
 
@@ -237,6 +245,8 @@ function RepairContent(props) {
             })
         })
         .then((Response) => Response.json())
+
+        handleFetchedRepair();
 
         setDisableMechanical(true);
     }
@@ -258,6 +268,8 @@ function RepairContent(props) {
         })
         .then((Response) => Response.json())
 
+        handleFetchedRepair();
+
         setDisableElectrical(true);
     }
 
@@ -278,6 +290,8 @@ function RepairContent(props) {
         })
         .then((Response) => Response.json())
 
+        handleFetchedRepair();
+
         setDisableAirCondition(true);
     }
 
@@ -297,6 +311,8 @@ function RepairContent(props) {
             })
         })
         .then((Response) => Response.json())
+
+        handleFetchedRepair();
 
         setDisableAdditionalWork(true);
     }
