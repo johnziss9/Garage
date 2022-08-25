@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Breadcrumbs, Typography } from '@mui/material';
 import _ from 'lodash';
 import moment from 'moment';
 import CustomTextField from '../CustomTextField/CustomTextField';
@@ -11,6 +11,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import RepairContent from '../RepairContent/RepairContent';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 
 function RepairCarContent(props) {
     const [disableCarDetailsContent, setDisableCarDetailsContent] = React.useState(true);
@@ -99,6 +101,17 @@ function RepairCarContent(props) {
 
   return (
     <>
+      {!showSelectedRepair ?
+      <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
+        <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+          <WarehouseIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+          All Repairs
+        </Typography>
+        <Typography sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
+          <DirectionsCarIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+          Car
+        </Typography>
+      </Breadcrumbs> : null}
       {showSelectedRepair ?
       <RepairContent clickHideRepair={handleHideSelectedRepair} car={props.car} repairId={repair._id} /> :
       <>

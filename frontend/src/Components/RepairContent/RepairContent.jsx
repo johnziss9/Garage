@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Divider, IconButton, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert } from '@mui/material';
+import { Divider, IconButton, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert, Breadcrumbs, Typography } from '@mui/material';
 import CustomTextField from '../CustomTextField/CustomTextField';
 import CustomButton from '../CustomButton/CustomButton';
 import CustomDatePicker2 from '../CustomDatePicker2/CustomDatePicker2';
@@ -9,6 +9,9 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import BuildIcon from '@mui/icons-material/Build';
 
 function RepairContent(props) {
     const [fetchedRepair, setFetchedRepair] = React.useState({});
@@ -338,6 +341,20 @@ function RepairContent(props) {
 
   return (
     <>
+        <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
+            <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                <WarehouseIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+                All Repairs
+            </Typography>
+            <Typography sx={{ display: 'flex', alignItems: 'center' }} color="inherit">
+                <DirectionsCarIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+                Car
+            </Typography>
+            <Typography sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
+                <BuildIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+                Repair
+            </Typography>
+        </Breadcrumbs>
         <div className='car-details-header'>
           <IconButton onClick={props.clickHideRepair} disabled={!disableCustomerDetails || !disableInsuranceDetails || !disableRepairDates || !disableAlignments || !disablePaintings || !disableMechanical || !disableElectrical || !disableAirCondition || !disableAdditionalWork ? true : false}>
             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
