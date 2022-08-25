@@ -101,20 +101,19 @@ function RepairCarContent(props) {
 
   return (
     <>
-      {!showSelectedRepair ?
-      <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
-        <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-          <WarehouseIcon sx={{ mr: 0.7 }} fontSize="inherit" />
-          All Repairs
-        </Typography>
-        <Typography sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
-          <DirectionsCarIcon sx={{ mr: 0.7 }} fontSize="inherit" />
-          Car
-        </Typography>
-      </Breadcrumbs> : null}
       {showSelectedRepair ?
       <RepairContent clickHideRepair={handleHideSelectedRepair} car={props.car} repairId={repair._id} /> :
       <>
+        <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
+          <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+            <WarehouseIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+            All Repairs
+          </Typography>
+          <Typography sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
+            <DirectionsCarIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+            Car
+          </Typography>
+        </Breadcrumbs>
         <div className='car-details-header'>
           <IconButton onClick={props.clickHideCar}>
             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
