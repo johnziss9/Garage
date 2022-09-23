@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Divider, IconButton, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert, Breadcrumbs, Typography } from '@mui/material';
+import { Divider, IconButton, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert, Breadcrumbs, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import CustomTextField from '../CustomTextField/CustomTextField';
 import CustomButton from '../CustomButton/CustomButton';
 import CustomDatePicker2 from '../CustomDatePicker2/CustomDatePicker2';
@@ -12,6 +12,7 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import BuildIcon from '@mui/icons-material/Build';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 function RepairContent(props) {
     const [fetchedRepair, setFetchedRepair] = React.useState({});
@@ -68,8 +69,13 @@ function RepairContent(props) {
         })
         .then((Response) => Response.json())
         .then (data => {
-            const repairData = data; // using a const before setting the state as it doesn't update immediately.
-            setFetchedRepair(repairData);
+            setFetchedRepair(data);
+
+            setFetchedRepair((state) => {
+                console.log(state);
+                
+                return state;
+            });
 
             setFirstName(data.customer_details.first_name)
             setLastName(data.customer_details.last_name);
@@ -128,6 +134,11 @@ function RepairContent(props) {
         .then((Response) => Response.json())
 
         handleFetchedRepair();
+
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+          }, 500);
 
         setDisableCustomerDetails(true);
     }
@@ -540,8 +551,31 @@ function RepairContent(props) {
             <form className='car-details-form'>
                 <CustomTextField label={"Additional Work"} size={"small"} onChange={e => setAdditionalWork(e.target.value)} value={additionalWork} disabled={disableAdditionalWork} multiline rows={6} labelMargin={-7} fullWidth={true} />
             </form>
+            <Divider style={{width:'100%'}} />
+            <div className='car-details-content-header-no-buttons'>Spare Parts</div>
+            <div className='content-listbox'>
+                {Object.keys(fetchedRepair).length !== 0 && fetchedRepair.spare_parts.length === 0 ?
+                <div className='content-listbox-no-items'>No spare parts needed for this car.</div> :
+                <div>
+                    <nav>
+                        <List>
+                            {Object.keys(fetchedRepair).length !== 0 && fetchedRepair.spare_parts.map((sparePart) => (
+                            <ListItem key={sparePart._id} disablePadding style={{ backgroundColor: '#fff' }}>
+                            {/* onClick={() => handleRepair(repair)} */ } 
+                                <ListItemButton>
+                                        <ListItemIcon>
+                                            <ArrowCircleRightIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={`${sparePart.name} - £${sparePart.cost}`} />
+                                </ListItemButton>
+                            </ListItem>
+                            ))}
+                        </List>
+                    </nav>
+                </div>}
+            </div>
         </div>
-        <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openDeleteDialog} onClose={handleCloseDeleteDialog} fullWidth={true}>
+        <Dialog disableEscapeKeyDown={true} open={openDeleteDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleCloseDeleteDialog(event, reason)} }} fullWidth={true}>
             <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
                 <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
             </DialogTitle>

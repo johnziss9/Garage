@@ -418,7 +418,7 @@ function RepairsCard(props) {
             <div className='card-make'>{props.car.make}</div>
             <div className='card-model'>{props.car.model}</div>
             <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Details'} color={'#fff'} onClick={() => handleOpen(props.car)}></CustomButton>
-            <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={open} onClose={handleClose} fullWidth={true}>
+            <Dialog disableEscapeKeyDown={true} open={open} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleClose(event, reason)} }} fullWidth={true}>
                 <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                     <div style={{ marginLeft: 'auto', marginRight: '-59px' /*  Used to center the title */ }}>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                     <IconButton style={{ marginLeft: 'auto' }} onClick={handleOpenDeleteDialog}>
@@ -499,7 +499,7 @@ function RepairsCard(props) {
                         null}
                     </div>}
                     <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Done'} color={'#fff'} onClick={handleClose} disabled={!disableCarDetails ? true : false} marginTop={20}></CustomButton>
-                    <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openSecondDialog} onClose={handleCloseSecondDialog} fullWidth={true}>
+                    <Dialog disableEscapeKeyDown={true} open={openSecondDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleCloseSecondDialog(event, reason)} }} fullWidth={true}>
                         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center' }} >
                             <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                         </DialogTitle>
@@ -694,7 +694,7 @@ function RepairsCard(props) {
                             </div>
                         </DialogContent>
                     </Dialog>
-                    <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={openDeleteDialog} onClose={handleCloseDeleteDialog} fullWidth={true}>
+                    <Dialog disableEscapeKeyDown={true} open={openDeleteDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleCloseDeleteDialog(event, reason)} }} fullWidth={true}>
                         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
                             <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
                         </DialogTitle>

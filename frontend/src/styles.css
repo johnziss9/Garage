@@ -128,7 +128,7 @@ body {
 .car-details-content-header-no-buttons {
     width: 100%;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     font-weight: bold;
     margin: 15px 0;
 }
@@ -144,10 +144,15 @@ body {
     margin-bottom: 20px;
 }
 
-.car-details-listbox {
+.content-listbox {
     box-shadow: rgb(180, 183, 187) 0px 0px 7px 0px inset;
     padding: 0 10px;
     width: 300px;
+}
+
+.content-listbox-no-items {
+    margin: 20px;
+    text-align: center;
 }
 
 .car_details_full_history_button {

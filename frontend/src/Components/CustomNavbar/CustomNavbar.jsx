@@ -6,7 +6,7 @@ function CustomNavbar2() {
     return (
         <nav role='navigation'>
             <div id="menuToggle">
-                <input type="checkbox" />
+                <input value='' type="checkbox" />
                 <span></span>
                 <span></span>
                 <span></span>

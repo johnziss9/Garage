@@ -92,13 +92,13 @@ function Repairs() {
             </ButtonGroup>
             <div className='repairs-content'>
               {radioAllClicked && Array.isArray(allRepairCars) ? allRepairCars.map((car) => (
-                <RepairsCard car={car} clickShowCar={handleShowSelectedCar} selectedCar={handleSelectedCar} />
+                <RepairsCard key={car._id} car={car} clickShowCar={handleShowSelectedCar} selectedCar={handleSelectedCar} />
               )) : null}
               {radioActiveClicked && Array.isArray(activeRepairCars) ? activeRepairCars.map((car) => (
-                <RepairsCard car={car} clickShowCar={handleShowSelectedCar} selectedCar={handleSelectedCar} />
+                <RepairsCard key={car._id} car={car} clickShowCar={handleShowSelectedCar} selectedCar={handleSelectedCar} />
               )) : null}
               {radioInactiveClicked && Array.isArray(inactiveRepairCars) ? inactiveRepairCars.map((car) => (
-                <RepairsCard car={car} clickShowCar={handleShowSelectedCar} selectedCar={handleSelectedCar} />
+                <RepairsCard key={car._id} car={car} clickShowCar={handleShowSelectedCar} selectedCar={handleSelectedCar} />
               )) : null}
             </div>
           </>}

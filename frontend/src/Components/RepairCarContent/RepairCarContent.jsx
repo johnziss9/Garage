@@ -144,15 +144,15 @@ function RepairCarContent(props) {
           </form>
           <Divider style={{width:'100%'}} />
           <div className='car-details-content-header-no-buttons'>Repairs</div>
-          <div className='car-details-listbox'>
+          <div className='content-listbox'>
             {props.car.repairs[0]._id === undefined ?
-            <div>No repairs for this car.</div> :
+            <div className='content-listbox-no-items'>No repairs for this car.</div> :
             <div>
                 <nav>
                     {fullHistory ?
                     <List>
                         {_.orderBy(repairs, ['repair_dates.received_date'], ['asc']).map((repair) => (
-                        <ListItem disablePadding style={{ backgroundColor: repair.completed ? '#fff' : '#00cc99' }} onClick={() => handleRepair(repair)} >
+                        <ListItem key={repair._id} disablePadding style={{ backgroundColor: repair.completed ? '#fff' : '#00cc99' }} onClick={() => handleRepair(repair)} >
                             <ListItemButton>
                                     <ListItemIcon>
                                         <ArrowCircleRightIcon />
@@ -164,7 +164,7 @@ function RepairCarContent(props) {
                     </List> :
                     <List>
                       {_.orderBy(completedRepairs, ['repair_dates.received_date'], ['asc']).slice(-3).map((repair) => (
-                      <ListItem disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleRepair(repair)} >
+                      <ListItem key={repair._id} disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleRepair(repair)} >
                           <ListItemButton>
                                   <ListItemIcon>
                                       <ArrowCircleRightIcon />
