@@ -71,6 +71,7 @@ function RepairContent(props) {
         .then (data => {
             setFetchedRepair(data);
 
+            // Used to update state immediately.
             setFetchedRepair((state) => {
                 console.log(state);
                 
