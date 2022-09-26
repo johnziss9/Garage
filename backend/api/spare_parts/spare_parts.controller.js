@@ -34,6 +34,23 @@ export default class SparePartsController {
         res.json(response);
     }
 
+    static async apiGetSparePartById(req, res, next) {
+        try {
+            let id = req.params.id || {};
+            let sparePart = await SparePartsDAO.getSparePartById(id);
+ 
+            if (!sparePart) {
+                res.status(404).json({ error: "Not Found" });
+                return;
+            }
+ 
+            res.json(sparePart)
+        } catch (e) {
+            console.log(`api, ${e}`);
+            res.status(500).json({ error: e });
+        }
+    }
+
     static async apiDeleteSparePart(req, res, next) {
         try {
             const sparePartId = req.body.spare_part_id;

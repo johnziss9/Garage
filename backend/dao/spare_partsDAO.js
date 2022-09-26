@@ -59,6 +59,22 @@ export default class SparePartsDAO {
         } 
     }
 
+    static async getSparePartById(id) {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        _id: new ObjectId(id)
+                    }
+                }
+            ]
+            return await spare_parts.aggregate(pipeline).next();
+        } catch (e) {
+            console.error(`Something went wrong in getSparePartById: ${e}`);
+            throw e;
+        }
+    }
+
     static async deleteSparePart(sparePartId, deleted) {
         try {
             const updateResponse = await spare_parts.updateOne(

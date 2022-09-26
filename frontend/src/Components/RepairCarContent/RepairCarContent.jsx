@@ -18,7 +18,7 @@ function RepairCarContent(props) {
     const [disableCarDetailsContent, setDisableCarDetailsContent] = React.useState(true);
     const [frameNumber, setFrameNumber] = React.useState(props.car.frame_number);
     const [kmMiles, setKmMiles] = React.useState(props.car.km_miles);
-    const [repair, setRepair] = React.useState({}); // Selected repair coming from RepairContent.jsx
+    const [repair, setRepair] = React.useState({}); // Storing the selected repair
     const [repairs, setRepairs] = React.useState([]); // All repairs for selected car that are not deleted
     const [completedRepairs, setCompletedRepairs] = React.useState([]); // All repairs for selected car that are not deleted and are completed
     const [incompleteRepair, setIncompleteRepair] = React.useState({});

@@ -13,11 +13,14 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import BuildIcon from '@mui/icons-material/Build';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import SparePartContent from '../SparePartContent/SparePartContent';
 
 function RepairContent(props) {
     const [fetchedRepair, setFetchedRepair] = React.useState({});
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [repairDeleted, setRepairDeleted] = React.useState(false);
+    const [showSelectedSparePart, setShowSelectedSparePart] = React.useState(false);
+    const [sparePart, setSparePart] = React.useState({}); // Storing the selected spare part
     
     const [disableCustomerDetails, setDisableCustomerDetails] = React.useState(true);
     const [disableInsuranceDetails, setDisableInsuranceDetails] = React.useState(true);
@@ -110,6 +113,9 @@ function RepairContent(props) {
 
     const handleShowRepairDeletedSB = () => setRepairDeleted(true);
     const handleHideRepairDeletedSB = () => setRepairDeleted(false);
+
+    const handleShowSelectedSparePart = () => setShowSelectedSparePart(true);
+    const handleHideSelectedSparePart = () => setShowSelectedSparePart(false);
 
     const handleCustomerDetailsEdit = () => setDisableCustomerDetails(false);
     const handleCustomerDetailsCancel = () => setDisableCustomerDetails(true);
@@ -351,257 +357,265 @@ function RepairContent(props) {
         handleCloseDeleteDialog();
     }
 
+    const handleSparePart = (sparePart) => {
+        setSparePart(sparePart);
+        handleShowSelectedSparePart();
+      }
+
   return (
     <>
-        <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
-            <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                <WarehouseIcon sx={{ mr: 0.7 }} fontSize="inherit" />
-                All Repairs
-            </Typography>
-            <Typography sx={{ display: 'flex', alignItems: 'center' }} color="inherit">
-                <DirectionsCarIcon sx={{ mr: 0.7 }} fontSize="inherit" />
-                Car
-            </Typography>
-            <Typography sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
-                <BuildIcon sx={{ mr: 0.7 }} fontSize="inherit" />
-                Repair
-            </Typography>
-        </Breadcrumbs>
-        <div className='car-details-header'>
-          <IconButton onClick={props.clickHideRepair} disabled={!disableCustomerDetails || !disableInsuranceDetails || !disableRepairDates || !disableAlignments || !disablePaintings || !disableMechanical || !disableElectrical || !disableAirCondition || !disableAdditionalWork ? true : false}>
-            <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
-          </IconButton>
-          <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
-          <IconButton onClick={handleOpenDeleteDialog}>
-            <DeleteForeverIcon fontSize="large" style={{ color: '#fff' }} />
-          </IconButton>
-        </div>
-        <div className='car-details-content'>
-            {/* Customer Details */}
-            <div className='car-details-content-header'>
-                Customer Details
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handleCustomerDetailsEdit} style={{display: disableCustomerDetails ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleCustomerDetailsCancel} style={{display: !disableCustomerDetails ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleCustomerDetailsSave} style={{display: !disableCustomerDetails ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
+        {showSelectedSparePart ?
+        <SparePartContent clickHideSparePart={handleHideSelectedSparePart} car={props.car} sparePartId={sparePart._id} /> :
+        <>
+            <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
+                <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                    <WarehouseIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+                    All Repairs
+                </Typography>
+                <Typography sx={{ display: 'flex', alignItems: 'center' }} color="inherit">
+                    <DirectionsCarIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+                    Car
+                </Typography>
+                <Typography sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
+                    <BuildIcon sx={{ mr: 0.7 }} fontSize="inherit" />
+                    Repair
+                </Typography>
+            </Breadcrumbs>
+            <div className='car-details-header'>
+            <IconButton onClick={props.clickHideRepair} disabled={!disableCustomerDetails || !disableInsuranceDetails || !disableRepairDates || !disableAlignments || !disablePaintings || !disableMechanical || !disableElectrical || !disableAirCondition || !disableAdditionalWork ? true : false}>
+                <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
+            </IconButton>
+            <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+            <IconButton onClick={handleOpenDeleteDialog}>
+                <DeleteForeverIcon fontSize="large" style={{ color: '#fff' }} />
+            </IconButton>
             </div>
-            <form className='car-details-form'>
-                <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomerDetails} margin={'dense'} />
-                <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomerDetails} margin={'dense'} />
-                <CustomTextField label={"Phone Number"} size={"small"} onChange={e => setPhoneNumber(e.target.value)} value={phoneNumber} disabled={disableCustomerDetails} margin={'dense'} />
-                <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomerDetails} margin={'dense'} />
-                <CustomTextField label={"Email"} size={"small"} onChange={e => setEmail(e.target.value)} value={email} disabled={disableCustomerDetails} margin={'dense'} />
-            </form>
-            <Divider style={{width:'100%'}} />
-            {/* Insurance Details */}
-            <div className='car-details-content-header'>
-                Insurance Details
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handleInsuranceDetailsEdit} style={{display: disableInsuranceDetails ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleInsuranceDetailsCancel} style={{display: !disableInsuranceDetails ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleInsuranceDetailsSave} style={{display: !disableInsuranceDetails ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
-            </div>
-            <form className='car-details-form'>
-                <CustomTextField label={"Insurance Name"} size={"small"} onChange={e => setInsuranceName(e.target.value)} value={insuranceName} disabled={disableInsuranceDetails} margin={'dense'} />
-                <CustomTextField label={"Insurer Name"} size={"small"} onChange={e => setInsurerName(e.target.value)} value={insurerName} disabled={disableInsuranceDetails} margin={'dense'} />
-                <CustomTextField label={"Insurer Phone Number"} size={"small"} onChange={e => setInsurerPhoneNumber(e.target.value)} value={insurerPhoneNumber} disabled={disableInsuranceDetails} margin={'dense'} />
-                <CustomTextField label={"Operator Name"} size={"small"} onChange={e => setOperatorName(e.target.value)} value={operatorName} disabled={disableInsuranceDetails} margin={'dense'} />
-                <CustomTextField label={"Operator Phone Number"} size={"small"} onChange={e => setOperatorPhoneNumber(e.target.value)} value={operatorPhoneNumber} disabled={disableInsuranceDetails} margin={'dense'} />
-                <CustomTextField label={"Claim Number"} size={"small"} onChange={e => setClaimNumber(e.target.value)} value={claimNumber} disabled={disableInsuranceDetails} margin={'dense'} />
-                <CustomTextField label={"Paid Amount"} size={"small"} onChange={e => setPaidAmount(parseFloat(e.target.value))} value={paidAmount} disabled={disableInsuranceDetails} margin={'dense'} />
-            </form>
-            {/* Repair Dates */}
-            <div className='car-details-content-header'>
-                Repair Dates
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handleRepairDatesEdit} style={{display: disableRepairDates ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleRepairDatesCancel} style={{display: !disableRepairDates ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleRepairDatesSave} style={{display: !disableRepairDates ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
-            </div>
-            <form className='car-details-form'>
-                <CustomDatePicker2 label="Acceptance Date" value={acceptanceDate} disabled={disableRepairDates} onChange={setAcceptanceDate} margin={'10px 0'} />
-                <CustomDatePicker2 label="Date Received" value={receivedDate} disabled={disableRepairDates} onChange={setReceivedDate} margin={'10px 0'} />
-                <CustomDatePicker2 label="Date Delivered" value={deliveryDate} disabled={disableRepairDates} onChange={setDeliveryDate} margin={'10px 0'} />
-            </form>
-            {/* Alignments */}
-            <div className='car-details-content-header'>
-                Alignments
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handleAlignmentsEdit} style={{display: disableAlignments ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleAlignmentsCancel} style={{display: !disableAlignments ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleAlignmentsSave} style={{display: !disableAlignments ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
-            </div>
-            <form className='car-details-form'>
-                <CustomTextField label={"Alignments"} size={"small"} onChange={e => setAlignments(e.target.value)} value={alignments} disabled={disableAlignments} multiline rows={6} labelMargin={-7} fullWidth={true} />
-            </form>
-            {/* Paintings */}
-            <div className='car-details-content-header'>
-                Paintings
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handlePaintingsEdit} style={{display: disablePaintings ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handlePaintingsCancel} style={{display: !disablePaintings ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handlePaintingsSave} style={{display: !disablePaintings ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
-            </div>
-            <form className='car-details-form'>
-                <CustomTextField label={"Paintings"} size={"small"} onChange={e => setPaintings(e.target.value)} value={paintings} disabled={disablePaintings} multiline rows={6} labelMargin={-7} fullWidth={true} />
-            </form>
-            {/* Mechanical */}
-            <div className='car-details-content-header'>
-                Mechanical
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handleMechanicalEdit} style={{display: disableMechanical ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleMechanicalCancel} style={{display: !disableMechanical ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleMechanicalSave} style={{display: !disableMechanical ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
-            </div>
-            <form className='car-details-form'>
-                <CustomTextField label={"Mechanical"} size={"small"} onChange={e => setMechanical(e.target.value)} value={mechanical} disabled={disableMechanical} multiline rows={6} labelMargin={-7} fullWidth={true} />
-            </form>
-            {/* Electrical */}
-            <div className='car-details-content-header'>
-                Electrical
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handleElectricalEdit} style={{display: disableElectrical ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleElectricalCancel} style={{display: !disableElectrical ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleElectricalSave} style={{display: !disableElectrical ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
-            </div>
-            <form className='car-details-form'>
-                <CustomTextField label={"Electrical"} size={"small"} onChange={e => setElectrical(e.target.value)} value={electrical} disabled={disableElectrical} multiline rows={6} labelMargin={-7} fullWidth={true} />
-            </form>
-            {/* Air Condition */}
-            <div className='car-details-content-header'>
-                Air Condition
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handleAirConditionEdit} style={{display: disableAirCondition ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleAirConditionCancel} style={{display: !disableAirCondition ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleAirConditionSave} style={{display: !disableAirCondition ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
-            </div>
-            <form className='car-details-form'>
-                <CustomTextField label={"AirCondition"} size={"small"} onChange={e => setAirCondition(e.target.value)} value={airCondition} disabled={disableAirCondition} multiline rows={6} labelMargin={-7} fullWidth={true} />
-            </form>
-            {/* Additional Work */}
-            <div className='car-details-content-header'>
-                Additional Work
-                <span className='car-details-content-header-icons'>
-                    <IconButton onClick={handleAdditionalWorkEdit} style={{display: disableAdditionalWork ? 'flex' : 'none'}}>
-                        <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleAdditionalWorkCancel} style={{display: !disableAdditionalWork ? 'flex' : 'none'}}>
-                        <DisabledByDefaultIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton onClick={handleAdditionalWorkSave} style={{display: !disableAdditionalWork ? 'flex' : 'none'}}>
-                        <SaveIcon fontSize="small" />
-                    </IconButton>                            
-                </span>
-            </div>
-            <form className='car-details-form'>
-                <CustomTextField label={"Additional Work"} size={"small"} onChange={e => setAdditionalWork(e.target.value)} value={additionalWork} disabled={disableAdditionalWork} multiline rows={6} labelMargin={-7} fullWidth={true} />
-            </form>
-            <Divider style={{width:'100%'}} />
-            <div className='car-details-content-header-no-buttons'>Spare Parts</div>
-            <div className='content-listbox'>
-                {Object.keys(fetchedRepair).length !== 0 && fetchedRepair.spare_parts.length === 0 ?
-                <div className='content-listbox-no-items'>No spare parts needed for this car.</div> :
-                <div>
-                    <nav>
-                        <List>
-                            {Object.keys(fetchedRepair).length !== 0 && fetchedRepair.spare_parts.map((sparePart) => (
-                            <ListItem key={sparePart._id} disablePadding style={{ backgroundColor: '#fff' }}>
-                            {/* onClick={() => handleRepair(repair)} */ } 
-                                <ListItemButton>
-                                        <ListItemIcon>
-                                            <ArrowCircleRightIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary={`${sparePart.name} - £${sparePart.cost}`} />
-                                </ListItemButton>
-                            </ListItem>
-                            ))}
-                        </List>
-                    </nav>
-                </div>}
-            </div>
-        </div>
-        <Dialog disableEscapeKeyDown={true} open={openDeleteDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleCloseDeleteDialog(event, reason)} }} fullWidth={true}>
-            <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
-                <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
-            </DialogTitle>
-            <Divider style={{width:'100%'}} />
-            <DialogContent>
-                <div className='card-confirmation-message'>Are you sure you want to delete this repair?</div>
-                <div className='card-confirmation-buttons'>
-                    <Box m={1}>
-                        <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
-                    </Box>
-                    <Box m={1}>
-                        <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteRepair} />
-                    </Box>
+            <div className='car-details-content'>
+                {/* Customer Details */}
+                <div className='car-details-content-header'>
+                    Customer Details
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleCustomerDetailsEdit} style={{display: disableCustomerDetails ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleCustomerDetailsCancel} style={{display: !disableCustomerDetails ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleCustomerDetailsSave} style={{display: !disableCustomerDetails ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
                 </div>
-            </DialogContent>
-        </Dialog>
-        {repairDeleted ?
-        <Snackbar
-            autoHideDuration={4000}
-            open={handleShowRepairDeletedSB}
-            onClose={handleHideRepairDeletedSB}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-            <Alert severity='success' onClose={handleHideRepairDeletedSB}>Repair Successfully Deleted.</Alert>
-        </Snackbar> : null}
+                <form className='car-details-form'>
+                    <CustomTextField label={"First Name"} size={"small"} onChange={e => setFirstName(e.target.value)} value={firstName} disabled={disableCustomerDetails} margin={'dense'} />
+                    <CustomTextField label={"Last Name"} size={"small"} onChange={e => setLastName(e.target.value)} value={lastName} disabled={disableCustomerDetails} margin={'dense'} />
+                    <CustomTextField label={"Phone Number"} size={"small"} onChange={e => setPhoneNumber(e.target.value)} value={phoneNumber} disabled={disableCustomerDetails} margin={'dense'} />
+                    <CustomTextField label={"Address"} size={"small"} onChange={e => setAddress(e.target.value)} value={address} disabled={disableCustomerDetails} margin={'dense'} />
+                    <CustomTextField label={"Email"} size={"small"} onChange={e => setEmail(e.target.value)} value={email} disabled={disableCustomerDetails} margin={'dense'} />
+                </form>
+                <Divider style={{width:'100%'}} />
+                {/* Insurance Details */}
+                <div className='car-details-content-header'>
+                    Insurance Details
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleInsuranceDetailsEdit} style={{display: disableInsuranceDetails ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleInsuranceDetailsCancel} style={{display: !disableInsuranceDetails ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleInsuranceDetailsSave} style={{display: !disableInsuranceDetails ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
+                </div>
+                <form className='car-details-form'>
+                    <CustomTextField label={"Insurance Name"} size={"small"} onChange={e => setInsuranceName(e.target.value)} value={insuranceName} disabled={disableInsuranceDetails} margin={'dense'} />
+                    <CustomTextField label={"Insurer Name"} size={"small"} onChange={e => setInsurerName(e.target.value)} value={insurerName} disabled={disableInsuranceDetails} margin={'dense'} />
+                    <CustomTextField label={"Insurer Phone Number"} size={"small"} onChange={e => setInsurerPhoneNumber(e.target.value)} value={insurerPhoneNumber} disabled={disableInsuranceDetails} margin={'dense'} />
+                    <CustomTextField label={"Operator Name"} size={"small"} onChange={e => setOperatorName(e.target.value)} value={operatorName} disabled={disableInsuranceDetails} margin={'dense'} />
+                    <CustomTextField label={"Operator Phone Number"} size={"small"} onChange={e => setOperatorPhoneNumber(e.target.value)} value={operatorPhoneNumber} disabled={disableInsuranceDetails} margin={'dense'} />
+                    <CustomTextField label={"Claim Number"} size={"small"} onChange={e => setClaimNumber(e.target.value)} value={claimNumber} disabled={disableInsuranceDetails} margin={'dense'} />
+                    <CustomTextField label={"Paid Amount"} size={"small"} onChange={e => setPaidAmount(parseFloat(e.target.value))} value={paidAmount} disabled={disableInsuranceDetails} margin={'dense'} />
+                </form>
+                {/* Repair Dates */}
+                <div className='car-details-content-header'>
+                    Repair Dates
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleRepairDatesEdit} style={{display: disableRepairDates ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleRepairDatesCancel} style={{display: !disableRepairDates ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleRepairDatesSave} style={{display: !disableRepairDates ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
+                </div>
+                <form className='car-details-form'>
+                    <CustomDatePicker2 label="Acceptance Date" value={acceptanceDate} disabled={disableRepairDates} onChange={setAcceptanceDate} margin={'10px 0'} />
+                    <CustomDatePicker2 label="Date Received" value={receivedDate} disabled={disableRepairDates} onChange={setReceivedDate} margin={'10px 0'} />
+                    <CustomDatePicker2 label="Date Delivered" value={deliveryDate} disabled={disableRepairDates} onChange={setDeliveryDate} margin={'10px 0'} />
+                </form>
+                {/* Alignments */}
+                <div className='car-details-content-header'>
+                    Alignments
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleAlignmentsEdit} style={{display: disableAlignments ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleAlignmentsCancel} style={{display: !disableAlignments ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleAlignmentsSave} style={{display: !disableAlignments ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
+                </div>
+                <form className='car-details-form'>
+                    <CustomTextField label={"Alignments"} size={"small"} onChange={e => setAlignments(e.target.value)} value={alignments} disabled={disableAlignments} multiline rows={6} labelMargin={-7} fullWidth={true} />
+                </form>
+                {/* Paintings */}
+                <div className='car-details-content-header'>
+                    Paintings
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handlePaintingsEdit} style={{display: disablePaintings ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handlePaintingsCancel} style={{display: !disablePaintings ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handlePaintingsSave} style={{display: !disablePaintings ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
+                </div>
+                <form className='car-details-form'>
+                    <CustomTextField label={"Paintings"} size={"small"} onChange={e => setPaintings(e.target.value)} value={paintings} disabled={disablePaintings} multiline rows={6} labelMargin={-7} fullWidth={true} />
+                </form>
+                {/* Mechanical */}
+                <div className='car-details-content-header'>
+                    Mechanical
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleMechanicalEdit} style={{display: disableMechanical ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleMechanicalCancel} style={{display: !disableMechanical ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleMechanicalSave} style={{display: !disableMechanical ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
+                </div>
+                <form className='car-details-form'>
+                    <CustomTextField label={"Mechanical"} size={"small"} onChange={e => setMechanical(e.target.value)} value={mechanical} disabled={disableMechanical} multiline rows={6} labelMargin={-7} fullWidth={true} />
+                </form>
+                {/* Electrical */}
+                <div className='car-details-content-header'>
+                    Electrical
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleElectricalEdit} style={{display: disableElectrical ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleElectricalCancel} style={{display: !disableElectrical ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleElectricalSave} style={{display: !disableElectrical ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
+                </div>
+                <form className='car-details-form'>
+                    <CustomTextField label={"Electrical"} size={"small"} onChange={e => setElectrical(e.target.value)} value={electrical} disabled={disableElectrical} multiline rows={6} labelMargin={-7} fullWidth={true} />
+                </form>
+                {/* Air Condition */}
+                <div className='car-details-content-header'>
+                    Air Condition
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleAirConditionEdit} style={{display: disableAirCondition ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleAirConditionCancel} style={{display: !disableAirCondition ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleAirConditionSave} style={{display: !disableAirCondition ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
+                </div>
+                <form className='car-details-form'>
+                    <CustomTextField label={"AirCondition"} size={"small"} onChange={e => setAirCondition(e.target.value)} value={airCondition} disabled={disableAirCondition} multiline rows={6} labelMargin={-7} fullWidth={true} />
+                </form>
+                {/* Additional Work */}
+                <div className='car-details-content-header'>
+                    Additional Work
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleAdditionalWorkEdit} style={{display: disableAdditionalWork ? 'flex' : 'none'}}>
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleAdditionalWorkCancel} style={{display: !disableAdditionalWork ? 'flex' : 'none'}}>
+                            <DisabledByDefaultIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={handleAdditionalWorkSave} style={{display: !disableAdditionalWork ? 'flex' : 'none'}}>
+                            <SaveIcon fontSize="small" />
+                        </IconButton>                            
+                    </span>
+                </div>
+                <form className='car-details-form'>
+                    <CustomTextField label={"Additional Work"} size={"small"} onChange={e => setAdditionalWork(e.target.value)} value={additionalWork} disabled={disableAdditionalWork} multiline rows={6} labelMargin={-7} fullWidth={true} />
+                </form>
+                <Divider style={{width:'100%'}} />
+                <div className='car-details-content-header-no-buttons'>Spare Parts</div>
+                <div className='content-listbox'>
+                    {Object.keys(fetchedRepair).length !== 0 && fetchedRepair.spare_parts.length === 0 ?
+                    <div className='content-listbox-no-items'>No spare parts needed for this car.</div> :
+                    <div>
+                        <nav>
+                            <List>
+                                {Object.keys(fetchedRepair).length !== 0 && fetchedRepair.spare_parts.map((sparePart) => (
+                                <ListItem key={sparePart._id} disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleSparePart(sparePart)}>
+                                    <ListItemButton>
+                                            <ListItemIcon>
+                                                <ArrowCircleRightIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={`${sparePart.name} - £${sparePart.cost}`} />
+                                    </ListItemButton>
+                                </ListItem>
+                                ))}
+                            </List>
+                        </nav>
+                    </div>}
+                </div>
+            </div>
+            <Dialog disableEscapeKeyDown={true} open={openDeleteDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleCloseDeleteDialog(event, reason)} }} fullWidth={true}>
+                <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+                    <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+                </DialogTitle>
+                <Divider style={{width:'100%'}} />
+                <DialogContent>
+                    <div className='card-confirmation-message'>Are you sure you want to delete this repair?</div>
+                    <div className='card-confirmation-buttons'>
+                        <Box m={1}>
+                            <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
+                        </Box>
+                        <Box m={1}>
+                            <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteRepair} />
+                        </Box>
+                    </div>
+                </DialogContent>
+            </Dialog>
+            {repairDeleted ?
+            <Snackbar
+                autoHideDuration={4000}
+                open={handleShowRepairDeletedSB}
+                onClose={handleHideRepairDeletedSB}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert severity='success' onClose={handleHideRepairDeletedSB}>Repair Successfully Deleted.</Alert>
+            </Snackbar> : null}
+        </>}
     </>
   );
 }

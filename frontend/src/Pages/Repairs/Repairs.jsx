@@ -67,7 +67,7 @@ function Repairs() {
   const handleShowSelectedCar = () => setShowSelectedCar(true);
   const handleHideSelectedCar = () => setShowSelectedCar(false);
 
-  // When the Repair Card Details button is clicked it brings back the car object and the below function is called and saved the car to the state.
+  // When the Repair Card Details button is clicked it brings back the car object and the below function is called and saves the car to the state.
   const handleSelectedCar = (car) => setSelectedCar(car);
 
   return (
