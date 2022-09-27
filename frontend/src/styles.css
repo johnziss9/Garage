@@ -161,3 +161,9 @@ body {
     cursor: pointer;
     color: rgb(0, 0, 0);
 }
+
+.add-new-item-form-dialog {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}

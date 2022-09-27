@@ -14,10 +14,12 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import BuildIcon from '@mui/icons-material/Build';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import SparePartContent from '../SparePartContent/SparePartContent';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 function RepairContent(props) {
     const [fetchedRepair, setFetchedRepair] = React.useState({});
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+    const [openAddSparePartDialog, setOpenAddSparePartDialog] = React.useState(false);
     const [repairDeleted, setRepairDeleted] = React.useState(false);
     const [showSelectedSparePart, setShowSelectedSparePart] = React.useState(false);
     const [sparePart, setSparePart] = React.useState({}); // Storing the selected spare part
@@ -56,6 +58,9 @@ function RepairContent(props) {
     const [electrical, setElectrical] = React.useState('');
     const [airCondition, setAirCondition] = React.useState('');
     const [additionalWork, setAdditionalWork] = React.useState('');
+
+    const [sparePartName, setSparePartName] = React.useState('');
+    const [sparePartPrice, setSparePartPrice] = React.useState('');
     
     useEffect(() => {
         handleFetchedRepair();
@@ -110,6 +115,9 @@ function RepairContent(props) {
 
     const handleOpenDeleteDialog = () => setOpenDeleteDialog(true)
     const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
+    
+    const handleOpenAddSparePartDialog = () => setOpenAddSparePartDialog(true)
+    const handleCloseAddSparePartDialog = () => setOpenAddSparePartDialog(false);
 
     const handleShowRepairDeletedSB = () => setRepairDeleted(true);
     const handleHideRepairDeletedSB = () => setRepairDeleted(false);
@@ -360,7 +368,36 @@ function RepairContent(props) {
     const handleSparePart = (sparePart) => {
         setSparePart(sparePart);
         handleShowSelectedSparePart();
-      }
+    }
+
+    const handleAddNewSparePart = () => {
+        fetch('http://localhost:5000/api/spare_parts/add', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                repair_id: fetchedRepair._id,
+                name: sparePartName,
+                cost: sparePartPrice,
+                deleted: false
+            })
+        })
+        .then((Response) => Response.json())
+
+        handleFetchedRepair();
+
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+          }, 500);
+
+        handleCloseAddSparePartDialog();
+        setSparePartName('');
+        setSparePartPrice('');
+    }
 
   return (
     <>
@@ -567,7 +604,14 @@ function RepairContent(props) {
                     <CustomTextField label={"Additional Work"} size={"small"} onChange={e => setAdditionalWork(e.target.value)} value={additionalWork} disabled={disableAdditionalWork} multiline rows={6} labelMargin={-7} fullWidth={true} />
                 </form>
                 <Divider style={{width:'100%'}} />
-                <div className='car-details-content-header-no-buttons'>Spare Parts</div>
+                <div className='car-details-content-header'>
+                    Spare Parts
+                    <span className='car-details-content-header-icons'>
+                        <IconButton onClick={handleOpenAddSparePartDialog}>
+                            <AddCircleIcon style={{ color: '#00cc99' }} fontSize="medium" />
+                        </IconButton>                          
+                    </span>
+                </div>
                 <div className='content-listbox'>
                     {Object.keys(fetchedRepair).length !== 0 && fetchedRepair.spare_parts.length === 0 ?
                     <div className='content-listbox-no-items'>No spare parts needed for this car.</div> :
@@ -598,10 +642,30 @@ function RepairContent(props) {
                     <div className='card-confirmation-message'>Are you sure you want to delete this repair?</div>
                     <div className='card-confirmation-buttons'>
                         <Box m={1}>
-                            <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
+                            <CustomButton backgroundColor={'grey'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
                         </Box>
                         <Box m={1}>
                             <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteRepair} />
+                        </Box>
+                    </div>
+                </DialogContent>
+            </Dialog>
+            <Dialog disableEscapeKeyDown={true} open={openAddSparePartDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleCloseAddSparePartDialog(event, reason)} }} fullWidth={true}>
+                <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+                    <div>{`Add New Spare Part for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+                </DialogTitle>
+                <Divider style={{width:'100%'}} />
+                <DialogContent style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                    <form className='add-new-item-form-dialog'>
+                        <CustomTextField label='Item' margin={'dense'} onChange={e => setSparePartName(e.target.value)} value={sparePartName}/>
+                        <CustomTextField label='Price' margin={'dense'} onChange={e => setSparePartPrice(e.target.value)} value={sparePartPrice} />
+                    </form>
+                    <div className='card-confirmation-buttons'>
+                        <Box m={1}>
+                            <CustomButton backgroundColor={'grey'} width={'140px'} height={'40px'} value={'Cancel'} color={'#fff'} onClick={handleCloseAddSparePartDialog} />
+                        </Box>
+                        <Box m={1}>
+                            <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'Add'} color={'#fff'} onClick={handleAddNewSparePart} />
                         </Box>
                     </div>
                 </DialogContent>
