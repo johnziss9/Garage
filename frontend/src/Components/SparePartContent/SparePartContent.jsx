@@ -162,7 +162,7 @@ function SparePartContent(props) {
                 <div className='card-confirmation-message'>Are you sure you want to delete this spare part?</div>
                 <div className='card-confirmation-buttons'>
                     <Box m={1}>
-                        <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
+                        <CustomButton backgroundColor={'grey'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
                     </Box>
                     <Box m={1}>
                         <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteSparePart} />

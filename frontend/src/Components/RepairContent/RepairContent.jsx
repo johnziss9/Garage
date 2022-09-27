@@ -123,7 +123,10 @@ function RepairContent(props) {
     const handleHideRepairDeletedSB = () => setRepairDeleted(false);
 
     const handleShowSelectedSparePart = () => setShowSelectedSparePart(true);
-    const handleHideSelectedSparePart = () => setShowSelectedSparePart(false);
+    const handleHideSelectedSparePart = () => {
+        setShowSelectedSparePart(false);
+        handleFetchedRepair();
+    }
 
     const handleCustomerDetailsEdit = () => setDisableCustomerDetails(false);
     const handleCustomerDetailsCancel = () => setDisableCustomerDetails(true);
@@ -153,7 +156,7 @@ function RepairContent(props) {
         // Using a timeout to fix the async issue on showing the updated results after saving.
         setTimeout(() => {
             handleFetchedRepair();
-          }, 500);
+        }, 500);
 
         setDisableCustomerDetails(true);
     }
@@ -185,6 +188,11 @@ function RepairContent(props) {
 
         handleFetchedRepair();
 
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+        }, 500);
+
         setDisableInsuranceDetails(true);
     }
 
@@ -211,6 +219,11 @@ function RepairContent(props) {
 
         handleFetchedRepair();
 
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+        }, 500);
+
         setDisableRepairDates(true);
     }
 
@@ -232,6 +245,11 @@ function RepairContent(props) {
         .then((Response) => Response.json())
 
         handleFetchedRepair();
+
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+        }, 500);
 
         setDisableAlignments(true);
     }
@@ -255,6 +273,11 @@ function RepairContent(props) {
 
         handleFetchedRepair();
 
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+        }, 500);
+
         setDisablePaintings(true);
     }
 
@@ -276,6 +299,11 @@ function RepairContent(props) {
         .then((Response) => Response.json())
 
         handleFetchedRepair();
+
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+        }, 500);
 
         setDisableMechanical(true);
     }
@@ -299,6 +327,11 @@ function RepairContent(props) {
 
         handleFetchedRepair();
 
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+        }, 500);
+
         setDisableElectrical(true);
     }
 
@@ -321,6 +354,11 @@ function RepairContent(props) {
 
         handleFetchedRepair();
 
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+        }, 500);
+
         setDisableAirCondition(true);
     }
 
@@ -342,6 +380,11 @@ function RepairContent(props) {
         .then((Response) => Response.json())
 
         handleFetchedRepair();
+
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedRepair();
+        }, 500);
 
         setDisableAdditionalWork(true);
     }

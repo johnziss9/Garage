@@ -17,6 +17,10 @@ function Repairs() {
   const [selectedCar, setSelectedCar] = React.useState({});
 
   useEffect(() => {
+    handleFetchedCars();
+  }, []);
+
+  const handleFetchedCars = () => {
     fetch('http://localhost:5000/api/cars/getRepairs', {
         method: 'get',
         headers: {
@@ -44,7 +48,7 @@ function Repairs() {
       setActiveRepairCars(activeRepairCars);
       setInactiveRepairCars(inactiveRepairCars);
     });
-  }, []);
+  }
 
   const handleActiveClick = () => {
     setRadioActiveClicked(true);
@@ -65,7 +69,10 @@ function Repairs() {
   }
 
   const handleShowSelectedCar = () => setShowSelectedCar(true);
-  const handleHideSelectedCar = () => setShowSelectedCar(false);
+  const handleHideSelectedCar = () => {
+    setShowSelectedCar(false);
+    handleFetchedCars();
+  }
 
   // When the Repair Card Details button is clicked it brings back the car object and the below function is called and saves the car to the state.
   const handleSelectedCar = (car) => setSelectedCar(car);

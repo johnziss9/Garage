@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Breadcrumbs, Typography } from '@mui/material';
+import { Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Breadcrumbs, Typography, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert } from '@mui/material';
 import _ from 'lodash';
 import moment from 'moment';
 import CustomTextField from '../CustomTextField/CustomTextField';
+import CustomButton from '../CustomButton/CustomButton';
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -25,6 +26,8 @@ function RepairCarContent(props) {
     const [fullHistory, setFullHistory] = React.useState(false);
     const [showSelectedRepair, setShowSelectedRepair] = React.useState(false);
     const [fetchedCar, setFetchedCar] = React.useState({});
+    const [carDeleted, setCarDeleted] = React.useState(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
     useEffect(() => {
       handleFetchedCar();
@@ -69,7 +72,16 @@ function RepairCarContent(props) {
     const handleHideFullHistory = () => setFullHistory(false);
 
     const handleShowSelectedRepair = () => setShowSelectedRepair(true);
-    const handleHideSelectedRepair = () => setShowSelectedRepair(false);
+    const handleHideSelectedRepair = () => {
+      setShowSelectedRepair(false);
+      handleFetchedCar();
+    }
+
+    const handleOpenDeleteDialog = () => setOpenDeleteDialog(true)
+    const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
+
+    const handleShowCarDeletedSB = () => setCarDeleted(true);
+    const handleHideCarDeletedSB = () => setCarDeleted(false);
 
     const handleCarEdit = () => setDisableCarDetailsContent(false);
     const handleCarCancel = () => setDisableCarDetailsContent(true);
@@ -91,6 +103,11 @@ function RepairCarContent(props) {
 
       handleFetchedCar();
 
+      // Using a timeout to fix the async issue on showing the updated results after saving.
+      setTimeout(() => {
+        handleFetchedCar();
+      }, 500);
+
       setDisableCarDetailsContent(true);
   }
 
@@ -98,6 +115,25 @@ function RepairCarContent(props) {
     setRepair(repair);
     handleShowSelectedRepair();
   }
+
+  const handleDeleteCar = () => {
+    fetch('http://localhost:5000/api/cars/delete', {
+        method: 'put',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': sessionStorage.getItem('token')
+        },
+        body: JSON.stringify({
+            car_id: fetchedCar._id,
+            deleted: true
+        })
+    })
+    .then((Response) => Response.json());
+
+    setCarDeleted(true);
+    handleCloseDeleteDialog();
+}
 
   return (
     <>
@@ -119,7 +155,7 @@ function RepairCarContent(props) {
             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
           </IconButton>
           <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
-          <IconButton>
+          <IconButton onClick={handleOpenDeleteDialog}>
             <DeleteForeverIcon fontSize="large" style={{ color: '#fff' }} />
           </IconButton>
         </div>
@@ -194,6 +230,32 @@ function RepairCarContent(props) {
             <div className='car_details_full_history_button' onClick={handleShowFullHistory}>{'View Full History'}</div>}
           </div> : null}
         </div>
+        <Dialog disableEscapeKeyDown={true} open={openDeleteDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleCloseDeleteDialog(event, reason)} }} fullWidth={true}>
+          <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+            <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+          </DialogTitle>
+          <Divider style={{width:'100%'}} />
+          <DialogContent>
+            <div className='card-confirmation-message'>Are you sure you want to delete this car?</div>
+            <div className='card-confirmation-buttons'>
+              <Box m={1}>
+                <CustomButton backgroundColor={'grey'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
+              </Box>
+              <Box m={1}>
+                <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteCar} />
+              </Box>
+            </div>
+          </DialogContent>
+        </Dialog>
+        {carDeleted ?
+          <Snackbar
+            autoHideDuration={4000}
+            open={handleShowCarDeletedSB}
+            onClose={handleHideCarDeletedSB}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert severity='success' onClose={handleHideCarDeletedSB}>Car Successfully Deleted.</Alert>
+          </Snackbar> : null}
       </>}
     </>
   );
