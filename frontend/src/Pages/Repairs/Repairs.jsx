@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import './Repairs.css';
-import { ButtonGroup } from '@mui/material';
+import { ButtonGroup, Dialog, DialogTitle, DialogContent, Divider, Box, Snackbar, Alert } from '@mui/material';
 import CustomNavbar from '../../Components/CustomNavbar/CustomNavbar';
 import RepairsCard from '../../Components/RepairsCard/RepairsCard';
 import CustomButton from '../../Components/CustomButton/CustomButton';
 import RepairCarContent from '../../Components/RepairCarContent/RepairCarContent';
+import AddNewButton from '../../Components/AddNewButton/AddNewButton';
+import CustomTextField from '../../Components/CustomTextField/CustomTextField';
 
 function Repairs() {
   const [radioActiveClicked, setRadioActiveClicked] = React.useState(true);
@@ -14,7 +16,14 @@ function Repairs() {
   const [activeRepairCars, setActiveRepairCars] = React.useState([]);
   const [inactiveRepairCars, setInactiveRepairCars] = React.useState([]);
   const [showSelectedCar, setShowSelectedCar] = React.useState(false);
+  const [carAdded, setCarAdded] = React.useState(false);
   const [selectedCar, setSelectedCar] = React.useState({});
+  const [openAddNewCarDialog, setOpenAddNewCarDialog] = React.useState(false);
+  const [make, setMake] = React.useState('');
+  const [model, setModel] = React.useState('');
+  const [numberPlate, setNumberPlate] = React.useState('');
+  const [frameNumber, setFrameNumber] = React.useState('');
+  const [kmMiles, setKmMiles] = React.useState('');
 
   useEffect(() => {
     handleFetchedCars();
@@ -49,6 +58,58 @@ function Repairs() {
       setInactiveRepairCars(inactiveRepairCars);
     });
   }
+
+  const handleAddNewCar = () => {
+    fetch('http://localhost:5000/api/cars/add', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': sessionStorage.getItem('token')
+      },
+      body: JSON.stringify({
+        make: make,
+        model: model,
+        number_plate: numberPlate,
+        frame_number: frameNumber,
+        km_miles: kmMiles,
+        deleted: false,
+        type: 'repair',
+        has_active_repair: false,
+        mot: {
+          start_date: "0001-01-01T00:00:00Z",
+          end_date: "0001-01-01T00:00:00Z"
+        },
+        road_tax: {
+          start_date: "0001-01-01T00:00:00Z",
+          end_date: "0001-01-01T00:00:00Z"
+        }
+      })
+    })
+    .then((Response) => Response.json())
+
+    handleFetchedCars();
+
+    // Using a timeout to fix the async issue on showing the updated results after saving.
+    setTimeout(() => {
+      handleFetchedCars();
+    }, 500);
+
+    setCarAdded(true);
+    handleCloseAddNewCarDialog();
+
+    setMake('');
+    setModel('');
+    setNumberPlate('');
+    setFrameNumber('');
+    setKmMiles('');
+  }
+
+  const handleOpenAddNewCarDialog = () => setOpenAddNewCarDialog(true)
+  const handleCloseAddNewCarDialog = () => setOpenAddNewCarDialog(false);
+
+  const handleShowCarAddedSB = () => setCarAdded(true);
+  const handleHideCarAddedSB = () => setCarAdded(false);
 
   const handleActiveClick = () => {
     setRadioActiveClicked(true);
@@ -110,6 +171,40 @@ function Repairs() {
             </div>
           </>}
       </div>
+      {!showSelectedCar ? <AddNewButton onClick={handleOpenAddNewCarDialog} /> : null}
+      <Dialog disableEscapeKeyDown={true} open={openAddNewCarDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') {handleCloseAddNewCarDialog(event, reason)} }} fullWidth={true}>
+        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+          <div>Add New Car for Repair</div>
+        </DialogTitle>
+        <Divider style={{width:'100%'}} />
+        <DialogContent style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <form className='add-new-item-form-dialog'>
+            <CustomTextField label='Make' margin={'dense'} onChange={e => setMake(e.target.value)} value={make}/>
+            <CustomTextField label='Model' margin={'dense'} onChange={e => setModel(e.target.value)} value={model} />
+            <CustomTextField label='Number Plate' margin={'dense'} onChange={e => setNumberPlate(e.target.value)} value={numberPlate} />
+            <CustomTextField label='Frame Number' margin={'dense'} onChange={e => setFrameNumber(e.target.value)} value={frameNumber} />
+            <CustomTextField label='Km/Miles' margin={'dense'} onChange={e => setKmMiles(e.target.value)} value={kmMiles} />
+          </form>
+          <div className='card-confirmation-buttons'>
+            <Box m={1}>
+              <CustomButton backgroundColor={'grey'} width={'140px'} height={'40px'} value={'Cancel'} color={'#fff'} onClick={handleCloseAddNewCarDialog} />
+            </Box>
+            <Box m={1}>
+              <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'Add'} color={'#fff'} onClick={handleAddNewCar} />
+            </Box>
+          </div>
+        </DialogContent>
+      </Dialog>
+      {carAdded ?
+        <Snackbar
+          autoHideDuration={4000}
+          open={handleShowCarAddedSB}
+          onClose={handleHideCarAddedSB}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert severity='success' onClose={handleHideCarAddedSB}>Car Successfully Added.</Alert>
+        </Snackbar> : null
+      }
     </>
   );
 }
