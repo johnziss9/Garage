@@ -67,6 +67,12 @@ function RemindersCard(props) {
         setCurrentRental(curRental);
     }
 
+    /* This function opens up the Rental Car component and will stay here once everything else goes */
+    const handleShowSelectedCar = (car) => {
+        props.clickShowCar();
+        props.selectedCar(car)
+    }
+
     const handleOpen = () => {
         setOpen(true);
         handleRentals();
@@ -245,7 +251,7 @@ function RemindersCard(props) {
             <div className='card-number-plate'>{props.car.number_plate}</div> 
             <div className='card-make'>{props.car.make}</div>
             <div className='card-model'>{props.car.model}</div>
-            <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Details'} color={'#fff'} onClick={handleOpen}></CustomButton>
+            <CustomButton backgroundColor={'#00cc99'} width={'120px'} height={'40px'} value={'Details'} color={'#fff'} onClick={handleShowSelectedCar}></CustomButton>
             <Dialog disableEscapeKeyDown={true} onBackdropClick={true} open={open} onClose={handleClose} fullWidth={true}>
                 <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                     <div style={{ marginLeft: 'auto', marginRight: '-59px' /*  Used to center the title */ }}>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
