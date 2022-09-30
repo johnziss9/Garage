@@ -125,14 +125,6 @@ body {
     margin: 10px 0;
 }
 
-.car-details-content-header-no-buttons {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    font-weight: bold;
-    margin: 15px 0;
-}
-
 .car-details-content-header-icons {
     display: flex;
 }
@@ -165,5 +157,5 @@ body {
 .add-new-item-form-dialog {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 350px;
 }

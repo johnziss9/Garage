@@ -18,7 +18,7 @@ export default class RepairsDAO {
         }
     }
 
-    static async addRepair(carId, customerDetails, insuranceDetails, repairDetails, isiomata, paintings, mechanical, electric, aircon, additionalNotes, deleted) {
+    static async addRepair(carId, customerDetails, insuranceDetails, repairDates, alignments, paintings, mechanical, electrical, airCondition, additionalWork, completed, deleted) {
         try {
             const repair = { 
                 car_id: ObjectId(carId),
@@ -35,19 +35,21 @@ export default class RepairsDAO {
                     insurer_phone_number: insuranceDetails.insurer_phone_number,
                     operator_name: insuranceDetails.operator_name,
                     operator_phone_number: insuranceDetails.operator_phone_number,
+                    claim_number: insuranceDetails.claim_number,
                     paid_amount: insuranceDetails.paid_amount
                 },
-                repair_details: {
-                    repair_date: repairDetails.repair_date,
-                    received_date: repairDetails.received_date,
-                    due_date: repairDetails.due_date
+                repair_dates: {
+                    acceptance_date: repairDates.acceptance_date,
+                    received_date: repairDates.received_date,
+                    delivery_date: repairDates.delivery_date
                 },
-                isiomata: isiomata,
+                alignments: alignments,
                 paintings: paintings,
                 mechanical: mechanical,
-                electric: electric,
-                aircon: aircon,
-                additional_notes: additionalNotes,
+                electrical: electrical,
+                air_condition: airCondition,
+                additional_work: additionalWork,
+                completed: completed,
                 deleted: deleted
             };
  

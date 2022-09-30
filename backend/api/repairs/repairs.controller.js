@@ -20,30 +20,32 @@ export default class RepairsController {
                 operator_phone_number: req.body.insurance_details.operator_phone_number,
                 paid_amount: req.body.insurance_details.paid_amount
             };
-            const repair_details = {
-                repair_date: new Date(req.body.repair_details.repair_date),
-                received_date: new Date(req.body.repair_details.received_date),
-                due_date: new Date(req.body.repair_details.due_date)
+            const repair_dates = {
+                acceptance_date: new Date(req.body.repair_dates.acceptance_date),
+                received_date: new Date(req.body.repair_dates.received_date),
+                delivery_date: new Date(req.body.repair_dates.delivery_date)
             };
-            const isiomata = req.body.isiomata;
+            const alignments = req.body.alignments;
             const paintings = req.body.paintings;
             const mechanical = req.body.mechanical;
-            const electric = req.body.electric;
-            const aircon = req.body.aircon;
-            const additional_notes = req.body.additional_notes;
+            const electrical = req.body.electrical;
+            const air_condition = req.body.air_condition;
+            const additional_work = req.body.additional_work;
+            const completed = req.body.completed;
             const deleted = req.body.deleted;
  
             const addRepairResponse = await RepairsDAO.addRepair(
                 carId,
                 customer_details,
                 insurance_details,
-                repair_details,
-                isiomata,
+                repair_dates,
+                alignments,
                 paintings,
                 mechanical,
-                electric,
-                aircon,
-                additional_notes,
+                electrical,
+                air_condition,
+                additional_work,
+                completed,
                 deleted
             );
 
