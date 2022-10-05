@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { Breadcrumbs, Typography, IconButton, Divider, List, ListItem, ListItemIcon, ListItemText, ListItemButton } from '@mui/material';
+import { Breadcrumbs, Typography, IconButton, Divider, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert } from '@mui/material';
 import CustomTextField from '../CustomTextField/CustomTextField';
+import CustomButton from '../CustomButton/CustomButton';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -28,6 +29,8 @@ function RentalCarContent(props) {
     const [pastRentals, setPastRentals] = React.useState([]);
     const [futureRentals, setFutureRentals] = React.useState([]);
     const [showAllRentals, setShowAllRentals] = React.useState(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+    const [carDeleted, setCarDeleted] = React.useState(false);
 
     useEffect(() => {
         handleFetchedCar();
@@ -84,6 +87,31 @@ function RentalCarContent(props) {
     const handleShowAllRentals = () => setShowAllRentals(true);
     const handleHideAllRentals = () => setShowAllRentals(false);
 
+    const handleOpenDeleteDialog = () => setOpenDeleteDialog(true)
+    const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
+
+    const handleShowCarDeletedSB = () => setCarDeleted(true);
+    const handleHideCarDeletedSB = () => setCarDeleted(false);
+
+    const handleDeleteCar = () => {
+        fetch('http://localhost:5000/api/cars/delete', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: fetchedCar._id,
+                deleted: true
+            })
+        })
+            .then((Response) => Response.json());
+
+        setCarDeleted(true);
+        handleCloseDeleteDialog();
+    }
+
     const handleCarEdit = () => setDisableCarDetailsContent(false);
     const handleCarCancel = () => setDisableCarDetailsContent(true);
     const handleCarSave = () => {
@@ -132,7 +160,7 @@ function RentalCarContent(props) {
                             <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
                         </IconButton>
                         <div>{props.car.make} {props.car.model} ({props.car.number_plate})</div>
-                        <IconButton onClick={props.clickHideCar}>
+                        <IconButton onClick={handleOpenDeleteDialog}>
                             <DeleteForeverIcon fontSize="large" style={{ color: '#fff' }} />
                         </IconButton>
                     </div>
@@ -228,6 +256,33 @@ function RentalCarContent(props) {
                             </div> : null
                         }
                     </div>
+                    <Dialog disableEscapeKeyDown={true} open={openDeleteDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') { handleCloseDeleteDialog(event, reason) } }} fullWidth={true}>
+                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+                            <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+                        </DialogTitle>
+                        <Divider style={{ width: '100%' }} />
+                        <DialogContent>
+                            <div className='card-confirmation-message'>Are you sure you want to delete this car?</div>
+                            <div className='card-confirmation-buttons'>
+                                <Box m={1}>
+                                    <CustomButton backgroundColor={'grey'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
+                                </Box>
+                                <Box m={1}>
+                                    <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteCar} />
+                                </Box>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                    {carDeleted ?
+                        <Snackbar
+                            autoHideDuration={4000}
+                            open={handleShowCarDeletedSB}
+                            onClose={handleHideCarDeletedSB}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                        >
+                            <Alert severity='success' onClose={handleHideCarDeletedSB}>Car Successfully Deleted.</Alert>
+                        </Snackbar> : null
+                    }
                 </>
             }
         </>
