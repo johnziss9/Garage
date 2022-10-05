@@ -31,6 +31,7 @@ function RentalCarContent(props) {
     const [showAllRentals, setShowAllRentals] = React.useState(false);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [carDeleted, setCarDeleted] = React.useState(false);
+    const [selectedRental, setSelectedRental] = React.useState({}); // Storing the selected rental to pass to RentalContent
 
     useEffect(() => {
         handleFetchedCar();
@@ -78,7 +79,7 @@ function RentalCarContent(props) {
     const handleShowSelectedRental = () => setShowSelectedRental(true);
     const handleHideSelectedRental = () => {
         setShowSelectedRental(false);
-        // handleFetchedCar();
+        handleFetchedCar();
     }
 
     const handleOpenAddRentalDialog = () => setOpenAddRentalDialog(true)
@@ -92,6 +93,11 @@ function RentalCarContent(props) {
 
     const handleShowCarDeletedSB = () => setCarDeleted(true);
     const handleHideCarDeletedSB = () => setCarDeleted(false);
+
+    const handleRental = (rental) => {
+        setSelectedRental(rental);
+        handleShowSelectedRental();
+    }
 
     const handleDeleteCar = () => {
         fetch('http://localhost:5000/api/cars/delete', {
@@ -115,27 +121,27 @@ function RentalCarContent(props) {
     const handleCarEdit = () => setDisableCarDetailsContent(false);
     const handleCarCancel = () => setDisableCarDetailsContent(true);
     const handleCarSave = () => {
-        // fetch('http://localhost:5000/api/cars/updateCarDetails', {
-        //     method: 'put',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     },
-        //     body: JSON.stringify({
-        //         car_id: fetchedCar._id,
-        //         frame_number: frameNumber,
-        //         km_miles: kmMiles
-        //     })
-        // })
-        //     .then((Response) => Response.json())
+        fetch('http://localhost:5000/api/cars/updateCarDetails', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: fetchedCar._id,
+                frame_number: frameNumber,
+                km_miles: kmMiles
+            })
+        })
+            .then((Response) => Response.json())
 
-        // handleFetchedCar();
+        handleFetchedCar();
 
-        // // Using a timeout to fix the async issue on showing the updated results after saving.
-        // setTimeout(() => {
-        //     handleFetchedCar();
-        // }, 500);
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedCar();
+        }, 500);
 
         setDisableCarDetailsContent(true);
     }
@@ -148,7 +154,7 @@ function RentalCarContent(props) {
                     <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                             <WarehouseIcon sx={{ mr: 0.7 }} fontSize="inherit" />
-                            All Repairs
+                            All Rentals
                         </Typography>
                         <Typography sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
                             <DirectionsCarIcon sx={{ mr: 0.7 }} fontSize="inherit" />
@@ -185,7 +191,7 @@ function RentalCarContent(props) {
                         </form>
                         <Divider style={{ width: '100%' }} />
                         <div className='car-details-content-header'>
-                            Repairs
+                            Rentals
                             <span className='car-details-content-header-icons'>
                                 <IconButton onClick={handleOpenAddRentalDialog}>
                                     <AddCircleIcon style={{ color: '#00cc99' }} fontSize="medium" />
@@ -200,7 +206,7 @@ function RentalCarContent(props) {
                                         {showAllRentals ?
                                             <List>
                                                 {_.orderBy(allRentals, ['dates.start_date'], ['asc']).map((rental) => (
-                                                    <ListItem key={rental._id} disablePadding style={{ backgroundColor: moment(rental.dates.start_date).format('YYYY-MM-DD') <= currentDate && moment(rental.dates.end_date).format('YYYY-MM-DD') >= currentDate ? '#00cc99' : '#fff' }}> {/* onClick={() => handleRepair(repair)} */}
+                                                    <ListItem key={rental._id} disablePadding style={{ backgroundColor: moment(rental.dates.start_date).format('YYYY-MM-DD') <= currentDate && moment(rental.dates.end_date).format('YYYY-MM-DD') >= currentDate ? '#00cc99' : '#fff' }} onClick={() => handleRental(rental)} >
                                                         <ListItemButton>
                                                             <ListItemIcon>
                                                                 <ArrowCircleRightIcon />
@@ -212,7 +218,7 @@ function RentalCarContent(props) {
                                             </List> :
                                             <List>
                                                 {_.orderBy(pastRentals, ['dates.start_date'], ['asc']).slice(-2).map((rental) => (
-                                                    <ListItem key={rental._id} disablePadding style={{ backgroundColor: '#fff' }}> {/* onClick={() => handleRepair(repair)} */}
+                                                    <ListItem key={rental._id} disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleRental(rental)}> 
                                                         <ListItemButton>
                                                             <ListItemIcon>
                                                                 <ArrowCircleRightIcon />
@@ -222,7 +228,7 @@ function RentalCarContent(props) {
                                                     </ListItem>
                                                 ))}
                                                 {Object.keys(currentRental).length !== 0 ?
-                                                    <ListItem disablePadding style={{ backgroundColor: '#00cc99' }}> {/* onClick={() => handleRepair(incompleteRepair)} */}
+                                                    <ListItem disablePadding style={{ backgroundColor: '#00cc99' }} onClick={() => handleRental(currentRental)}>
                                                         <ListItemButton>
                                                             <ListItemIcon>
                                                                 <ArrowCircleRightIcon />
@@ -232,7 +238,7 @@ function RentalCarContent(props) {
                                                     </ListItem> : null
                                                 }
                                                 {_.orderBy(futureRentals, ['dates.start_date'], ['asc']).slice(-2).map((rental) => (
-                                                    <ListItem key={rental._id} disablePadding style={{ backgroundColor: '#fff' }}> {/* onClick={() => handleRepair(repair)} */}
+                                                    <ListItem key={rental._id} disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleRental(rental)}>
                                                         <ListItemButton>
                                                             <ListItemIcon>
                                                                 <ArrowCircleRightIcon />
@@ -258,7 +264,7 @@ function RentalCarContent(props) {
                     </div>
                     <Dialog disableEscapeKeyDown={true} open={openDeleteDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') { handleCloseDeleteDialog(event, reason) } }} fullWidth={true}>
                         <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
-                            <div>{`Repair for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+                            <div>{`Rental for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
                         </DialogTitle>
                         <Divider style={{ width: '100%' }} />
                         <DialogContent>
