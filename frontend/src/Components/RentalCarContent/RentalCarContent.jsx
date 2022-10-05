@@ -41,6 +41,14 @@ function RentalCarContent(props) {
     const [carDeleted, setCarDeleted] = React.useState(false);
     const [selectedRental, setSelectedRental] = React.useState({}); // Storing the selected rental to pass to RentalContent
 
+    const [firstName, setFirstName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
+    const [phoneNumber, setPhoneNumber] = React.useState('');
+    const [address, setAddress] = React.useState('');
+
+    const [startDate, setStartDate] = React.useState(new Date());
+    const [endDate, setEndDate] = React.useState(new Date());
+
     useEffect(() => {
         handleFetchedCar();
     }, []);
@@ -214,6 +222,47 @@ function RentalCarContent(props) {
         handleCloseDeleteDialog();
     }
 
+    const handleAddRental = () => {
+        fetch('http://localhost:5000/api/rentals/add', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: fetchedCar._id,
+                first_name: firstName,
+                last_name: lastName,
+                phone_number: phoneNumber,
+                address, address,
+                dates: {
+                    start_date: startDate,
+                    end_date: endDate
+                },
+                deleted: false
+            })
+        })
+            .then((Response) => Response.json())
+
+        handleFetchedCar();
+
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedCar();
+        }, 500);
+
+        handleCloseAddRentalDialog();
+
+        setFirstName('');
+        setLastName('');
+        setPhoneNumber('');
+        setAddress('');
+
+        setStartDate(new Date());
+        setEndDate(new Date());
+    }
+
     return (
         <>
             {showSelectedRental ?
@@ -322,7 +371,7 @@ function RentalCarContent(props) {
                                             </List> :
                                             <List>
                                                 {_.orderBy(pastRentals, ['dates.start_date'], ['asc']).slice(-2).map((rental) => (
-                                                    <ListItem key={rental._id} disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleRental(rental)}> 
+                                                    <ListItem key={rental._id} disablePadding style={{ backgroundColor: '#fff' }} onClick={() => handleRental(rental)}>
                                                         <ListItemButton>
                                                             <ListItemIcon>
                                                                 <ArrowCircleRightIcon />
@@ -379,6 +428,31 @@ function RentalCarContent(props) {
                                 </Box>
                                 <Box m={1}>
                                     <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteCar} />
+                                </Box>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                    <Dialog disableEscapeKeyDown={true} open={openAddRentalDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') { handleCloseAddRentalDialog(event, reason) } }} fullWidth={true}>
+                        <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+                            <div>{`Add New Rental for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+                        </DialogTitle>
+                        <Divider style={{ width: '100%' }} />
+                        <DialogContent style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                            <form className='add-new-item-form-dialog'>
+                                <CustomTextField label='First Name' margin={'dense'} onChange={e => setFirstName(e.target.value)} size={'small'} value={firstName} />
+                                <CustomTextField label='Last Name' margin={'dense'} onChange={e => setLastName(e.target.value)} size={'small'} value={lastName} />
+                                <CustomTextField label='Phone Number' margin={'dense'} onChange={e => setPhoneNumber(e.target.value)} size={'small'} value={phoneNumber} />
+                                <CustomTextField label='Address' margin={'dense'} onChange={e => setAddress(e.target.value)} size={'small'} value={address} />
+                                <br />
+                                <CustomDatePicker2 label="Start Date" value={startDate} onChange={setStartDate} margin={'10px 0'} />
+                                <CustomDatePicker2 label="End Date" value={endDate} onChange={setEndDate} margin={'10px 0'} />
+                            </form>
+                            <div className='card-confirmation-buttons'>
+                                <Box m={1}>
+                                    <CustomButton backgroundColor={'grey'} width={'140px'} height={'40px'} value={'Cancel'} color={'#fff'} onClick={handleCloseAddRentalDialog} />
+                                </Box>
+                                <Box m={1}>
+                                    <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'Add'} color={'#fff'} onClick={handleAddRental} />
                                 </Box>
                             </div>
                         </DialogContent>
