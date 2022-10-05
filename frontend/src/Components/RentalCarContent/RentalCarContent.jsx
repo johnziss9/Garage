@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Breadcrumbs, Typography, IconButton, Divider, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert } from '@mui/material';
 import CustomTextField from '../CustomTextField/CustomTextField';
 import CustomButton from '../CustomButton/CustomButton';
+import CustomDatePicker2 from '../CustomDatePicker2/CustomDatePicker2';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -20,8 +21,14 @@ function RentalCarContent(props) {
 
     const [showSelectedRental, setShowSelectedRental] = React.useState(false);
     const [disableCarDetailsContent, setDisableCarDetailsContent] = React.useState(true);
+    const [disableMOTContent, setDisableMOTContent] = React.useState(true);
+    const [disableRoadTaxContent, setDisableRoadTaxContent] = React.useState(true);
     const [frameNumber, setFrameNumber] = React.useState(props.car.frame_number);
     const [kmMiles, setKmMiles] = React.useState(props.car.km_miles);
+    const [MOTStartDate, setMOTStartDate] = React.useState(props.car.mot.start_date);
+    const [MOTEndDate, setMOTEndDate] = React.useState(props.car.mot.end_date);
+    const [roadTaxStartDate, setRoadTaxStartDate] = React.useState(props.car.road_tax.start_date);
+    const [roadTaxEndtDate, setRoadTaxEndDate] = React.useState(props.car.road_tax.end_date);
     const [openAddRentalDialog, setOpenAddRentalDialog] = React.useState(false);
     const [currentRental, setCurrentRental] = React.useState({});
     const [fetchedCar, setFetchedCar] = React.useState({});
@@ -99,28 +106,9 @@ function RentalCarContent(props) {
         handleShowSelectedRental();
     }
 
-    const handleDeleteCar = () => {
-        fetch('http://localhost:5000/api/cars/delete', {
-            method: 'put',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'x-access-token': sessionStorage.getItem('token')
-            },
-            body: JSON.stringify({
-                car_id: fetchedCar._id,
-                deleted: true
-            })
-        })
-            .then((Response) => Response.json());
-
-        setCarDeleted(true);
-        handleCloseDeleteDialog();
-    }
-
-    const handleCarEdit = () => setDisableCarDetailsContent(false);
-    const handleCarCancel = () => setDisableCarDetailsContent(true);
-    const handleCarSave = () => {
+    const handleCarDetailsEdit = () => setDisableCarDetailsContent(false);
+    const handleCarDetailsCancel = () => setDisableCarDetailsContent(true);
+    const handleCarDetailsSave = () => {
         fetch('http://localhost:5000/api/cars/updateCarDetails', {
             method: 'put',
             headers: {
@@ -144,6 +132,85 @@ function RentalCarContent(props) {
         }, 500);
 
         setDisableCarDetailsContent(true);
+    }
+
+    const handleMOTEdit = () => setDisableMOTContent(false);
+    const handleMOTCancel = () => setDisableMOTContent(true);
+    const handleMOTSave = () => {
+        fetch('http://localhost:5000/api/cars/updateMOT', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: fetchedCar._id,
+                mot: {
+                    start_date: MOTStartDate,
+                    end_date: MOTEndDate
+                }
+            })
+        })
+            .then((Response) => Response.json())
+
+        handleFetchedCar();
+
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedCar();
+        }, 500);
+
+        setDisableMOTContent(true);
+    }
+
+    const handleRoadTaxEdit = () => setDisableRoadTaxContent(false);
+    const handleRoadTaxCancel = () => setDisableRoadTaxContent(true);
+    const handleRoadTaxSave = () => {
+        fetch('http://localhost:5000/api/cars/updateRT', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: fetchedCar._id,
+                road_tax: {
+                    start_date: roadTaxStartDate,
+                    end_date: roadTaxEndtDate
+                }
+            })
+        })
+            .then((Response) => Response.json())
+
+        handleFetchedCar();
+
+        // Using a timeout to fix the async issue on showing the updated results after saving.
+        setTimeout(() => {
+            handleFetchedCar();
+        }, 500);
+
+        setDisableRoadTaxContent(true);
+    }
+
+    const handleDeleteCar = () => {
+        fetch('http://localhost:5000/api/cars/delete', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                car_id: fetchedCar._id,
+                deleted: true
+            })
+        })
+            .then((Response) => Response.json());
+
+        setCarDeleted(true);
+        handleCloseDeleteDialog();
     }
 
     return (
@@ -174,13 +241,13 @@ function RentalCarContent(props) {
                         <div className='car-details-content-header'>
                             Details
                             <span className='car-details-content-header-icons'>
-                                <IconButton onClick={handleCarEdit} style={{ display: disableCarDetailsContent ? 'flex' : 'none' }}>
+                                <IconButton onClick={handleCarDetailsEdit} style={{ display: disableCarDetailsContent ? 'flex' : 'none' }}>
                                     <EditIcon fontSize="small" />
                                 </IconButton>
-                                <IconButton onClick={handleCarCancel} style={{ display: !disableCarDetailsContent ? 'flex' : 'none' }}>
+                                <IconButton onClick={handleCarDetailsCancel} style={{ display: !disableCarDetailsContent ? 'flex' : 'none' }}>
                                     <DisabledByDefaultIcon fontSize="small" />
                                 </IconButton>
-                                <IconButton onClick={handleCarSave} style={{ display: !disableCarDetailsContent ? 'flex' : 'none' }}>
+                                <IconButton onClick={handleCarDetailsSave} style={{ display: !disableCarDetailsContent ? 'flex' : 'none' }}>
                                     <SaveIcon fontSize="small" />
                                 </IconButton>
                             </span>
@@ -188,6 +255,42 @@ function RentalCarContent(props) {
                         <form className='car-details-form'>
                             <CustomTextField label={"Frame Number"} size={"small"} onChange={e => setFrameNumber(e.target.value)} value={frameNumber} disabled={disableCarDetailsContent} margin={'dense'} />
                             <CustomTextField label={"Km/Miles"} size={"small"} onChange={e => setKmMiles(e.target.value)} value={kmMiles} disabled={disableCarDetailsContent} margin={'dense'} />
+                        </form>
+                        <div className='car-details-content-header'>
+                            M.O.T.
+                            <span className='car-details-content-header-icons'>
+                                <IconButton onClick={handleMOTEdit} style={{ display: disableMOTContent ? 'flex' : 'none' }}>
+                                    <EditIcon fontSize="small" />
+                                </IconButton>
+                                <IconButton onClick={handleMOTCancel} style={{ display: !disableMOTContent ? 'flex' : 'none' }}>
+                                    <DisabledByDefaultIcon fontSize="small" />
+                                </IconButton>
+                                <IconButton onClick={handleMOTSave} style={{ display: !disableMOTContent ? 'flex' : 'none' }}>
+                                    <SaveIcon fontSize="small" />
+                                </IconButton>
+                            </span>
+                        </div>
+                        <form className='car-details-form'>
+                            <CustomDatePicker2 label="M.O.T. Start Date" onChange={setMOTStartDate} value={MOTStartDate} disabled={disableMOTContent} margin={'10px 0'} />
+                            <CustomDatePicker2 label="M.O.T. End Date" onChange={setMOTEndDate} value={MOTEndDate} disabled={disableMOTContent} margin={'10px 0'} />
+                        </form>
+                        <div className='car-details-content-header'>
+                            Road Tax
+                            <span className='car-details-content-header-icons'>
+                                <IconButton onClick={handleRoadTaxEdit} style={{ display: disableRoadTaxContent ? 'flex' : 'none' }}>
+                                    <EditIcon fontSize="small" />
+                                </IconButton>
+                                <IconButton onClick={handleRoadTaxCancel} style={{ display: !disableRoadTaxContent ? 'flex' : 'none' }}>
+                                    <DisabledByDefaultIcon fontSize="small" />
+                                </IconButton>
+                                <IconButton onClick={handleRoadTaxSave} style={{ display: !disableRoadTaxContent ? 'flex' : 'none' }}>
+                                    <SaveIcon fontSize="small" />
+                                </IconButton>
+                            </span>
+                        </div>
+                        <form className='car-details-form'>
+                            <CustomDatePicker2 label="Road Tax Start Date" onChange={setRoadTaxStartDate} value={roadTaxStartDate} disabled={disableRoadTaxContent} margin={'10px 0'} />
+                            <CustomDatePicker2 label="Road Tax End Date" onChange={setRoadTaxEndDate} value={roadTaxEndtDate} disabled={disableRoadTaxContent} margin={'10px 0'} />
                         </form>
                         <Divider style={{ width: '100%' }} />
                         <div className='car-details-content-header'>
