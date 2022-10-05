@@ -29,6 +29,13 @@ body {
 
 /* Card content */
 
+.cards-content {
+    width: 1020px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .card-form {
     width: 250px;
     display: flex;
