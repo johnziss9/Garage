@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Breadcrumbs, Typography, IconButton, Divider } from '@mui/material';
+import { Breadcrumbs, Typography, IconButton, Divider, Dialog, DialogTitle, DialogContent, Box, Snackbar, Alert } from '@mui/material';
 import CustomTextField from '../CustomTextField/CustomTextField';
 import CustomDatePicker2 from '../CustomDatePicker2/CustomDatePicker2';
+import CustomButton from '../CustomButton/CustomButton';
 
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -16,6 +17,8 @@ function RentalContent(props) {
     const [disableCustomerDetails, setDisableCustomerDetails] = React.useState(true);
     const [disableRentalDates, setDisableRentalDates] = React.useState(true);
     const [fetchedRental, setFetchedRental] = React.useState({});
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+    const [rentalDeleted, setRentalDeleted] = React.useState(false);
 
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
@@ -119,6 +122,31 @@ function RentalContent(props) {
         setDisableRentalDates(true);
     }
 
+    const handleOpenDeleteDialog = () => setOpenDeleteDialog(true)
+    const handleCloseDeleteDialog = () => setOpenDeleteDialog(false);
+
+    const handleShowRentalDeletedSB = () => setRentalDeleted(true);
+    const handleHideRentalDeletedSB = () => setRentalDeleted(false);
+
+    const handleDeleteRental = () => {
+        fetch('http://localhost:5000/api/rentals/delete', {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                rental_id: fetchedRental._id,
+                deleted: true
+            })
+        })
+            .then((Response) => Response.json());
+
+        setRentalDeleted(true);
+        handleCloseDeleteDialog();
+    }
+
     return (
         <>
             <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
@@ -136,11 +164,11 @@ function RentalContent(props) {
                 </Typography>
             </Breadcrumbs>
             <div className='car-details-header'>
-                <IconButton onClick={props.clickHideRental}> {/* disabled={!disableCustomerDetails || !disableInsuranceDetails || !disableRepairDates || !disableAlignments || !disablePaintings || !disableMechanical || !disableElectrical || !disableAirCondition || !disableAdditionalWork ? true : false} */}
+                <IconButton onClick={props.clickHideRental} disabled={!disableCustomerDetails || !disableRentalDates ? true : false}>
                     <ArrowBackIosIcon fontSize="large" style={{ color: '#fff' }} />
                 </IconButton>
                 <div>{`Rental for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
-                <IconButton onClick={props.clickHideRental}>
+                <IconButton onClick={handleOpenDeleteDialog}>
                     <DeleteForeverIcon fontSize="large" style={{ color: '#fff' }} />
                 </IconButton>
             </div>
@@ -185,6 +213,33 @@ function RentalContent(props) {
                     <CustomDatePicker2 label="End Date" value={endDate} disabled={disableRentalDates} onChange={setEndDate} margin={'10px 0'} />
                 </form>
             </div>
+            <Dialog disableEscapeKeyDown={true} open={openDeleteDialog} onClose={(event, reason) => { if (reason !== 'backdropClick') { handleCloseDeleteDialog(event, reason) } }} fullWidth={true}>
+                <DialogTitle style={{ backgroundColor: '#00cc99', color: '#fff', display: 'flex', justifyContent: 'center', minWidth: '300px' }} >
+                    <div>{`Rental for ${props.car.make} ${props.car.model} (${props.car.number_plate})`}</div>
+                </DialogTitle>
+                <Divider style={{ width: '100%' }} />
+                <DialogContent>
+                    <div className='card-confirmation-message'>Are you sure you want to delete this rental?</div>
+                    <div className='card-confirmation-buttons'>
+                        <Box m={1}>
+                            <CustomButton backgroundColor={'grey'} width={'140px'} height={'40px'} value={'NO'} color={'#fff'} onClick={handleCloseDeleteDialog} />
+                        </Box>
+                        <Box m={1}>
+                            <CustomButton backgroundColor={'#00cc99'} width={'140px'} height={'40px'} value={'YES'} color={'#fff'} onClick={handleDeleteRental} />
+                        </Box>
+                    </div>
+                </DialogContent>
+            </Dialog>
+            {rentalDeleted ?
+                <Snackbar
+                    autoHideDuration={4000}
+                    open={handleShowRentalDeletedSB}
+                    onClose={handleHideRentalDeletedSB}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert severity='success' onClose={handleHideRentalDeletedSB}>Rental Successfully Deleted.</Alert>
+                </Snackbar> : null
+            }
         </>
     );
 }
