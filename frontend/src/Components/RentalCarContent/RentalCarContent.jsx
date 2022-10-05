@@ -15,6 +15,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import RentalContent from '../RentalContent/RentalContent';
 
 function RentalCarContent(props) {
     const currentDate = moment(new Date()).format('YYYY-MM-DD');
@@ -90,7 +91,7 @@ function RentalCarContent(props) {
     }
 
     const handleOpenAddRentalDialog = () => setOpenAddRentalDialog(true)
-    const handleCloseAddRntalrDialog = () => setOpenAddRentalDialog(false);
+    const handleCloseAddRentalDialog = () => setOpenAddRentalDialog(false);
 
     const handleShowAllRentals = () => setShowAllRentals(true);
     const handleHideAllRentals = () => setShowAllRentals(false);
@@ -216,7 +217,7 @@ function RentalCarContent(props) {
     return (
         <>
             {showSelectedRental ?
-                <div>RENTAL CONTENT WILL GO HERE</div> :
+                <RentalContent clickHideRental={handleHideSelectedRental} car={props.car} rentalId={selectedRental._id} /> :
                 <>
                     <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "15px" }}>
                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
