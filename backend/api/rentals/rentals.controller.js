@@ -76,6 +76,23 @@ export default class RentalsController {
         res.json(response);
     }
 
+    static async apiGetRentalById(req, res, next) {
+        try {
+            let id = req.params.id || {};
+            let rental = await RentalsDAO.getRentalById(id);
+ 
+            if (!rental) {
+                res.status(404).json({ error: "Not Found" });
+                return;
+            }
+ 
+            res.json(rental)
+        } catch (e) {
+            console.log(`api, ${e}`);
+            res.status(500).json({ error: e });
+        }
+    }
+
     static async apiUpdateRental(req, res, next) {
         try {
             const rentalId = req.body.rental_id;

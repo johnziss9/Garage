@@ -143,6 +143,22 @@ export default class RentalsDAO {
         } 
     }
 
+    static async getRentalById(id) {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        _id: new ObjectId(id)
+                    }
+                }
+            ]
+            return await rentals.aggregate(pipeline).next();
+        } catch (e) {
+            console.error(`Something went wrong in getRentalById: ${e}`);
+            throw e;
+        }
+    }
+
     static async updateRental(rentalId, firstName, lastName, phoneNumber, address) {
         try {
             const updateResponse = await rentals.updateOne(

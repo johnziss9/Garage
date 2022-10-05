@@ -9,6 +9,7 @@ router.route("/getAll").get(verifyToken, RentalsController.apiGetRentals);
 router.route("/getPast").get(verifyToken, RentalsController.apiGetPastRentals);
 router.route("/getFuture").get(verifyToken, RentalsController.apiGetFutureRentals);
 router.route("/getCurrent").get(verifyToken, RentalsController.apiGetCurrentRentals);
+router.route("/rentalId/:id").get(verifyToken, RentalsController.apiGetRentalById);
 router.route("/update").put(verifyToken, RentalsController.apiUpdateRental);
 router.route("/updateDates").put(verifyToken, RentalsController.apiUpdateRentalDates);
 router.route("/delete").put(verifyToken, RentalsController.apiDeleteRental);
