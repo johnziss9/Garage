@@ -5,7 +5,7 @@ import verifyToken from "../authentication/authentication.js";
 const router = express.Router();
 
 router.route("/add").post(verifyToken, RentalsController.apiAddRental);
-router.route("/getAll").get(verifyToken, RentalsController.apiGetRentals);
+// router.route("/getAll").get(verifyToken, RentalsController.apiGetRentals);
 router.route("/getPast").get(verifyToken, RentalsController.apiGetPastRentals);
 router.route("/getFuture").get(verifyToken, RentalsController.apiGetFutureRentals);
 router.route("/getCurrent").get(verifyToken, RentalsController.apiGetCurrentRentals);
