@@ -39,7 +39,7 @@ function RemindersCard(props) {
         })
     })
     .then((Response) => Response.json())
-    .then(handleClose(), window.location.reload())
+    .then(handleClose(), props.clickHideDialog())
   }
 
   const handleRenewRT = () => {
@@ -59,7 +59,7 @@ function RemindersCard(props) {
         })
     })
     .then((Response) => Response.json())
-    .then(handleClose(), window.location.reload())
+    .then(handleClose(), props.clickHideDialog())
   }
 
   const handleCarReturn = () => {
@@ -79,7 +79,7 @@ function RemindersCard(props) {
         })
     })
     .then((Response) => Response.json())
-    .then(handleClose(), window.location.reload())
+    .then(handleClose(), props.clickHideDialog())
   }
 
   return (

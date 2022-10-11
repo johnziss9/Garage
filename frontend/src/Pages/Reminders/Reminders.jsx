@@ -6,147 +6,144 @@ import RemindersCard from '../../Components/RemindersCard/RemindersCard';
 import CustomNavbar from '../../Components/CustomNavbar/CustomNavbar';
 
 function Reminders() {
+    const currentDate = moment(new Date()).format('YYYY-MM-DD');
+    const currentDateToChange = new Date(); // Using this as a provisional variable as the line below changes its value.
+    const currentDateTwoWeeks = moment(new Date(currentDateToChange.setDate(currentDateToChange.getDate() + 14))).format('YYYY-MM-DD');
 
-  const [expiringMOTs, setExpiringMOTs] = useState([]);
-  const [expiringRTs, setExpiringRTs] = useState([]);
-  const [expiringRentalsList, setExpiringRentalsList] = useState([]);
-  const [allRentalsList, setAllRentalsList] = useState([]);
+    const [expiringMOTs, setExpiringMOTs] = useState([]);
+    const [expiringRTs, setExpiringRTs] = useState([]);
+    const [expiringRentals, setExpiringRentals] = useState([]);
+    // const [allRentals, setAllRentals] = useState([]);
 
-  useEffect(() => {
-    Promise.all([
-      fetch('http://localhost:5000/api/cars/getExpiringMOTs', {
-          method: 'get',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'x-access-token': sessionStorage.getItem('token')
-          }
-      })
-      .then(res => res.json()),
-      fetch('http://localhost:5000/api/cars/getExpiringRTs',  {
-          method: 'get',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'x-access-token': sessionStorage.getItem('token')
-          }
-      })
-      .then(res => res.json()),
-      fetch('http://localhost:5000/api/cars/getExpiringRentals',  {
-          method: 'get',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'x-access-token': sessionStorage.getItem('token')
-          }
-      })
-      .then(res => res.json()),
-      fetch('http://localhost:5000/api/cars/getRentals',  {
-          method: 'get',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'x-access-token': sessionStorage.getItem('token')
-          }
-      })
-      .then(res => res.json())
-    ]).then(([expiringMOTsData, expiringRTsData, expiringRentalsData, allRentalData]) => {
-      setExpiringMOTs(expiringMOTsData.cars);
-      setExpiringRTs(expiringRTsData.cars);
-      
-      // This function gets a list of all expiring rentals as there might be more than one rental expiring.
-      const getExpiringRentals = () => {
-        const rentals = [];
+    useEffect(() => {
+        handleFetchedCars();
+    }, []);
 
-        // Creating a car object and adding it to the list so we have only one rental instead of an array. (Only passing the information needed.)
-        expiringRentalsData.cars.forEach(car => {
-          for (let r = 0; r < car.rentals.length; r++) {
-            rentals.push(
-              {
-                "_id": car._id,
-                "make": car.make,
-                "model": car.model,
-                "number_plate": car.number_plate,
-                "rentals": {
-                  "car_id": car.rentals[r].car_id,
-                  "_id": car.rentals[r]._id,
-                  "first_name": car.rentals[r].first_name,
-                  "last_name": car.rentals[r].last_name,
-                  "dates": {
-                    "start_date": car.rentals[r].dates.start_date,
-                    "end_date": car.rentals[r].dates.end_date,
-                  }
-                }
-              }
-            );
-          }
-        });
+    const handleFetchedCars = () => {
+        fetch('http://localhost:5000/api/cars/getRentals', {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': sessionStorage.getItem('token')
+            }
+        })
+            .then((Response) => Response.json())
+            .then(data => {
+                const expiringMOTcars = [];
+                const expiringRTcars = [];
+                const expiringRentalsCars = [];
+                // const allRentalCars = []; // Need to see if we are going to use that to show the rentals in the new custom datepicker
 
-        setExpiringRentalsList(rentals);
-      }
+                data.cars.forEach(car => {
+                    // allRentalCars.push(car);
 
-      getExpiringRentals();
+                    if (car.mot.end_date >= currentDate && car.mot.end_date <= currentDateTwoWeeks)
+                        expiringMOTcars.push(car);
 
-      // Get all rentals to pass over to the CustomDatePicker
-      const getAllRentals = () => setAllRentalsList(allRentalData);
-      getAllRentals();
-    })
-  }, []);
+                    if (car.road_tax.end_date >= currentDate && car.road_tax.end_date <= currentDateTwoWeeks)
+                        expiringRTcars.push(car);
 
-  return (
-    <>
-      <div className='top'>
-        <div className='top-content'>
-          <div className='title'>Reminders</div>
-          <CustomNavbar />
-        </div>
-      </div>
-      <div className='bottom'>
-        <div className='reminders-content'>
-        {expiringMOTs.map((car) => (
-            <RemindersCard
-              type="M.O.T."
-              number_plate={car.number_plate}
-              make={car.make}
-              model={car.model}
-              expiry_text_or_name={"Expiring on"}
-              expiry_date={moment(car.mot.end_date).format('DD/MM/YYYY')}
-              button_value={"RENEW"}
-              car_id={car._id}
-            />
-          ))}
-          {expiringRTs.map((car) => (
-            <RemindersCard
-              type="ROAD TAX"
-              number_plate={car.number_plate}
-              make={car.make}
-              model={car.model}
-              expiry_text_or_name={"Expiring on"}
-              expiry_date={moment(car.road_tax.end_date).format('DD/MM/YYYY')}
-              button_value={"RENEW"}
-              car_id={car._id}
-            />
-          ))}
-          {expiringRentalsList.map((car) => (
-            <RemindersCard
-              type="RENTAL"
-              number_plate={car.number_plate}
-              make={car.make}
-              model={car.model}
-              expiry_text_or_name={`${car.rentals.first_name} ${car.rentals.last_name}`}
-              rental_start_date={moment(car.rentals.dates.start_date).format('DD/MM/YYYY')}
-              until_text={"until"}
-              rental_end_date={moment(car.rentals.dates.end_date).format('DD/MM/YYYY')}
-              button_value={"RETURN"}
-              rental_id={car.rentals._id}
-              expiringRentals={expiringRentalsList}
-              allRentals={allRentalsList}
-            />
-          ))}
-        </div>
-      </div>
-    </>
-  );
+                    if (car.rented) {
+                        car.rentals.forEach(rental => {
+                            if (rental.dates.end_date >= currentDate && rental.dates.end_date <= currentDateTwoWeeks) {
+                                expiringRentalsCars.push(
+                                    {
+                                        "_id": car._id,
+                                        "make": car.make,
+                                        "model": car.model,
+                                        "number_plate": car.number_plate,
+                                        "rentals": {
+                                            "car_id": car._id,
+                                            "_id": rental._id,
+                                            "first_name": rental.first_name,
+                                            "last_name": rental.last_name,
+                                            "dates": {
+                                                "start_date": rental.dates.start_date,
+                                                "end_date": rental.dates.end_date,
+                                            }
+                                        }
+                                    }
+                                )
+                            }
+                        });
+                    }
+
+
+                });
+
+                setExpiringMOTs(expiringMOTcars);
+                setExpiringRTs(expiringRTcars);
+                setExpiringRentals(expiringRentalsCars);
+
+                // // Get all rentals to pass over to the CustomDatePicker
+                // const getAllRentals = () => setAllRentalsList(allRentalData);
+                // getAllRentals();
+            });
+    }
+
+    const handleDialogClosing = () => handleFetchedCars();
+
+    return (
+        <>
+            <div className='top'>
+                <div className='top-content'>
+                    <div className='title'>Reminders</div>
+                    <CustomNavbar />
+                </div>
+            </div>
+            <div className='bottom'>
+                <div className='reminders-content'>
+                    {expiringMOTs.map((car) => (
+                        <RemindersCard
+                            key={car._id}
+                            type="M.O.T."
+                            number_plate={car.number_plate}
+                            make={car.make}
+                            model={car.model}
+                            expiry_text_or_name={"Expiring on"}
+                            expiry_date={moment(car.mot.end_date).format('DD/MM/YYYY')}
+                            button_value={"RENEW"}
+                            car_id={car._id}
+                            clickHideDialog={handleDialogClosing}
+                        />
+                    ))}
+                    {expiringRTs.map((car) => (
+                        <RemindersCard
+                            key={car._id}
+                            type="ROAD TAX"
+                            number_plate={car.number_plate}
+                            make={car.make}
+                            model={car.model}
+                            expiry_text_or_name={"Expiring on"}
+                            expiry_date={moment(car.road_tax.end_date).format('DD/MM/YYYY')}
+                            button_value={"RENEW"}
+                            car_id={car._id}
+                            clickHideDialog={handleDialogClosing}
+                        />
+                    ))}
+                    {expiringRentals.map((car) => (
+                        <RemindersCard
+                            key={car._id}
+                            type="RENTAL"
+                            number_plate={car.number_plate}
+                            make={car.make}
+                            model={car.model}
+                            expiry_text_or_name={`${car.rentals.first_name} ${car.rentals.last_name}`}
+                            rental_start_date={moment(car.rentals.dates.start_date).format('DD/MM/YYYY')}
+                            until_text={"until"}
+                            rental_end_date={moment(car.rentals.dates.end_date).format('DD/MM/YYYY')}
+                            button_value={"RETURN"}
+                            rental_id={car.rentals._id}
+                            // expiringRentals={expiringRentalsList}
+                            // allRentals={allRentalsList}
+                            clickHideDialog={handleDialogClosing}
+                        />
+                    ))}
+                </div>
+            </div>
+        </>
+    );
 }
 
 export default Reminders;
