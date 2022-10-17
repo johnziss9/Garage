@@ -21,18 +21,18 @@ app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
 
 // Deployment
 
-const path = require("path");
+// const path = require("path");
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.resolve(__dirname, "/frontend/build")));
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static(path.resolve(__dirname, "/frontend/build")));
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
-    })
-} else {
-    app.get("/", (req, res) => {
-        res.send("API is running!");
-    });
-}
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+//     })
+// } else {
+//     app.get("/", (req, res) => {
+//         res.send("API is running!");
+//     });
+// }
  
 export default app;
